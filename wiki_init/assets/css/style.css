@@ -1,0 +1,21 @@
+body {
+  margin: 0px;//40px auto;
+  max-width: 100%; //650px;
+  line-height:1.6;
+  font-size:18px;
+  color:#444;
+  padding: 20px;//0 10px;
+  font-family: "Helvetica Neue", Helvetica, arial, freesans, clean, sans-serif;
+}
+
+body {
+  height: calc(100% - 40px);
+}
+
+html {
+  height: 100%;
+}
+
+#content {
+  padding-top: 20px;
+}

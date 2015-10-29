@@ -5,7 +5,7 @@ body.mode_read #content {
   display: block;
 }
 #content {
-  display: none;
+  /*display: none;*/
 }
 
 body.mode_edit #editor_container {
