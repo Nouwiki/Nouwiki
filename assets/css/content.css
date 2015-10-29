@@ -1,0 +1,38 @@
+body {
+  margin: 0px;//40px auto;
+  max-width: 100%; //650px;
+  line-height:1.6;
+  font-size:18px;
+  color:#444;
+  padding: 20px;//0 10px;
+  font-family: "Helvetica Neue", Helvetica, arial, freesans, clean, sans-serif;
+}
+
+body {
+  height: calc(100% - 40px);
+}
+
+html {
+  height: 100%;
+}
+
+/*div#content.markdown-body img {
+  max-width: 100%;
+  -moz-box-shadow: 0 10px 15px -12px #6f6f6f;
+  -webkit-box-shadow: 0 10px 15px -12px #6f6f6f;
+  box-shadow: 0 10px 15px -12px #6f6f6f;
+  border: 1px solid #222;
+  margin: 10px 12px 0px 0px;
+}*/
+
+div#content.markdown-body .bg_img {
+  max-width: 100%;
+  -moz-box-shadow: 0 10px 15px -12px #6f6f6f;
+  -webkit-box-shadow: 0 10px 15px -12px #6f6f6f;
+  box-shadow: 0 10px 15px -12px #6f6f6f;
+  border: 1px solid #222;
+}
+
+#content {
+  padding-top: 20px;
+}

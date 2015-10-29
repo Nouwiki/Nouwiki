@@ -1,0 +1,22 @@
+{
+  "name": "nouwiki",
+  "version": "0.0.1",
+  "description": "A Git-powered wiki.",
+  "main": "nouwiki.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/01AutoMonkey/nouwiki"
+  },
+  "keywords": [
+    "git",
+    "wiki"
+  ],
+  "author": "Brynjar Harðarson",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/01AutoMonkey/nouwiki/issues"
+  }
+}
