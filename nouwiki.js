@@ -31,7 +31,7 @@ function createWiki(p) {
 	//createNewWikiFiles(path_abs);
 	var markup_path = path.join(path_abs, "/markup");
 	var index_path = path.join(markup_path, "/index.md");
-	var index_markup = "+++\ntitle: \""+wiki_name+"\"\n+++\n\n Welcome to your new wiki!";
+	var index_markup = "+++\ntitle = \""+wiki_name+"\"\n+++\n\n Welcome to your new wiki!";
 	fs.writeFileSync(index_path, index_markup);
 	buildWiki(path_abs);
 }
@@ -106,7 +106,7 @@ function buildMarkupFile(root, markup_file) {
 	fs.writeFileSync(fragment_path, fragment);
 
 	var stat_path = path.join(root, "/static", file);
-	var template_path = path.join(root, "/templates", "page.html");
+	var template_path = path.join(root, "/templates", "static.html");
 	var template_string = fs.readFileSync(template_path, 'utf8');
 	var stat_template = doT.template(template_string);
 	var stat = stat_template({wiki: wiki, title: title, content: html});

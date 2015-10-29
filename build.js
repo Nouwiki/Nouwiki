@@ -1,6 +1,5 @@
 var fs = require('fs');
 var matter = require('gray-matter');
-matter.delims = ["+++", "+++"];
 var hljs = require('highlight.js') // https://highlightjs.org/
 //hljs.configure({classPrefix: ''});
 //hljs.initHighlightingOnLoad();
@@ -28,7 +27,7 @@ var md = require('markdown-it')({
 
 function build(markup_file) {
 	var data = fs.readFileSync(markup_file, 'utf8');
-	var content = matter(data, { lang: 'toml' });
+	var content = matter(data, { lang: 'toml', delims: ['+++', '+++']});
 	markData = content.content;
 	console.log(content)
 	if (content.data.title != undefined) {
