@@ -6,7 +6,6 @@ var doT = require('dot');
 var program = require('commander');
 
 var appDir = path.dirname(require.main.filename);
-console.log(appDir)
 
 var build = require('./build');
 
@@ -54,8 +53,7 @@ function createWiki(p) {
 }
 
 function createNewWikiDirStructure(path_abs) {
-	var lib = path.resolve("./");
-	var wiki_init = path.join(lib, "/wiki_init");
+	var wiki_init = path.join(appDir, "/wiki_init");
 	fs.copySync(wiki_init, path_abs);
 	createEmptyDirs(path_abs);
 }
