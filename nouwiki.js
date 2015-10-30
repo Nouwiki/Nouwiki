@@ -66,7 +66,7 @@ function createNewWikiDirStructure(path_abs) {
 	var templates_dest = path.join(path_abs, "/templates");
 	fs.copySync(assets_init, assets_dest);
 	fs.copySync(templates_init, templates_dest);
-	
+
 	var index_init = path.join(wiki_init, "index.html");
 	var index_dest = path.join(path_abs, "index.html");
 	fs.copySync(index_init, index_dest);
@@ -117,15 +117,16 @@ function buildWiki(path_abs) {
 
 function buildMarkupFile(root, markup_file) {
 	var wiki = path.basename(root);
-	var title = path.basename(markup_file, '.md');
-	var file = title + ".html";
-	var html = build.build(markup_file);
+	var file_name = path.basename(markup_file, '.md') + ".html";
+	var data = build.build(markup_file);
+	var html = data.html;
+	var title = data.title;
 
-	var fragment_path = path.join(root, "/fragment", file);
+	var fragment_path = path.join(root, "/fragment", file_name);
 	var fragment = html;
 	fs.writeFileSync(fragment_path, fragment);
 
-	var stat_path = path.join(root, "/static", file);
+	var stat_path = path.join(root, "/static", file_name);
 	var template_path = path.join(root, "/templates", "static.html");
 	var template_string = fs.readFileSync(template_path, 'utf8');
 	var stat_template = doT.template(template_string);

@@ -33,7 +33,7 @@ function build(markup_file) {
 		markData = "# "+content.data.title+"\n\n"+markData
 	}
 	html = md.render(markData);
-	return html;
+	return { html: html, title: content.data.title };
 }
 
 exports.build = build;
