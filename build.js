@@ -29,7 +29,6 @@ function build(markup_file) {
 	var data = fs.readFileSync(markup_file, 'utf8');
 	var content = matter(data, { lang: 'toml', delims: ['+++', '+++']});
 	markData = content.content;
-	console.log(content)
 	if (content.data.title != undefined) {
 		markData = "# "+content.data.title+"\n\n"+markData
 	}

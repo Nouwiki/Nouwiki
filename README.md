@@ -38,9 +38,8 @@ Note that this is a very early prototype, but if you want to play with it:
 ## ToDo
 
 - Misc
-	- Consdier if we should have empty directories if github doesn't support it and instead of copying just copy the folders with content and use `fs` to create the empty directories.
+	- Python's `SimpleHTTPServer` and Node's `http-server` don't treat HTML files without extensions as HTML
 	- Solve the problem of the markdown files not being served as plain text on GitHub pages.
-	- Create a build command (currently it just build the initial index.md file)
 - Dynamic
 	- Use React + Redux for UI and dynamic behavior?
 	- Build to Dynamic and md.html
