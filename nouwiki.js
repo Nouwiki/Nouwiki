@@ -5,6 +5,9 @@ var fs = require('fs-extra');
 var doT = require('dot');
 var program = require('commander');
 
+var appDir = path.dirname(require.main.filename);
+console.log(appDir)
+
 var build = require('./build');
 
 program
