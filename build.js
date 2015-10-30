@@ -21,7 +21,7 @@ var md = require('markdown-it')({
 
     return ''; // use external default escaping
   }
-}).use(require('markdown-it-wikilink')).use(require('markdown-it-attrs'));
+}).use(require('markdown-it-wikilink'))//.use(require('markdown-it-attrs'));
 
 /* --- */
 
