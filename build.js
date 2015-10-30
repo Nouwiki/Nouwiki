@@ -28,7 +28,7 @@ var md = require('markdown-it')({
 function build(markup_file) {
 	var data = fs.readFileSync(markup_file, 'utf8');
 	var content = matter(data, { lang: 'toml', delims: ['+++', '+++']});
-  console.log(content)
+  console.log(content.data.title)
 	markData = content.content;
 	if (content.data.title != undefined) {
 		markData = "# "+content.data.title+"\n\n"+markData
