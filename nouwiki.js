@@ -53,8 +53,24 @@ function createWiki(p) {
 }
 
 function createNewWikiDirStructure(path_abs) {
+	try {
+		fs.mkdirSync(path_abs);
+	} catch(e) {
+		if ( e.code != 'EEXIST' ) throw e;
+	}
+
 	var wiki_init = path.join(appDir, "/wiki_init");
-	fs.copySync(wiki_init, path_abs);
+	var assets_init = path.join(wiki_init, "/assets");
+	var templates_init = path.join(wiki_init, "/templates");
+	var assets_dest = path.join(path_abs, "/assets");
+	var templates_dest = path.join(path_abs, "/templates");
+	fs.copySync(assets_init, assets_dest);
+	fs.copySync(templates_init, templates_dest);
+	
+	var index_init = path.join(wiki_init, "index.html");
+	var index_dest = path.join(path_abs, "index.html");
+	fs.copySync(index_init, index_dest);
+
 	createEmptyDirs(path_abs);
 }
 
