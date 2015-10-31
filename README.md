@@ -31,8 +31,8 @@ Flexible Wiki Software, early prototype. Written in NodeJS but will use Rust in 
 		- [x] *Static*: Full HTML but only for reading.
 		- [ ] *Dynamic*: Full HTML plus interface for editing content within browser and other dynamic features
 		- [ ] *md.html*: Pure markup but with some JS at the end which allows viewing the whole document as HTML and degrades nicely to plaintext if HTML support is not presant (e.x. in a text editor)
-		- *Standalone*: Each page as a standalone HTML file, all assets within the file itself (css, img, font, etc).
-		- *Full Standalone*: Entire wiki in a single HTML file.
+		- [ ] *Standalone*: Each page as a standalone HTML file, all assets within the file itself (css, img, font, etc).
+		- [ ] *Full Standalone*: Entire wiki in a single HTML file.
 	- **View anywhere**
 		- [x] Text browsers
 		- [x] Browsers with JavaScript disabled
