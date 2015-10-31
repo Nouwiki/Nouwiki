@@ -1,6 +1,6 @@
 # Nouwiki
 
-Flexible Wiki Software, early prototype. Written in NodeJS but will use Rust in some places for performance.
+Flexible Wiki Software, early prototype. Written in Node for awesome and in Rust for performance.
 
 ## Features & Goals
 
