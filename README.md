@@ -4,7 +4,8 @@ Flexible Wiki Software, early prototype. Written in NodeJS but will use Rust in 
 
 ## Features & Goals
 
-- [ ] Edit anywhere (text editor, in-browser, etc).
+- [ ] Multiple collaboration models (solve Wikipedia bureaucracy).
+- [ ] Edit anywhere (text editor, markup editor, in-browser, etc).
 - [ ] Serve anywhere (static: local filesystem, simple server, static web hosting. dynamic: github, local nouwiki server, dedicated nouwiki server)
 - [x] View anywhere (text, no-js, modern browser, mobile).
 - [ ] Use any language (markdown, asciidoc, mediawiki, etc).
