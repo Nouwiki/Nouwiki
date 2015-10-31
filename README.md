@@ -2,6 +2,20 @@
 
 Flexible Wiki Software, early prototype. Written in NodeJS but will use Rust in some places for performance.
 
+## Features
+
+- [ ] Edit anywhere.
+- [ ] Serve anywhere.
+- [x] View anywhere.
+- [ ] Use any language.
+- [ ] Wikilinks in all languages.
+- [ ] Multiple build targets.
+- [ ] Great text editor support.
+- [ ] Extensible.
+- [ ] Scales.
+- [ ] Federated.
+- [ ] Flexible.
+
 ## Goals
 
 - Users
