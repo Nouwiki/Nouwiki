@@ -4,64 +4,19 @@ Flexible Wiki Software, early prototype. Written in NodeJS but will use Rust in 
 
 ## Features
 
-- [ ] Edit anywhere.
-- [ ] Serve anywhere.
-- [x] View anywhere.
-- [ ] Use any language.
+- [ ] Edit anywhere (text editor, in-browser, etc).
+- [ ] Serve anywhere (static: local filesystem, simple server, static web hosting. dynamic: github, local nouwiki server, dedicated nouwiki server)
+- [x] View anywhere (text, no-js, modern browser, mobile).
+- [ ] Use any language (markdown, asciidoc, mediawiki, etc).
 - [ ] Wikilinks in all languages.
-- [ ] Multiple build targets.
-- [ ] Great text editor support.
-- [ ] Extensible.
-- [ ] Scales.
-- [ ] Federated.
-- [ ] Flexible.
-
-## Goals
-
-- Users
-	- [ ] Be **easy** enough for the layman
-	- [ ] Be **powerful** enough for the developer.
-	- [ ] Be **good** enough for the academic.
-	- [ ] Be **beautiful** enough for the designer.
-- Anywhere & Everything
-	- **Edit anywhere**
-		- [x] Plain text editor (Atom, Sublime, Vim, Emacs, etc)
-		- [x] Markup specific editors
-		- [ ] In-Browser
-		- [ ] Custom Nouwiki Editor
-	- **Use any language**
-		- [x] Markdown
-		- [ ] Asciidoc
-		- [ ] Mediawiki
-		- etc
-	- **Serve anywhere**
-		- [x] Open HTML files locally (no server)
-		- [x] Serve files through something simple such as `http-server` or `python -m SimpleHTTPServer`
-		- [x] Static website hosting services.
-		- [ ] Use GitHub as the backend.
-		- [ ] Use Nouwiki client itself as the backend, locally or on a dedicated server (this setup has the greatest number of features).
-	- **Multiple build targets**
-		- [x] *Fragments*: no `<html>`, `<head>` or `<body>` just the HTML content as it comes directly from the Markup parser.
-		- [x] *Static*: Full HTML but only for reading.
-		- [ ] *Dynamic*: Full HTML plus interface for editing content within browser and other dynamic features
-		- [ ] *md.html*: Pure markup but with some JS at the end which allows viewing the whole document as HTML and degrades nicely to plaintext if HTML support is not presant (e.x. in a text editor)
-		- [ ] *Standalone*: Each page as a standalone HTML file, all assets within the file itself (css, img, font, etc).
-		- [ ] *Full Standalone*: Entire wiki in a single HTML file.
-	- **View anywhere**
-		- [x] Text browsers
-		- [x] Browsers with JavaScript disabled
-		- [x] Modern browsers
-		- [x] Mobile browsers
-- Apps & Plugins
-	- [ ] **Electron App**:  App that uses the same frontend as the dynamic build of markdown content plus OS features, useful if you just want a local wiki, and perhaps as an editor for content that's being served on GitHub or a dedicated server.
-	- [ ] **Atom plugin**: Same as the Electron app but for those who want to use Atom.
-	- [ ] **Sublime plugin**: Same but Sublime.
-- Misc
-	- [ ] **Universal asset manager** (audio, css, font, img, js, text, video, etc)
-	- [ ] Markup with YAML, TOML, or JSON **front-matter**
-	- [ ] **Extend** entire wikis or just individual pages with your own JS or CSS
-	- [ ] **Extend** the markup parsing with plugins.
-	- [ ] **Scale** from a personal notebook to Wikipedia-sized wikis.
+- [ ] Multiple build targets (fragments, static, dynamic, md.html, standalone, full-standalone).
+- [ ] Great text editor support (atom, sublime, vim, emacs plugin. custom nouwiki editor).
+- [ ] Extendable (extend markup parsers, extend functionality and themes with custom js, css, etc).
+- [ ] Scales (personal notebook to wikipedia scale).
+- [ ] Federated (cross node wikilinks, fork, push, pull).
+- [ ] Universal Asset Manager (audio, css, font, img, js, text, video, etc)
+- [ ] YAML, TOML, JSON front-matter
+- [ ] Flexible (see above).
 
 ## Install
 
