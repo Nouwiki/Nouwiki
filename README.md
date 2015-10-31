@@ -2,7 +2,7 @@
 
 Flexible Wiki Software, early prototype. Written in NodeJS but will use Rust in some places for performance.
 
-## Features
+## Features & Goals
 
 - [ ] Edit anywhere (text editor, in-browser, etc).
 - [ ] Serve anywhere (static: local filesystem, simple server, static web hosting. dynamic: github, local nouwiki server, dedicated nouwiki server)
@@ -11,7 +11,8 @@ Flexible Wiki Software, early prototype. Written in NodeJS but will use Rust in 
 - [ ] Wikilinks in all languages.
 - [ ] Multiple build targets (fragments, static, dynamic, md.html, standalone, full-standalone).
 - [ ] Great text editor support (atom, sublime, vim, emacs plugin. custom nouwiki editor).
-- [ ] Extendable (extend markup parsers, extend functionality and themes with custom js, css, etc).
+- [ ] Theme support.
+- [ ] Extendable (extend markup parsers, extend functionality and themes globally or page-specific with custom js, css, etc).
 - [ ] Scales (personal notebook to wikipedia scale).
 - [ ] Federated (cross node wikilinks, fork, push, pull).
 - [ ] Universal Asset Manager (audio, css, font, img, js, text, video, etc)
