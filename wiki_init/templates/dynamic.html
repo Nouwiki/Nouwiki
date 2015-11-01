@@ -9,14 +9,28 @@
   <![endif]-->
   <link rel="stylesheet" href="../assets/css/normalize.css">
   <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/css/ui.css">
   <link rel="stylesheet" href="../assets/css/content.css">
+
+  <!-- Dynamic -->
+  <link rel="stylesheet" href="../assets/css/simplemde.min.css">
+  <link rel="stylesheet" href="../assets/css/ui.css">
 </head>
 <body>
 
+<div id="controles">
+  <button id="edit">Edit</button>
+</div>
 <div id="content" class="markdown-body">
 {{=it.content}}
 </div>
+<div id="editor">
+  <textarea></textarea>
+</div>
+
+<!-- Dynamic -->
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/simplemde.min.js"></script>
+<script src="../assets/js/ui.js"></script>
 
 </body>
 </html>

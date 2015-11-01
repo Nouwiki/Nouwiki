@@ -1,98 +1,27 @@
-
-/* mode_read, mode_edit, mode_preview */
-
-body.mode_read #content {
-  display: block;
-}
-#content {
-  /*display: none;*/
-}
-
-body.mode_edit #editor_container {
-  visibility: visible;
-}
-#editor_container {
-  visibility: hidden;
-}
-
-body.mode_preview #preview {
-  display: block;
-}
-#preview {
-  display: none;
-}
-
-#root, #home {
-  display: inline-block;
-}
-
-#discard, #edit, #view, #save {
-  display: none;
-}
-
-body.mode_edit #discard {
-  display: inline-block;
-}
-
-body.mode_edit #view {
-  display: inline-block;
-}
-
-body.mode_edit #save {
-  display: inline-block;
-}
-
-body.mode_preview #discard {
-  display: inline-block;
-}
-
-body.mode_preview #edit {
-  display: inline-block;
-}
-
-body.mode_preview #save {
-  display: inline-block;
-}
-
-body.mode_read #edit {
-  display: inline-block;
-}
-
-#content {
-  margin-bottom: 20px;
-  font-size: 20px; /* Firefox Reader View CSS */
-  font-size: 1em; /* Firefox Reader View CSS */
-}
-
-#editor_container {
-  height: calc(100% - 56px - 20px - 28px);
+#controles {
   position: absolute;
-  top: calc(54px + 28px);
-  left: 20px;
-  width: calc(100% - 40px);
+  left: 0;
+  top: 0;
+  border-bottom: 1px solid #eee;
+  width: 100%;
+}
+
+#controles button {
+  float: left;
 }
 
 #editor {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border: 1px solid #999;
-}
-
-#editor.ace_editor {
-  /*font-family: "Helvetica Neue", Helvetica, arial, freesans, clean, sans-serif;*/
-  /*font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;*/ /* github */
-}
-
-#yaml_form {
   display: none;
 }
 
-#categories {
-  border: 1px solid #eee;
-  padding: 10px;
+.editor-toolbar.fullscreen {
+  top: 21px;
 }
 
-#history {
-  height: 28px;
+.editor-toolbar.fullscreen::before {
+  width: 0; /* hides white gradient that's in the way of the controles bar */
+}
+
+.CodeMirror-fullscreen {
+  top: 71px;
 }
