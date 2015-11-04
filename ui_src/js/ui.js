@@ -1,3 +1,5 @@
+var parse = require("../../parse.js");
+
 var editor_showing = false;
 $("#edit").click(function() {
   if (editor_showing) {
@@ -9,11 +11,11 @@ $("#edit").click(function() {
 })
 
 // To use the node parser we need to use webpack *on the wiki instance side*
-var customMarkdownParser = function() {
-  return "";
+var customMarkdownParser = function(markup) {
+  return parse.parse(markup).html;
 }
 var simplemde = new SimpleMDE({
-  previewRender: function(plainText) {
-      return customMarkdownParser(plainText); // Returns HTML from a custom parser
+  previewRender: function(markup) {
+      return customMarkdownParser(markup); // Returns HTML from a custom parser
   }
 });

@@ -21,18 +21,22 @@ program
     }
   });
 
+var targets = ["all", "fragment", "static", "dynamic"];
+
 program
-  .command('build [paths...]')
-  .action(function (paths) {
+  .command('build <target> [paths...]')
+  .action(function (target, paths) {
     var path_abs;
-    if (paths.length != 0) {
-	    for (var x = 0; x < paths.length; x++) {
-	    	path_abs = path.resolve(paths[x]);
-  			build.buildWiki(path_abs);
-  		}
-    } else {
-    	path_abs = path.resolve("./");
-      build.buildWiki(path_abs);
+    if (targets.indexOf(target) > -1) {
+      if (paths.length != 0) {
+        for (var x = 0; x < paths.length; x++) {
+          path_abs = path.resolve(paths[x]);
+          build.buildWiki(path_abs, target);
+        }
+      } else {
+        path_abs = path.resolve("./");
+        build.buildWiki(path_abs, target);
+      }
     }
   });
 

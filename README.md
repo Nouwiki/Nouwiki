@@ -26,16 +26,10 @@ Note that this is a very early prototype, but if you want to play with it:
 
 - `npm i -g git+https://github.com/01AutoMonkey/nouwiki.git`
 - `nouwiki new wiki ./directory`
+- `nouwiki build static ./directory`
+- `cd ./directory/site`
+- `http-server`
 
 ## ToDo
 
-- Misc
-	- Solve the problem of the markdown files not being served as plain text on GitHub pages.
-- Dynamic
-	- Use React + Redux for UI and dynamic behavior?
-	- Build to Dynamic and md.html
-	- Experiment with the possibility of RW with JS-Git
-	- Choose a Markdown editor:
-		- SimpleMDE
-		- Ace Editor
-		- Something else?
+- ...
