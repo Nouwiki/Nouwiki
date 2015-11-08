@@ -2,10 +2,11 @@ var path = require('path');
 var doT = require('dot');
 var fs = require('fs-extra');
 var parse = require('./parse');
+var dirTree = require('directory-tree');
 
 var appDir = path.dirname(require.main.filename);
 
-function buildWiki(path_abs, target) {
+function buildWiki(path_abs, target, assets) {
 	var site = path.join(path_abs, "/site");
 	removeAndCreateSiteDir(site, target);
 
@@ -22,7 +23,13 @@ function buildWiki(path_abs, target) {
 		var markup_file = path.join(markup_dir, markup_files[x]);
 		buildMarkupFile(path_abs, markup_file, target);
 	}
+
 	buildAssets(site, target);
+	linkUserAssets(path_abs);
+
+	if (assets) {
+		generateAssetPages(path_abs, target);
+	}
 }
 
 function removeAndCreateSiteDir(site, target) {
@@ -40,9 +47,13 @@ function removeAndCreateSiteDir(site, target) {
 }
 
 function buildMarkupFile(root, markup_file, target) {
-	var wiki = path.basename(root);
 	var file_name = path.basename(markup_file, '.md') + ".html";
   var data = fs.readFileSync(markup_file, 'utf8');
+	parseAndWriteMarkup(root, data, file_name, target);
+}
+
+function parseAndWriteMarkup(root, data, file_name, target) {
+	var wiki = path.basename(root);
 	data = parse.parse(data);
 	//var html = data.html;
 	//var title = data.title;
@@ -106,12 +117,54 @@ function buildAssets(site, target) {
 	if (target == "all" || target == "dynamic") {
 		var dynamic_src = path.join(appDir, "/templates/default/dynamic");
 		var dynamic_dest = path.join(assets, "/dynamic");
-		fs.copySync(dynamic_src, dynamic_dest);	
+		fs.copySync(dynamic_src, dynamic_dest);
 
 		var ui_src = path.join(appDir, "/ui");
 		var ui_dest = path.join(assets, "/ui");
 		fs.copySync(ui_src, ui_dest);
 	}
+}
+
+function linkUserAssets(root) {
+	var user_assets_abs = path.join(root, "/user_assets");
+	var assets = path.join(root, "/site", "/assets");
+	var user_assets_dest = path.join(assets, "/user_assets");
+	var user_assets_src = path.relative(assets, user_assets_abs);
+	fs.symlinkSync(user_assets_src, user_assets_dest);
+}
+
+function generateAssetPages(root, target) {
+	var user_assets_abs = path.join(root, "/user_assets");
+	var tree = dirTree.directoryTree(user_assets_abs);
+	markup = addMarkup("", tree.children, "", 0);
+	data = '+++\ntitle = "User Assets"\n+++\n\n'+markup
+	parseAndWriteMarkup(root, data, "__assets.html", target);
+}
+
+function addMarkup(markup, a, tab, level) {
+	for (var p in a) {
+		if (a[p].type == "file") {
+			var file_name = path.basename(a[p].name);
+			var href = path.join("/assets/user_assets/", a[p].path);
+			markup += tab+"- ["+file_name+"](<"+href+">)\n";
+		} else {
+			if (level == 0) {
+				markup += "## "+a[p].name+"\n";
+			} else if (level == 1) {
+				markup += "### "+a[p].name+"\n";
+			} else {
+				markup += tab+"- "+a[p].name+"\n";
+			}
+		}
+		if (a[p].children != undefined && a[p].children.length > 0) {
+			var new_tab = tab;
+			if (level > 1) {
+				new_tab += "    ";
+			}
+			markup = addMarkup(markup, a[p].children, new_tab, level+1);
+		}
+	}
+	return markup;
 }
 
 exports.buildWiki = buildWiki;

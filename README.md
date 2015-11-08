@@ -32,4 +32,4 @@ Note that this is a very early prototype, but if you want to play with it:
 
 ## ToDo
 
-- ...
+- Shouldn't the dependancies be actual dependancies and not dev dependancies since dev dependancies don't get downloaded on npm i (right?)?

@@ -47,7 +47,7 @@ function createNewWikiDirStructure(path_abs) {
 function createEmptyDirs(path_abs) {
 	var user_assets = path.join(path_abs, "/user_assets");
 	var audio = path.join(user_assets, "/audio");
-	var css = path.join(user_assets, "/css");
+	var style = path.join(user_assets, "/style");
 	var font = path.join(user_assets, "/font");
 	var img = path.join(user_assets, "/img");
 	var js = path.join(user_assets, "/js");
@@ -55,7 +55,7 @@ function createEmptyDirs(path_abs) {
 	var video = path.join(user_assets, "/video");
 	fs.mkdirSync(user_assets);
 	fs.mkdirSync(audio);
-	fs.mkdirSync(css);
+	fs.mkdirSync(style);
 	fs.mkdirSync(font);
 	fs.mkdirSync(img);
 	fs.mkdirSync(js);
