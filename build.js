@@ -136,9 +136,11 @@ function linkUserAssets(root) {
 function generateAssetPages(root, target) {
 	var user_assets_abs = path.join(root, "/user_assets");
 	var tree = dirTree.directoryTree(user_assets_abs);
-	markup = addMarkup("", tree.children, "", 0);
-	data = '+++\ntitle = "User Assets"\n+++\n\n'+markup
-	parseAndWriteMarkup(root, data, "__assets.html", target);
+	if (tree != null) {
+		markup = addMarkup("", tree.children, "", 0);
+		data = '+++\ntitle = "User Assets"\n+++\n\n'+markup
+		parseAndWriteMarkup(root, data, "__assets.html", target);
+	}
 }
 
 function addMarkup(markup, a, tab, level) {
