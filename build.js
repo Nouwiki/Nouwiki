@@ -147,7 +147,7 @@ function addMarkup(markup, a, tab, level) {
 	for (var p in a) {
 		if (a[p].type == "file") {
 			var file_name = path.basename(a[p].name);
-			var href = path.join("/assets/user_assets/", a[p].path);
+			var href = path.join("assets/user_assets/", a[p].path);
 			markup += tab+"- ["+file_name+"](<"+href+">)\n";
 		} else {
 			if (level == 0) {
