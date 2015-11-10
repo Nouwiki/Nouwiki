@@ -141,8 +141,7 @@ function copyUserAssets(root) {
 	var user_assets_abs = path.join(root, "/user_assets");
 	var assets = path.join(root, "/site", "/assets");
 	var user_assets_dest = path.join(assets, "/user_assets");
-	var user_assets_src = path.relative(assets, user_assets_abs);
-	fs.copySync(user_assets_src, user_assets_dest);
+	fs.copySync(user_assets_abs, user_assets_dest);
 }
 
 function generateAssetPages(root, target) {
