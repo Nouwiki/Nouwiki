@@ -6,7 +6,7 @@ var dirTree = require('directory-tree');
 
 var appDir = path.dirname(require.main.filename);
 
-function buildWiki(path_abs, target, assets) {
+function buildWiki(path_abs, target, assets, copy) {
 	var site = path.join(path_abs, "/site");
 	removeAndCreateSiteDir(site, target);
 
@@ -25,7 +25,11 @@ function buildWiki(path_abs, target, assets) {
 	}
 
 	buildAssets(site, target);
-	linkUserAssets(path_abs);
+	if (copy) {
+		copyUserAssets(path_abs);
+	} else {
+		linkUserAssets(path_abs);
+	}
 
 	if (assets) {
 		generateAssetPages(path_abs, target);
@@ -131,6 +135,14 @@ function linkUserAssets(root) {
 	var user_assets_dest = path.join(assets, "/user_assets");
 	var user_assets_src = path.relative(assets, user_assets_abs);
 	fs.symlinkSync(user_assets_src, user_assets_dest);
+}
+
+function copyUserAssets(root) {
+	var user_assets_abs = path.join(root, "/user_assets");
+	var assets = path.join(root, "/site", "/assets");
+	var user_assets_dest = path.join(assets, "/user_assets");
+	var user_assets_src = path.relative(assets, user_assets_abs);
+	fs.copySync(user_assets_src, user_assets_dest);
 }
 
 function generateAssetPages(root, target) {

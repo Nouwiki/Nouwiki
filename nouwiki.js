@@ -25,6 +25,7 @@ var targets = ["all", "fragment", "static", "dynamic"];
 
 program
   .option('-a, --assets', 'Generate pages for user assets')
+  .option('-c, --copy', 'Copy user assets instead of symbolically linking them, useful for github hosting for example')
   .command('build <target> [paths...]')
   .action(function (target, paths) {
     var path_abs;
@@ -32,11 +33,11 @@ program
       if (paths.length != 0) {
         for (var x = 0; x < paths.length; x++) {
           path_abs = path.resolve(paths[x]);
-          build.buildWiki(path_abs, target, program.assets);
+          build.buildWiki(path_abs, target, program.assets, program.copy);
         }
       } else {
         path_abs = path.resolve("./");
-        build.buildWiki(path_abs, target, program.assets);
+        build.buildWiki(path_abs, target, program.assets, program.copy);
       }
     }
   });
