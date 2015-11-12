@@ -1,20 +1,20 @@
 # Nouwiki
 
-Flexible Wiki Software, early prototype. Written in Node for awesome and in Rust for performance.
+Flexible Wiki Software, early prototype. Written in Node for awesome and Rust for performance.
 
 ## Features & Goals
 
 - [ ] Multiple collaboration models (solve Wikipedia bureaucracy).
 - [ ] Edit anywhere (text editor, markup editor, in-browser, etc).
-- [ ] Serve anywhere (static: local filesystem, simple server, static web hosting. dynamic: github, local nouwiki server, dedicated nouwiki server)
+- [ ] Serve anywhere (**static:** local filesystem, simple server, static web hosting. **dynamic:** github, local nouwiki server, dedicated nouwiki server)
 - [x] View anywhere (text, no-js, modern browser, mobile).
 - [ ] Use any language (markdown, asciidoc, mediawiki, etc).
 - [ ] Wikilinks in all languages.
-- [ ] Multiple build targets (fragments, static, dynamic, md.html, standalone, full-standalone).
-- [ ] Great text editor support (atom, sublime, vim, emacs plugin. custom nouwiki editor).
-- [ ] Theme support.
-- [ ] Extendable (extend markup parsers, extend functionality and themes globally or page-specific with custom js, css, etc).
-- [ ] Scales (personal notebook to wikipedia scale).
+- [ ] Multiple build targets (fragments, static, md.html, standalone, full-standalone, dynamic).
+- [ ] Great text editor support (atom+sublime+vim+emacs plugins. custom nouwiki editor).
+- [ ] Theme/Template support.
+- [ ] Extendable (extend markup parsers, extend functionality (js) and look (css) globally or page-specific with custom js, css, etc).
+- [ ] Scales (from a personal notebook to the size of wikipedia).
 - [ ] Federated (cross node wikilinks, fork, push, pull).
 - [ ] Universal Asset Manager (audio, css, font, img, js, text, video, etc)
 - [ ] YAML, TOML, JSON front-matter
@@ -32,4 +32,4 @@ Note that this is a very early prototype, but if you want to play with it:
 
 ## ToDo
 
-- Shouldn't the dependancies be actual dependancies and not dev dependancies since dev dependancies don't get downloaded on npm i (right?)?
+- Saner split between dev dependancies and regular dependancies.
