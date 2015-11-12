@@ -30,7 +30,7 @@
 <script src="template_assets/dynamic/js/ui.js"></script>
 
 {{ for(var js in it.js) { }}
-<script src="{{=js}}"></script>
+<script src="{{=it.js[js]}}"></script>
 {{ } }}
 
 </body>
