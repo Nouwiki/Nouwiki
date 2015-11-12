@@ -52,7 +52,7 @@ function removeAndCreateSiteDir(site, target) {
 
 function buildMarkupFile(root, markup_file, target) {
 	var file_name = path.basename(markup_file, '.md') + ".html";
-  var data = fs.readFileSync(markup_file, 'utf8');
+	var data = fs.readFileSync(markup_file, 'utf8');
 	parseAndWriteMarkup(root, data, file_name, target);
 }
 
@@ -75,10 +75,10 @@ function parseAndWriteMarkup(root, data, file_name, target) {
 				buildFragment(template_data, build_path);
 		}
 		if (target == "static") {
-				buildStatic(template_data, wiki, build_path);
+				buildStatic(template_data, build_path);
 		}
 		if (target == "dynamic") {
-				buildDynamic(template_data, wiki, build_path);
+				buildDynamic(template_data, build_path);
 		}
 	}
 }
@@ -104,6 +104,7 @@ function buildStatic(template_data, build_path) {
   var template_string = fs.readFileSync(template_path, 'utf8');
   var stat_template = doT.template(template_string);
   var stat = stat_template(template_data);
+  console.log(stat_path, stat)
   fs.writeFileSync(stat_path, stat);
 }
 
