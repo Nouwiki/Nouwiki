@@ -13,25 +13,39 @@
 
   <!-- Dynamic -->
   <script src="template_assets/dynamic/css/ui.css"></script>
+
+  <!-- Global User CSS -->
+  {{ for(var i in it.global_css) { }}
+  <script src="{{=it.global_css[i]}}"></script>
+  {{ } }}
+
+  <!-- Local User CSS -->
+  {{ for(var i in it.local_css) { }}
+  <script src="{{=it.local_css[i]}}"></script>
+  {{ } }}
 </head>
 <body>
+  <div id="controles">
+    <button id="edit">Edit</button>
+  </div>
+  <div id="content" class="markdown-body">
+  {{=it.html}}
+  </div>
+  <div id="editor">
+    <textarea></textarea>
+  </div>
 
-<div id="controles">
-  <button id="edit">Edit</button>
-</div>
-<div id="content" class="markdown-body">
-{{=it.html}}
-</div>
-<div id="editor">
-  <textarea></textarea>
-</div>
+  <!-- Dynamic -->
+  <script src="template_assets/dynamic/js/ui.js"></script>
 
-<!-- Dynamic -->
-<script src="template_assets/dynamic/js/ui.js"></script>
+  <!-- Global User JS -->
+  {{ for(var i in it.global_js) { }}
+  <script src="{{=it.global_js[i]}}"></script>
+  {{ } }}
 
-{{ for(var js in it.js) { }}
-<script src="{{=it.js[js]}}"></script>
-{{ } }}
-
+  <!-- Local User JS -->
+  {{ for(var i in it.local_js) { }}
+  <script src="{{=it.local_js[i]}}"></script>
+  {{ } }}
 </body>
 </html>

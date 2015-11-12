@@ -3,6 +3,7 @@ var doT = require('dot');
 var fs = require('fs-extra');
 var parse = require('./parse');
 var dirTree = require('directory-tree');
+var toml = require('toml');
 
 var appDir = path.dirname(require.main.filename);
 
@@ -58,12 +59,20 @@ function buildMarkupFile(root, markup_file, target) {
 
 function parseAndWriteMarkup(root, data, file_name, target) {
 	var wiki = path.basename(root);
-	data = parse.parse(data); // .html .data.*
+	data = parse.parse(data); // .html .content.*
+
+	var config_src = path.join(root, "/config.toml");
+	var config_src_string = fs.readFileSync(config_src, 'utf8');
+	var global_data = toml.parse(config_src_string);
+
 	template_data = {
 		wiki: wiki,
 		html: data.html,
 		title: data.content.title,
-		js: data.content.js
+		local_js: data.content.js,
+		local_css: data.content.css,
+		global_js: global_data.js,
+		global_css: global_data.css
 	}
 
 	var site = path.join(root, "/site");

@@ -12,6 +12,7 @@ function createWiki(p) {
 	var index_markup = "+++\ntitle = \""+wiki_name+"\"\n+++\n\nWelcome to your new wiki!";
 	fs.writeFileSync(index_path, index_markup);
 	//buildWiki(path_abs);
+	createConfigFile(path_abs, wiki_name);
 }
 
 function createNewWikiDirStructure(path_abs) {
@@ -84,6 +85,12 @@ function createEmptyDirs(path_abs) {
 
 	//var core = path.join(path_abs, "/.core");
 	//fs.mkdirSync(core);
+}
+
+function createConfigFile(path_abs, wiki_name) {
+	var config_dest = path.join(path_abs, "/config.toml");
+	var config_string = 'title = "'+wiki_name+'"\njs = []\ncss = []';
+	fs.writeFileSync(config_dest, config_string);
 }
 
 exports.createWiki = createWiki;
