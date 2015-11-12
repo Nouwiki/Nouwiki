@@ -7,9 +7,12 @@
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <link rel="stylesheet" href="assets/static/css/normalize.css">
-  <link rel="stylesheet" href="assets/static/css/style.css">
-  <link rel="stylesheet" href="assets/static/css/content.css">
+  <link rel="stylesheet" href="template_assets/static/css/normalize.css">
+  <link rel="stylesheet" href="template_assets/static/css/style.css">
+  <link rel="stylesheet" href="template_assets/static/css/content.css">
+
+  <!-- Dynamic -->
+  <script src="template_assets/dynamic/css/ui.css"></script>
 </head>
 <body>
 
@@ -17,14 +20,18 @@
   <button id="edit">Edit</button>
 </div>
 <div id="content" class="markdown-body">
-{{=it.content}}
+{{=it.html}}
 </div>
 <div id="editor">
   <textarea></textarea>
 </div>
 
 <!-- Dynamic -->
-<script src="assets/ui/bundle.js"></script>
+<script src="template_assets/dynamic/js/ui.js"></script>
+
+{{ for(var js in it.js) { }}
+<script src="{{=js}}"></script>
+{{ } }}
 
 </body>
 </html>

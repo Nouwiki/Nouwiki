@@ -3,9 +3,9 @@ module.exports = {
   node: {
     fs: "empty"
   },
-  entry: './ui_src/index.js',
+  entry: './dynamic_src/index.js',
   output: {
-    filename: './ui/bundle.js'
+    filename: './templates/default/dynamic/js/ui.js'
   },
   module: {
     loaders: [
@@ -18,6 +18,6 @@ module.exports = {
     ]
   },
   plugins: [
-      new ExtractTextPlugin("./ui/bundle.css")
+      new ExtractTextPlugin("./templates/default/dynamic/css/ui.css")
   ]
 };

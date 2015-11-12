@@ -32,7 +32,7 @@ function parse(data) {
 		markData = "# "+content.data.title+"\n\n"+markData
 	}
 	html = md.render(markData);
-	return { html: html, title: content.data.title };
+	return { html: html, content: content.data };
 }
 
 exports.parse = parse;

@@ -24,11 +24,11 @@ function buildWiki(path_abs, target, assets, copy) {
 		buildMarkupFile(path_abs, markup_file, target);
 	}
 
-	buildAssets(site, target);
+	buildTemplateAssets(site, target);
 	if (copy) {
-		copyUserAssets(path_abs);
+		copyAssets(path_abs);
 	} else {
-		linkUserAssets(path_abs);
+		linkAssets(path_abs);
 	}
 
 	if (assets) {
@@ -58,95 +58,95 @@ function buildMarkupFile(root, markup_file, target) {
 
 function parseAndWriteMarkup(root, data, file_name, target) {
 	var wiki = path.basename(root);
-	data = parse.parse(data);
-	//var html = data.html;
-	//var title = data.title;
+	data = parse.parse(data); // .html .data.*
+	template_data = {
+		wiki: wiki,
+		html: data.html,
+		title: data.content.title,
+		js: data.content.js
+	}
 
 	var site = path.join(root, "/site");
 	if (target == "all") {
-		buildAll(site, file_name, data)
+		buildAll(site, file_name, template_data)
 	} else {
 		var build_path = path.join(site, file_name);
 		if (target == "fragment") {
-				buildFragment(data, build_path);
+				buildFragment(template_data, build_path);
 		}
 		if (target == "static") {
-				buildStatic(data, wiki, build_path);
+				buildStatic(template_data, wiki, build_path);
 		}
 		if (target == "dynamic") {
-				buildDynamic(data, wiki, build_path);
+				buildDynamic(template_data, wiki, build_path);
 		}
 	}
 }
 
-function buildAll(site, file_name, data) {
+function buildAll(site, file_name, template_data) {
 	var fragment_path = path.join(site, "/fragment", file_name);
-	buildFragment(file_name, data, fragment_path);
+	buildFragment(template_data, fragment_path);
 	var stat_path = path.join(site, "/static", file_name);
-	buildStatic(file_name, data, wiki, stat_path);
+	buildStatic(template_data, stat_path);
 	var dynamic_path = path.join(site, "/dynamic", file_name);
-	buildDynamic(file_name, data, wiki, dynamic_path);
+	buildDynamic(template_data, dynamic_path);
 }
 
-function buildFragment(data, build_path) {
+function buildFragment(template_data, build_path) {
   var fragment_path = build_path;
-  var fragment = data.html;
+  var fragment = template_data.html;
   fs.writeFileSync(fragment_path, fragment);
 }
 
-function buildStatic(data, wiki, build_path) {
+function buildStatic(template_data, build_path) {
   var stat_path = build_path;
   var template_path = path.join(appDir, "/templates/default/", "static.html");
   var template_string = fs.readFileSync(template_path, 'utf8');
   var stat_template = doT.template(template_string);
-  var stat = stat_template({wiki: wiki, title: data.title, content: data.html});
+  var stat = stat_template(template_data);
   fs.writeFileSync(stat_path, stat);
 }
 
-function buildDynamic(data, wiki, build_path) {
+function buildDynamic(template_data, build_path) {
   var dynamic_path = build_path;
   var template_path = path.join(appDir, "/templates/default/", "dynamic.html");
   var template_string = fs.readFileSync(template_path, 'utf8');
   var dynamic_template = doT.template(template_string);
-  var dynamic = dynamic_template({wiki: wiki, title: data.title, content: data.html});
+  var dynamic = dynamic_template(template_data);
   fs.writeFileSync(dynamic_path, dynamic);
 }
 
-function buildAssets(site, target) {
-	var assets = path.join(site, "/assets");
+function buildTemplateAssets(site, target) {
+	var template_assets = path.join(site, "/template_assets");
 	var stat_src = path.join(appDir, "/templates/default/static");
-	var stat_dest = path.join(assets, "/static");
+	var stat_dest = path.join(template_assets, "/static");
 	fs.copySync(stat_src, stat_dest);
 
 	if (target == "all" || target == "dynamic") {
 		var dynamic_src = path.join(appDir, "/templates/default/dynamic");
-		var dynamic_dest = path.join(assets, "/dynamic");
+		var dynamic_dest = path.join(template_assets, "/dynamic");
 		fs.copySync(dynamic_src, dynamic_dest);
-
-		var ui_src = path.join(appDir, "/ui");
-		var ui_dest = path.join(assets, "/ui");
-		fs.copySync(ui_src, ui_dest);
 	}
 }
 
-function linkUserAssets(root) {
-	var user_assets_abs = path.join(root, "/user_assets");
-	var assets = path.join(root, "/site", "/assets");
-	var user_assets_dest = path.join(assets, "/user_assets");
-	var user_assets_src = path.relative(assets, user_assets_abs);
-	fs.symlinkSync(user_assets_src, user_assets_dest);
+function linkAssets(root) {
+	var assets_abs = path.join(root, "/assets");
+	var site = path.join(root, "/site");
+	var assets_dest = path.join(site, "/assets");
+	var assets_src = path.relative(site, assets_abs);
+	fs.symlinkSync(assets_src, assets_dest);
 }
 
-function copyUserAssets(root) {
-	var user_assets_abs = path.join(root, "/user_assets");
-	var assets = path.join(root, "/site", "/assets");
-	var user_assets_dest = path.join(assets, "/user_assets");
-	fs.copySync(user_assets_abs, user_assets_dest);
+function copyAssets(root) {
+	var assets_abs = path.join(root, "/assets");
+	var site = path.join(root, "/site");
+	var assets_dest = path.join(site, "/assets");
+	fs.copySync(assets_abs, assets_dest);
 }
 
 function generateAssetPages(root, target) {
-	var user_assets_abs = path.join(root, "/user_assets");
-	var tree = dirTree.directoryTree(user_assets_abs);
+	var assets_abs = path.join(root, "/assets");
+	var tree = dirTree.directoryTree(assets_abs);
 	if (tree != null) {
 		markup = addMarkup("", tree.children, "", 0);
 		data = '+++\ntitle = "User Assets"\n+++\n\n'+markup
@@ -158,7 +158,7 @@ function addMarkup(markup, a, tab, level) {
 	for (var p in a) {
 		if (a[p].type == "file") {
 			var file_name = path.basename(a[p].name);
-			var href = path.join("assets/user_assets/", a[p].path);
+			var href = path.join("assets/assets/", a[p].path);
 			markup += tab+"- ["+file_name+"](<"+href+">)\n";
 		} else {
 			if (level == 0) {
