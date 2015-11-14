@@ -8,6 +8,7 @@ module.exports = {
     filename: './templates/default/dynamic/js/ui.js'
   },
   module: {
+    //noParse: [/autoit.js/],
     loaders: [
       { test: /\.js$/, loader: 'babel-loader' },
       { test: /\.scss$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader?sourceMap") },

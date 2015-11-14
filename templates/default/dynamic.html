@@ -12,16 +12,16 @@
   <link rel="stylesheet" href="template_assets/static/css/content.css">
 
   <!-- Dynamic -->
-  <script src="template_assets/dynamic/css/ui.css"></script>
+  <link rel="stylesheet" href="template_assets/dynamic/css/ui.css">
 
   <!-- Global User CSS -->
   {{ for(var i in it.global_css) { }}
-  <script src="{{=it.global_css[i]}}"></script>
+  <link rel="stylesheet" href="{{=it.global_css[i]}}">
   {{ } }}
 
   <!-- Local User CSS -->
   {{ for(var i in it.local_css) { }}
-  <script src="{{=it.local_css[i]}}"></script>
+  <link rel="stylesheet" href="{{=it.local_css[i]}}">
   {{ } }}
 </head>
 <body>

@@ -45,6 +45,9 @@
     "webpack": "^1.12.2"
   },
   "dependencies": {
+    "codemirror": "^5.8.0",
+    "jquery": "^2.1.4",
+    "simplemde": "git+https://github.com/01AutoMonkey/simplemde-markdown-editor.git",
     "toml": "^2.3.0"
   }
 }

@@ -28,8 +28,10 @@ function buildWiki(path_abs, target, assets, copy) {
 	buildTemplateAssets(site, target);
 	if (copy) {
 		copyAssets(path_abs);
+		copyMarkup(path_abs);
 	} else {
 		linkAssets(path_abs);
+		linkMarkup(path_abs);
 	}
 
 	if (assets) {
@@ -152,6 +154,21 @@ function copyAssets(root) {
 	var site = path.join(root, "/site");
 	var assets_dest = path.join(site, "/assets");
 	fs.copySync(assets_abs, assets_dest);
+}
+
+function linkMarkup(root) {
+	var markup_abs = path.join(root, "/markup");
+	var site = path.join(root, "/site");
+	var markup_dest = path.join(site, "/markup");
+	var markup_src = path.relative(site, markup_abs);
+	fs.symlinkSync(markup_src, markup_dest);
+}
+
+function copyMarkup(root) {
+	var markup_abs = path.join(root, "/markup");
+	var site = path.join(root, "/site");
+	var markup_dest = path.join(site, "/markup");
+	fs.copySync(markup_abs, markup_dest);
 }
 
 function generateAssetPages(root, target) {
