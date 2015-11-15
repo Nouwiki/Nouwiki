@@ -16,7 +16,20 @@
 #editor {
   display: none;
   margin-top: 37px;
-}/* Prose Bright Theme
+}
+
+#edit {
+  display: inline-block;
+}
+
+#discard {
+  display: none;
+}
+
+#save {
+  display: none;
+}
+/* Prose Bright Theme
  -------------------- */
 /* Dark Grey */
 .cm-s-prose-bright                    { color:#3D494E; }

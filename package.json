@@ -24,6 +24,9 @@
     "url": "https://github.com/01AutoMonkey/nouwiki/issues"
   },
   "devDependencies": {
+
+  },
+  "dependencies": {
     "babel-core": "^6.0.20",
     "babel-loader": "^6.0.1",
     "commander": "^2.9.0",
@@ -42,9 +45,7 @@
     "node-sass": "^3.4.1",
     "sass-loader": "^3.1.1",
     "style-loader": "^0.13.0",
-    "webpack": "^1.12.2"
-  },
-  "dependencies": {
+    "webpack": "^1.12.2",
     "codemirror": "^5.8.0",
     "jquery": "^2.1.4",
     "simplemde": "git+https://github.com/01AutoMonkey/simplemde-markdown-editor.git",

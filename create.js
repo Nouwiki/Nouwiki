@@ -80,8 +80,8 @@ function createEmptyDirs(path_abs) {
 	var templates = path.join(path_abs, "/templates");
 	fs.mkdirSync(templates);
 
-	var site = path.join(path_abs, "/site");
-	fs.mkdirSync(site);
+	/*var site = path.join(path_abs, "/site");
+	fs.mkdirSync(site);*/
 
 	//var core = path.join(path_abs, "/.core");
 	//fs.mkdirSync(core);

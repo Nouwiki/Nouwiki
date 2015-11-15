@@ -27,16 +27,41 @@ function getMarkupText() {
 }
 $("#edit").click(function() {
   edit();
-})
-var editor_showing = false;
+});
+//var editing = false;
 function edit() {
-  if (editor_showing) {
-    $("#editor").hide();
-    $("#content").show();
-  } else {
-    $("#editor").show();
-    $("#content").hide();
-    getMarkupText();
-  }
-  editor_showing = !editor_showing;
+  $("#edit").hide();
+  $("#discard").show();
+  $("#save").show();
+
+  $("#editor").show();
+  $("#content").hide();
+  getMarkupText();
+
+  //editing = !editor_showing;
+}
+
+$("#discard").click(function() {
+  discard();
+});
+function discard() {
+  $("#edit").show();
+  $("#discard").hide();
+  $("#save").hide();
+
+  $("#editor").hide();
+  $("#content").show();
+}
+
+$("#save").click(function() {
+  save();
+});
+function save() {
+  $("#edit").show();
+  $("#discard").hide();
+  $("#save").hide();
+
+  $("#editor").hide();
+  $("#content").show();
+  console.log(parse.parse(myCodeMirror.getValue()).html);
 }

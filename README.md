@@ -1,6 +1,6 @@
 # Nouwiki
 
-Flexible Wiki Software, early prototype. Written in Node for awesome and Rust for performance.
+Flexible Wiki Software, early prototype. Written in Node for awesome and Rust for performance, applies "Universal App" principles.
 
 ## Features & Goals
 
@@ -19,6 +19,7 @@ Flexible Wiki Software, early prototype. Written in Node for awesome and Rust fo
 - [ ] Universal Asset Manager (audio, css, font, img, js, text, video, etc)
 - [ ] YAML, TOML, JSON front-matter
 - [ ] Can easily function as a sub-app of your own app (an integrated wiki for your app)
+- [ ] Designed with learning in mind (spaced repetition, quizzes, annotations, discussion, etc)
 - [ ] Flexible (see above).
 
 In more abstract terms we want it to be:
@@ -40,8 +41,4 @@ Note that this is a very early prototype, but if you want to play with it:
 
 ## ToDo
 
-- Saner split between dev dependancies and regular dependancies.
-- Next Stage
-	- in-browser editing on github (using in-browser markdown parsing + js-git)
-	- Make sure all current build targets work
-	- Reconsider commander options
+...

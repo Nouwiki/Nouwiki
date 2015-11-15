@@ -17,3 +17,15 @@
   display: none;
   margin-top: 37px;
 }
+
+#edit {
+  display: inline-block;
+}
+
+#discard {
+  display: none;
+}
+
+#save {
+  display: none;
+}

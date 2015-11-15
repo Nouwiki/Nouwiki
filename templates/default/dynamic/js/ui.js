@@ -46,10 +46,10 @@
 
 	// CSS
 	__webpack_require__(1);
-	__webpack_require__(236);
+	__webpack_require__(5);
 
 	// JS
-	__webpack_require__(5);
+	__webpack_require__(7);
 
 /***/ },
 /* 1 */
@@ -62,17 +62,24 @@
 /* 3 */,
 /* 4 */,
 /* 5 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 6 */,
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var origin = __webpack_require__(235);
+	var origin = __webpack_require__(8);
 
-	var parse = __webpack_require__(6);
-	var $ = __webpack_require__(227);
-	__webpack_require__(229);
-	var CodeMirror = __webpack_require__(228);
+	var parse = __webpack_require__(9);
+	var $ = __webpack_require__(230);
 	__webpack_require__(231);
-	__webpack_require__(232);
-	__webpack_require__(233);
+	var CodeMirror = __webpack_require__(233);
+	__webpack_require__(234);
+	__webpack_require__(235);
+	__webpack_require__(236);
 
 	// parse.parse(markup).html
 
@@ -94,29 +101,84 @@
 	$("#edit").click(function () {
 	  edit();
 	});
-	var editor_showing = false;
+	//var editing = false;
 	function edit() {
-	  if (editor_showing) {
-	    $("#editor").hide();
-	    $("#content").show();
-	  } else {
-	    $("#editor").show();
-	    $("#content").hide();
-	    getMarkupText();
-	  }
-	  editor_showing = !editor_showing;
+	  $("#edit").hide();
+	  $("#discard").show();
+	  $("#save").show();
+
+	  $("#editor").show();
+	  $("#content").hide();
+	  getMarkupText();
+
+	  //editing = !editor_showing;
+	}
+
+	$("#discard").click(function () {
+	  discard();
+	});
+	function discard() {
+	  $("#edit").show();
+	  $("#discard").hide();
+	  $("#save").hide();
+
+	  $("#editor").hide();
+	  $("#content").show();
+	}
+
+	$("#save").click(function () {
+	  save();
+	});
+	function save() {
+	  $("#edit").show();
+	  $("#discard").hide();
+	  $("#save").hide();
+
+	  $("#editor").hide();
+	  $("#content").show();
+	  console.log(parse.parse(myCodeMirror.getValue()).html);
 	}
 
 /***/ },
-/* 6 */
+/* 8 */
+/***/ function(module, exports) {
+
+	var origin = window.location.origin;
+	var loc = decodeURI(window.location.href);
+
+	var page = loc.split("/");
+	page = page[page.length - 1].split("?")[0];
+	page = page || "index";
+
+	var root = loc;
+	if (loc[loc.length - 1] != "/") {
+	  root = loc.replace(page, "");
+	}
+
+	var git = root.split("/");
+	git_user = git[2].split(".")[0];
+	git_repo = git[3];
+	git_repo_url = "https://github.com/" + git_user + "/" + git_repo + "/";
+	git_clone_url = "https://github.com/" + git_user + "/" + git_repo + ".git";
+
+	//var wiki = loc.split("/");
+	//wiki = wiki[wiki.length-3];
+
+	var markup_page = page;
+	var markup_loc = root + "markup/" + markup_page + ".md";
+
+	exports.markup_loc = markup_loc;
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var matter = __webpack_require__(7);
-	var hljs = __webpack_require__(18); // https://highlightjs.org/
+	var matter = __webpack_require__(10);
+	var hljs = __webpack_require__(21); // https://highlightjs.org/
 	//hljs.configure({classPrefix: ''});
 	//hljs.initHighlightingOnLoad();
 
-	var md = __webpack_require__(157)({
+	var md = __webpack_require__(160)({
 	  html: true,
 	  linkify: true,
 	  typographer: true,
@@ -133,7 +195,7 @@
 
 	    return ''; // use external default escaping
 	  }
-	}).use(__webpack_require__(226)); //.use(require('markdown-it-attrs'));
+	}).use(__webpack_require__(229)); //.use(require('markdown-it-attrs'));
 
 	/* --- */
 
@@ -151,14 +213,14 @@
 	exports.parse = parse;
 
 /***/ },
-/* 7 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var fs = __webpack_require__(8);
-	var extend = __webpack_require__(9);
-	var parsers = __webpack_require__(11);
+	var fs = __webpack_require__(11);
+	var extend = __webpack_require__(12);
+	var parsers = __webpack_require__(14);
 
 	/**
 	 * Expose `matter()`
@@ -271,7 +333,7 @@
 	 * Requires cache
 	 */
 
-	var YAML = matter.parsers.requires.yaml || (matter.parsers.requires.yaml = __webpack_require__(14));
+	var YAML = matter.parsers.requires.yaml || (matter.parsers.requires.yaml = __webpack_require__(17));
 
 	/**
 	 * Read a file and parse front matter. Returns the same object
@@ -367,18 +429,18 @@
 	}
 
 /***/ },
-/* 8 */
+/* 11 */
 /***/ function(module, exports) {
 
 	
 
 /***/ },
-/* 9 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isObject = __webpack_require__(10);
+	var isObject = __webpack_require__(13);
 
 	module.exports = function extend(o /*, objects*/) {
 	  if (!isObject(o)) {
@@ -413,7 +475,7 @@
 	}
 
 /***/ },
-/* 10 */
+/* 13 */
 /***/ function(module, exports) {
 
 	/*!
@@ -430,7 +492,7 @@
 	};
 
 /***/ },
-/* 11 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -447,8 +509,8 @@
 	 */
 
 	;
-	var extend = __webpack_require__(9);
-	var red = __webpack_require__(12);
+	var extend = __webpack_require__(12);
+	var red = __webpack_require__(15);
 
 	/**
 	 * Expose `parser` module
@@ -474,7 +536,7 @@
 	parser.yaml = function (str, options) {
 	  var opts = extend({ strict: false, safeLoad: false }, options);
 	  try {
-	    var YAML = parser.requires.yaml || (parser.requires.yaml = __webpack_require__(14));
+	    var YAML = parser.requires.yaml || (parser.requires.yaml = __webpack_require__(17));
 	    return opts.safeLoad ? YAML.safeLoad(str, options) : YAML.load(str, options);
 	  } catch (err) {
 	    if (opts.strict) {
@@ -614,7 +676,7 @@
 
 	parser.toml = function (str, opts) {
 	  try {
-	    var toml = parser.requires.toml || (parser.requires.toml = __webpack_require__(15));
+	    var toml = parser.requires.toml || (parser.requires.toml = __webpack_require__(18));
 	    return toml.parse(str);
 	  } catch (err) {
 	    if (opts.strict) {
@@ -639,7 +701,7 @@
 	}
 
 /***/ },
-/* 12 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -651,14 +713,14 @@
 
 	'use strict';
 
-	var wrap = __webpack_require__(13);
+	var wrap = __webpack_require__(16);
 
 	module.exports = function red(message) {
 	  return wrap(31, 39, message);
 	};
 
 /***/ },
-/* 13 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -668,7 +730,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var require;!(function (e) {
@@ -1445,11 +1507,11 @@
 	});
 
 /***/ },
-/* 15 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var parser = __webpack_require__(16);
-	var compiler = __webpack_require__(17);
+	var parser = __webpack_require__(19);
+	var compiler = __webpack_require__(20);
 
 	module.exports = {
 	  parse: function (input) {
@@ -1459,7 +1521,7 @@
 	};
 
 /***/ },
-/* 16 */
+/* 19 */
 /***/ function(module, exports) {
 
 	module.exports = (function(){ /*
@@ -1472,7 +1534,7 @@
 	codePoint -= 0x10000;highSurrogate = (codePoint >> 10) + 0xD800;lowSurrogate = codePoint % 0x400 + 0xDC00;codeUnits.push(highSurrogate,lowSurrogate);}if(index + 1 == length || codeUnits.length > MAX_SIZE){result += String.fromCharCode.apply(null,codeUnits);codeUnits.length = 0;}}return result;}peg$result = peg$startRuleFunction();if(peg$result !== peg$FAILED && peg$currPos === input.length){return peg$result;}else {if(peg$result !== peg$FAILED && peg$currPos < input.length){peg$fail({type:"end",description:"end of input"});}throw peg$buildException(null,peg$maxFailExpected,peg$maxFailPos);}}return {SyntaxError:SyntaxError,parse:parse};})();
 
 /***/ },
-/* 17 */
+/* 20 */
 /***/ function(module, exports) {
 
 	function compile(nodes) {
@@ -1673,153 +1735,153 @@
 	};
 
 /***/ },
-/* 18 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var hljs = __webpack_require__(19);
+	var hljs = __webpack_require__(22);
 
-	hljs.registerLanguage('1c', __webpack_require__(20));
-	hljs.registerLanguage('accesslog', __webpack_require__(21));
-	hljs.registerLanguage('actionscript', __webpack_require__(22));
-	hljs.registerLanguage('apache', __webpack_require__(23));
-	hljs.registerLanguage('applescript', __webpack_require__(24));
-	hljs.registerLanguage('armasm', __webpack_require__(25));
-	hljs.registerLanguage('xml', __webpack_require__(26));
-	hljs.registerLanguage('asciidoc', __webpack_require__(27));
-	hljs.registerLanguage('aspectj', __webpack_require__(28));
-	hljs.registerLanguage('autohotkey', __webpack_require__(29));
-	hljs.registerLanguage('autoit', __webpack_require__(30));
-	hljs.registerLanguage('avrasm', __webpack_require__(31));
-	hljs.registerLanguage('axapta', __webpack_require__(32));
-	hljs.registerLanguage('bash', __webpack_require__(33));
-	hljs.registerLanguage('brainfuck', __webpack_require__(34));
-	hljs.registerLanguage('cal', __webpack_require__(35));
-	hljs.registerLanguage('capnproto', __webpack_require__(36));
-	hljs.registerLanguage('ceylon', __webpack_require__(37));
-	hljs.registerLanguage('clojure', __webpack_require__(38));
-	hljs.registerLanguage('clojure-repl', __webpack_require__(39));
-	hljs.registerLanguage('cmake', __webpack_require__(40));
-	hljs.registerLanguage('coffeescript', __webpack_require__(41));
-	hljs.registerLanguage('cpp', __webpack_require__(42));
-	hljs.registerLanguage('crmsh', __webpack_require__(43));
-	hljs.registerLanguage('crystal', __webpack_require__(44));
-	hljs.registerLanguage('cs', __webpack_require__(45));
-	hljs.registerLanguage('css', __webpack_require__(46));
-	hljs.registerLanguage('d', __webpack_require__(47));
-	hljs.registerLanguage('markdown', __webpack_require__(48));
-	hljs.registerLanguage('dart', __webpack_require__(49));
-	hljs.registerLanguage('delphi', __webpack_require__(50));
-	hljs.registerLanguage('diff', __webpack_require__(51));
-	hljs.registerLanguage('django', __webpack_require__(52));
-	hljs.registerLanguage('dns', __webpack_require__(53));
-	hljs.registerLanguage('dockerfile', __webpack_require__(54));
-	hljs.registerLanguage('dos', __webpack_require__(55));
-	hljs.registerLanguage('dust', __webpack_require__(56));
-	hljs.registerLanguage('elixir', __webpack_require__(57));
-	hljs.registerLanguage('elm', __webpack_require__(58));
-	hljs.registerLanguage('ruby', __webpack_require__(59));
-	hljs.registerLanguage('erb', __webpack_require__(60));
-	hljs.registerLanguage('erlang-repl', __webpack_require__(61));
-	hljs.registerLanguage('erlang', __webpack_require__(62));
-	hljs.registerLanguage('fix', __webpack_require__(63));
-	hljs.registerLanguage('fortran', __webpack_require__(64));
-	hljs.registerLanguage('fsharp', __webpack_require__(65));
-	hljs.registerLanguage('gams', __webpack_require__(66));
-	hljs.registerLanguage('gcode', __webpack_require__(67));
-	hljs.registerLanguage('gherkin', __webpack_require__(68));
-	hljs.registerLanguage('glsl', __webpack_require__(69));
-	hljs.registerLanguage('go', __webpack_require__(70));
-	hljs.registerLanguage('golo', __webpack_require__(71));
-	hljs.registerLanguage('gradle', __webpack_require__(72));
-	hljs.registerLanguage('groovy', __webpack_require__(73));
-	hljs.registerLanguage('haml', __webpack_require__(74));
-	hljs.registerLanguage('handlebars', __webpack_require__(75));
-	hljs.registerLanguage('haskell', __webpack_require__(76));
-	hljs.registerLanguage('haxe', __webpack_require__(77));
-	hljs.registerLanguage('http', __webpack_require__(78));
-	hljs.registerLanguage('inform7', __webpack_require__(79));
-	hljs.registerLanguage('ini', __webpack_require__(80));
-	hljs.registerLanguage('irpf90', __webpack_require__(81));
-	hljs.registerLanguage('java', __webpack_require__(82));
-	hljs.registerLanguage('javascript', __webpack_require__(83));
-	hljs.registerLanguage('json', __webpack_require__(84));
-	hljs.registerLanguage('julia', __webpack_require__(85));
-	hljs.registerLanguage('kotlin', __webpack_require__(86));
-	hljs.registerLanguage('lasso', __webpack_require__(87));
-	hljs.registerLanguage('less', __webpack_require__(88));
-	hljs.registerLanguage('lisp', __webpack_require__(89));
-	hljs.registerLanguage('livecodeserver', __webpack_require__(90));
-	hljs.registerLanguage('livescript', __webpack_require__(91));
-	hljs.registerLanguage('lua', __webpack_require__(92));
-	hljs.registerLanguage('makefile', __webpack_require__(93));
-	hljs.registerLanguage('mathematica', __webpack_require__(94));
-	hljs.registerLanguage('matlab', __webpack_require__(95));
-	hljs.registerLanguage('mel', __webpack_require__(96));
-	hljs.registerLanguage('mercury', __webpack_require__(97));
-	hljs.registerLanguage('mizar', __webpack_require__(98));
-	hljs.registerLanguage('perl', __webpack_require__(99));
-	hljs.registerLanguage('mojolicious', __webpack_require__(100));
-	hljs.registerLanguage('monkey', __webpack_require__(101));
-	hljs.registerLanguage('nginx', __webpack_require__(102));
-	hljs.registerLanguage('nimrod', __webpack_require__(103));
-	hljs.registerLanguage('nix', __webpack_require__(104));
-	hljs.registerLanguage('nsis', __webpack_require__(105));
-	hljs.registerLanguage('objectivec', __webpack_require__(106));
-	hljs.registerLanguage('ocaml', __webpack_require__(107));
-	hljs.registerLanguage('openscad', __webpack_require__(108));
-	hljs.registerLanguage('oxygene', __webpack_require__(109));
-	hljs.registerLanguage('parser3', __webpack_require__(110));
-	hljs.registerLanguage('pf', __webpack_require__(111));
-	hljs.registerLanguage('php', __webpack_require__(112));
-	hljs.registerLanguage('powershell', __webpack_require__(113));
-	hljs.registerLanguage('processing', __webpack_require__(114));
-	hljs.registerLanguage('profile', __webpack_require__(115));
-	hljs.registerLanguage('prolog', __webpack_require__(116));
-	hljs.registerLanguage('protobuf', __webpack_require__(117));
-	hljs.registerLanguage('puppet', __webpack_require__(118));
-	hljs.registerLanguage('python', __webpack_require__(119));
-	hljs.registerLanguage('q', __webpack_require__(120));
-	hljs.registerLanguage('r', __webpack_require__(121));
-	hljs.registerLanguage('rib', __webpack_require__(122));
-	hljs.registerLanguage('roboconf', __webpack_require__(123));
-	hljs.registerLanguage('rsl', __webpack_require__(124));
-	hljs.registerLanguage('ruleslanguage', __webpack_require__(125));
-	hljs.registerLanguage('rust', __webpack_require__(126));
-	hljs.registerLanguage('scala', __webpack_require__(127));
-	hljs.registerLanguage('scheme', __webpack_require__(128));
-	hljs.registerLanguage('scilab', __webpack_require__(129));
-	hljs.registerLanguage('scss', __webpack_require__(130));
-	hljs.registerLanguage('smali', __webpack_require__(131));
-	hljs.registerLanguage('smalltalk', __webpack_require__(132));
-	hljs.registerLanguage('sml', __webpack_require__(133));
-	hljs.registerLanguage('sqf', __webpack_require__(134));
-	hljs.registerLanguage('sql', __webpack_require__(135));
-	hljs.registerLanguage('stata', __webpack_require__(136));
-	hljs.registerLanguage('step21', __webpack_require__(137));
-	hljs.registerLanguage('stylus', __webpack_require__(138));
-	hljs.registerLanguage('swift', __webpack_require__(139));
-	hljs.registerLanguage('tcl', __webpack_require__(140));
-	hljs.registerLanguage('tex', __webpack_require__(141));
-	hljs.registerLanguage('thrift', __webpack_require__(142));
-	hljs.registerLanguage('tp', __webpack_require__(143));
-	hljs.registerLanguage('twig', __webpack_require__(144));
-	hljs.registerLanguage('typescript', __webpack_require__(145));
-	hljs.registerLanguage('vala', __webpack_require__(146));
-	hljs.registerLanguage('vbnet', __webpack_require__(147));
-	hljs.registerLanguage('vbscript', __webpack_require__(148));
-	hljs.registerLanguage('vbscript-html', __webpack_require__(149));
-	hljs.registerLanguage('verilog', __webpack_require__(150));
-	hljs.registerLanguage('vhdl', __webpack_require__(151));
-	hljs.registerLanguage('vim', __webpack_require__(152));
-	hljs.registerLanguage('x86asm', __webpack_require__(153));
-	hljs.registerLanguage('xl', __webpack_require__(154));
-	hljs.registerLanguage('xquery', __webpack_require__(155));
-	hljs.registerLanguage('zephir', __webpack_require__(156));
+	hljs.registerLanguage('1c', __webpack_require__(23));
+	hljs.registerLanguage('accesslog', __webpack_require__(24));
+	hljs.registerLanguage('actionscript', __webpack_require__(25));
+	hljs.registerLanguage('apache', __webpack_require__(26));
+	hljs.registerLanguage('applescript', __webpack_require__(27));
+	hljs.registerLanguage('armasm', __webpack_require__(28));
+	hljs.registerLanguage('xml', __webpack_require__(29));
+	hljs.registerLanguage('asciidoc', __webpack_require__(30));
+	hljs.registerLanguage('aspectj', __webpack_require__(31));
+	hljs.registerLanguage('autohotkey', __webpack_require__(32));
+	hljs.registerLanguage('autoit', __webpack_require__(33));
+	hljs.registerLanguage('avrasm', __webpack_require__(34));
+	hljs.registerLanguage('axapta', __webpack_require__(35));
+	hljs.registerLanguage('bash', __webpack_require__(36));
+	hljs.registerLanguage('brainfuck', __webpack_require__(37));
+	hljs.registerLanguage('cal', __webpack_require__(38));
+	hljs.registerLanguage('capnproto', __webpack_require__(39));
+	hljs.registerLanguage('ceylon', __webpack_require__(40));
+	hljs.registerLanguage('clojure', __webpack_require__(41));
+	hljs.registerLanguage('clojure-repl', __webpack_require__(42));
+	hljs.registerLanguage('cmake', __webpack_require__(43));
+	hljs.registerLanguage('coffeescript', __webpack_require__(44));
+	hljs.registerLanguage('cpp', __webpack_require__(45));
+	hljs.registerLanguage('crmsh', __webpack_require__(46));
+	hljs.registerLanguage('crystal', __webpack_require__(47));
+	hljs.registerLanguage('cs', __webpack_require__(48));
+	hljs.registerLanguage('css', __webpack_require__(49));
+	hljs.registerLanguage('d', __webpack_require__(50));
+	hljs.registerLanguage('markdown', __webpack_require__(51));
+	hljs.registerLanguage('dart', __webpack_require__(52));
+	hljs.registerLanguage('delphi', __webpack_require__(53));
+	hljs.registerLanguage('diff', __webpack_require__(54));
+	hljs.registerLanguage('django', __webpack_require__(55));
+	hljs.registerLanguage('dns', __webpack_require__(56));
+	hljs.registerLanguage('dockerfile', __webpack_require__(57));
+	hljs.registerLanguage('dos', __webpack_require__(58));
+	hljs.registerLanguage('dust', __webpack_require__(59));
+	hljs.registerLanguage('elixir', __webpack_require__(60));
+	hljs.registerLanguage('elm', __webpack_require__(61));
+	hljs.registerLanguage('ruby', __webpack_require__(62));
+	hljs.registerLanguage('erb', __webpack_require__(63));
+	hljs.registerLanguage('erlang-repl', __webpack_require__(64));
+	hljs.registerLanguage('erlang', __webpack_require__(65));
+	hljs.registerLanguage('fix', __webpack_require__(66));
+	hljs.registerLanguage('fortran', __webpack_require__(67));
+	hljs.registerLanguage('fsharp', __webpack_require__(68));
+	hljs.registerLanguage('gams', __webpack_require__(69));
+	hljs.registerLanguage('gcode', __webpack_require__(70));
+	hljs.registerLanguage('gherkin', __webpack_require__(71));
+	hljs.registerLanguage('glsl', __webpack_require__(72));
+	hljs.registerLanguage('go', __webpack_require__(73));
+	hljs.registerLanguage('golo', __webpack_require__(74));
+	hljs.registerLanguage('gradle', __webpack_require__(75));
+	hljs.registerLanguage('groovy', __webpack_require__(76));
+	hljs.registerLanguage('haml', __webpack_require__(77));
+	hljs.registerLanguage('handlebars', __webpack_require__(78));
+	hljs.registerLanguage('haskell', __webpack_require__(79));
+	hljs.registerLanguage('haxe', __webpack_require__(80));
+	hljs.registerLanguage('http', __webpack_require__(81));
+	hljs.registerLanguage('inform7', __webpack_require__(82));
+	hljs.registerLanguage('ini', __webpack_require__(83));
+	hljs.registerLanguage('irpf90', __webpack_require__(84));
+	hljs.registerLanguage('java', __webpack_require__(85));
+	hljs.registerLanguage('javascript', __webpack_require__(86));
+	hljs.registerLanguage('json', __webpack_require__(87));
+	hljs.registerLanguage('julia', __webpack_require__(88));
+	hljs.registerLanguage('kotlin', __webpack_require__(89));
+	hljs.registerLanguage('lasso', __webpack_require__(90));
+	hljs.registerLanguage('less', __webpack_require__(91));
+	hljs.registerLanguage('lisp', __webpack_require__(92));
+	hljs.registerLanguage('livecodeserver', __webpack_require__(93));
+	hljs.registerLanguage('livescript', __webpack_require__(94));
+	hljs.registerLanguage('lua', __webpack_require__(95));
+	hljs.registerLanguage('makefile', __webpack_require__(96));
+	hljs.registerLanguage('mathematica', __webpack_require__(97));
+	hljs.registerLanguage('matlab', __webpack_require__(98));
+	hljs.registerLanguage('mel', __webpack_require__(99));
+	hljs.registerLanguage('mercury', __webpack_require__(100));
+	hljs.registerLanguage('mizar', __webpack_require__(101));
+	hljs.registerLanguage('perl', __webpack_require__(102));
+	hljs.registerLanguage('mojolicious', __webpack_require__(103));
+	hljs.registerLanguage('monkey', __webpack_require__(104));
+	hljs.registerLanguage('nginx', __webpack_require__(105));
+	hljs.registerLanguage('nimrod', __webpack_require__(106));
+	hljs.registerLanguage('nix', __webpack_require__(107));
+	hljs.registerLanguage('nsis', __webpack_require__(108));
+	hljs.registerLanguage('objectivec', __webpack_require__(109));
+	hljs.registerLanguage('ocaml', __webpack_require__(110));
+	hljs.registerLanguage('openscad', __webpack_require__(111));
+	hljs.registerLanguage('oxygene', __webpack_require__(112));
+	hljs.registerLanguage('parser3', __webpack_require__(113));
+	hljs.registerLanguage('pf', __webpack_require__(114));
+	hljs.registerLanguage('php', __webpack_require__(115));
+	hljs.registerLanguage('powershell', __webpack_require__(116));
+	hljs.registerLanguage('processing', __webpack_require__(117));
+	hljs.registerLanguage('profile', __webpack_require__(118));
+	hljs.registerLanguage('prolog', __webpack_require__(119));
+	hljs.registerLanguage('protobuf', __webpack_require__(120));
+	hljs.registerLanguage('puppet', __webpack_require__(121));
+	hljs.registerLanguage('python', __webpack_require__(122));
+	hljs.registerLanguage('q', __webpack_require__(123));
+	hljs.registerLanguage('r', __webpack_require__(124));
+	hljs.registerLanguage('rib', __webpack_require__(125));
+	hljs.registerLanguage('roboconf', __webpack_require__(126));
+	hljs.registerLanguage('rsl', __webpack_require__(127));
+	hljs.registerLanguage('ruleslanguage', __webpack_require__(128));
+	hljs.registerLanguage('rust', __webpack_require__(129));
+	hljs.registerLanguage('scala', __webpack_require__(130));
+	hljs.registerLanguage('scheme', __webpack_require__(131));
+	hljs.registerLanguage('scilab', __webpack_require__(132));
+	hljs.registerLanguage('scss', __webpack_require__(133));
+	hljs.registerLanguage('smali', __webpack_require__(134));
+	hljs.registerLanguage('smalltalk', __webpack_require__(135));
+	hljs.registerLanguage('sml', __webpack_require__(136));
+	hljs.registerLanguage('sqf', __webpack_require__(137));
+	hljs.registerLanguage('sql', __webpack_require__(138));
+	hljs.registerLanguage('stata', __webpack_require__(139));
+	hljs.registerLanguage('step21', __webpack_require__(140));
+	hljs.registerLanguage('stylus', __webpack_require__(141));
+	hljs.registerLanguage('swift', __webpack_require__(142));
+	hljs.registerLanguage('tcl', __webpack_require__(143));
+	hljs.registerLanguage('tex', __webpack_require__(144));
+	hljs.registerLanguage('thrift', __webpack_require__(145));
+	hljs.registerLanguage('tp', __webpack_require__(146));
+	hljs.registerLanguage('twig', __webpack_require__(147));
+	hljs.registerLanguage('typescript', __webpack_require__(148));
+	hljs.registerLanguage('vala', __webpack_require__(149));
+	hljs.registerLanguage('vbnet', __webpack_require__(150));
+	hljs.registerLanguage('vbscript', __webpack_require__(151));
+	hljs.registerLanguage('vbscript-html', __webpack_require__(152));
+	hljs.registerLanguage('verilog', __webpack_require__(153));
+	hljs.registerLanguage('vhdl', __webpack_require__(154));
+	hljs.registerLanguage('vim', __webpack_require__(155));
+	hljs.registerLanguage('x86asm', __webpack_require__(156));
+	hljs.registerLanguage('xl', __webpack_require__(157));
+	hljs.registerLanguage('xquery', __webpack_require__(158));
+	hljs.registerLanguage('zephir', __webpack_require__(159));
 
 	module.exports = hljs;
 
 /***/ },
-/* 19 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2565,7 +2627,7 @@
 	});
 
 /***/ },
-/* 20 */
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -2615,7 +2677,7 @@
 	};
 
 /***/ },
-/* 21 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -2656,7 +2718,7 @@
 	};
 
 /***/ },
-/* 22 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -2708,7 +2770,7 @@
 	};
 
 /***/ },
-/* 23 */
+/* 26 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -2746,7 +2808,7 @@
 	};
 
 /***/ },
-/* 24 */
+/* 27 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -2797,7 +2859,7 @@
 	};
 
 /***/ },
-/* 25 */
+/* 28 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -2862,7 +2924,7 @@
 	};
 
 /***/ },
-/* 26 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -2943,7 +3005,7 @@
 	};
 
 /***/ },
-/* 27 */
+/* 30 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3117,7 +3179,7 @@
 	};
 
 /***/ },
-/* 28 */
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3211,7 +3273,7 @@
 	};
 
 /***/ },
-/* 29 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3260,7 +3322,7 @@
 	};
 
 /***/ },
-/* 30 */
+/* 33 */
 /***/ function(module, exports) {
 
 	module.exports = function(hljs){var KEYWORDS='ByRef Case Const ContinueCase ContinueLoop ' + 'Default Dim Do Else ElseIf EndFunc EndIf EndSelect ' + 'EndSwitch EndWith Enum Exit ExitLoop For Func ' + 'Global If In Local Next ReDim Return Select Static ' + 'Step Switch Then To Until Volatile WEnd While With',LITERAL='True False And Null Not Or',BUILT_IN='Abs ACos AdlibRegister AdlibUnRegister Asc AscW ASin ' + 'Assign ATan AutoItSetOption AutoItWinGetTitle ' + 'AutoItWinSetTitle Beep Binary BinaryLen BinaryMid ' + 'BinaryToString BitAND BitNOT BitOR BitRotate BitShift ' + 'BitXOR BlockInput Break Call CDTray Ceiling Chr ' + 'ChrW ClipGet ClipPut ConsoleRead ConsoleWrite ' + 'ConsoleWriteError ControlClick ControlCommand ' + 'ControlDisable ControlEnable ControlFocus ControlGetFocus ' + 'ControlGetHandle ControlGetPos ControlGetText ControlHide ' + 'ControlListView ControlMove ControlSend ControlSetText ' + 'ControlShow ControlTreeView Cos Dec DirCopy DirCreate ' + 'DirGetSize DirMove DirRemove DllCall DllCallAddress ' + 'DllCallbackFree DllCallbackGetPtr DllCallbackRegister ' + 'DllClose DllOpen DllStructCreate DllStructGetData ' + 'DllStructGetPtr DllStructGetSize DllStructSetData ' + 'DriveGetDrive DriveGetFileSystem DriveGetLabel ' + 'DriveGetSerial DriveGetType DriveMapAdd DriveMapDel ' + 'DriveMapGet DriveSetLabel DriveSpaceFree DriveSpaceTotal ' + 'DriveStatus EnvGet EnvSet EnvUpdate Eval Execute Exp ' + 'FileChangeDir FileClose FileCopy FileCreateNTFSLink ' + 'FileCreateShortcut FileDelete FileExists FileFindFirstFile ' + 'FileFindNextFile FileFlush FileGetAttrib FileGetEncoding ' + 'FileGetLongName FileGetPos FileGetShortcut FileGetShortName ' + 'FileGetSize FileGetTime FileGetVersion FileInstall ' + 'FileMove FileOpen FileOpenDialog FileRead FileReadLine ' + 'FileReadToArray FileRecycle FileRecycleEmpty FileSaveDialog ' + 'FileSelectFolder FileSetAttrib FileSetEnd FileSetPos ' + 'FileSetTime FileWrite FileWriteLine Floor FtpSetProxy ' + 'FuncName GUICreate GUICtrlCreateAvi GUICtrlCreateButton ' + 'GUICtrlCreateCheckbox GUICtrlCreateCombo ' + 'GUICtrlCreateContextMenu GUICtrlCreateDate GUICtrlCreateDummy ' + 'GUICtrlCreateEdit GUICtrlCreateGraphic GUICtrlCreateGroup ' + 'GUICtrlCreateIcon GUICtrlCreateInput GUICtrlCreateLabel ' + 'GUICtrlCreateList GUICtrlCreateListView ' + 'GUICtrlCreateListViewItem GUICtrlCreateMenu ' + 'GUICtrlCreateMenuItem GUICtrlCreateMonthCal GUICtrlCreateObj ' + 'GUICtrlCreatePic GUICtrlCreateProgress GUICtrlCreateRadio ' + 'GUICtrlCreateSlider GUICtrlCreateTab GUICtrlCreateTabItem ' + 'GUICtrlCreateTreeView GUICtrlCreateTreeViewItem ' + 'GUICtrlCreateUpdown GUICtrlDelete GUICtrlGetHandle ' + 'GUICtrlGetState GUICtrlRead GUICtrlRecvMsg ' + 'GUICtrlRegisterListViewSort GUICtrlSendMsg GUICtrlSendToDummy ' + 'GUICtrlSetBkColor GUICtrlSetColor GUICtrlSetCursor ' + 'GUICtrlSetData GUICtrlSetDefBkColor GUICtrlSetDefColor ' + 'GUICtrlSetFont GUICtrlSetGraphic GUICtrlSetImage ' + 'GUICtrlSetLimit GUICtrlSetOnEvent GUICtrlSetPos ' + 'GUICtrlSetResizing GUICtrlSetState GUICtrlSetStyle ' + 'GUICtrlSetTip GUIDelete GUIGetCursorInfo GUIGetMsg ' + 'GUIGetStyle GUIRegisterMsg GUISetAccelerators GUISetBkColor ' + 'GUISetCoord GUISetCursor GUISetFont GUISetHelp GUISetIcon ' + 'GUISetOnEvent GUISetState GUISetStyle GUIStartGroup ' + 'GUISwitch Hex HotKeySet HttpSetProxy HttpSetUserAgent ' + 'HWnd InetClose InetGet InetGetInfo InetGetSize InetRead ' + 'IniDelete IniRead IniReadSection IniReadSectionNames ' + 'IniRenameSection IniWrite IniWriteSection InputBox Int ' + 'IsAdmin IsArray IsBinary IsBool IsDeclared IsDllStruct ' + 'IsFloat IsFunc IsHWnd IsInt IsKeyword IsNumber IsObj ' + 'IsPtr IsString Log MemGetStats Mod MouseClick ' + 'MouseClickDrag MouseDown MouseGetCursor MouseGetPos ' + 'MouseMove MouseUp MouseWheel MsgBox Number ObjCreate ' + 'ObjCreateInterface ObjEvent ObjGet ObjName ' + 'OnAutoItExitRegister OnAutoItExitUnRegister Opt Ping ' + 'PixelChecksum PixelGetColor PixelSearch ProcessClose ' + 'ProcessExists ProcessGetStats ProcessList ' + 'ProcessSetPriority ProcessWait ProcessWaitClose ProgressOff ' + 'ProgressOn ProgressSet Ptr Random RegDelete RegEnumKey ' + 'RegEnumVal RegRead RegWrite Round Run RunAs RunAsWait ' + 'RunWait Send SendKeepActive SetError SetExtended ' + 'ShellExecute ShellExecuteWait Shutdown Sin Sleep ' + 'SoundPlay SoundSetWaveVolume SplashImageOn SplashOff ' + 'SplashTextOn Sqrt SRandom StatusbarGetText StderrRead ' + 'StdinWrite StdioClose StdoutRead String StringAddCR ' + 'StringCompare StringFormat StringFromASCIIArray StringInStr ' + 'StringIsAlNum StringIsAlpha StringIsASCII StringIsDigit ' + 'StringIsFloat StringIsInt StringIsLower StringIsSpace ' + 'StringIsUpper StringIsXDigit StringLeft StringLen ' + 'StringLower StringMid StringRegExp StringRegExpReplace ' + 'StringReplace StringReverse StringRight StringSplit ' + 'StringStripCR StringStripWS StringToASCIIArray ' + 'StringToBinary StringTrimLeft StringTrimRight StringUpper ' + 'Tan TCPAccept TCPCloseSocket TCPConnect TCPListen ' + 'TCPNameToIP TCPRecv TCPSend TCPShutdown TCPStartup ' + 'TimerDiff TimerInit ToolTip TrayCreateItem TrayCreateMenu ' + 'TrayGetMsg TrayItemDelete TrayItemGetHandle ' + 'TrayItemGetState TrayItemGetText TrayItemSetOnEvent ' + 'TrayItemSetState TrayItemSetText TraySetClick TraySetIcon ' + 'TraySetOnEvent TraySetPauseIcon TraySetState TraySetToolTip ' + 'TrayTip UBound UDPBind UDPCloseSocket UDPOpen UDPRecv ' + 'UDPSend UDPShutdown UDPStartup VarGetType WinActivate ' + 'WinActive WinClose WinExists WinFlash WinGetCaretPos ' + 'WinGetClassList WinGetClientSize WinGetHandle WinGetPos ' + 'WinGetProcess WinGetState WinGetText WinGetTitle WinKill ' + 'WinList WinMenuSelectItem WinMinimizeAll WinMinimizeAllUndo ' + 'WinMove WinSetOnTop WinSetState WinSetTitle WinSetTrans ' + 'WinWait WinWaitActive WinWaitClose WinWaitNotActive ' + 'Array1DToHistogram ArrayAdd ArrayBinarySearch ' + 'ArrayColDelete ArrayColInsert ArrayCombinations ' + 'ArrayConcatenate ArrayDelete ArrayDisplay ArrayExtract ' + 'ArrayFindAll ArrayInsert ArrayMax ArrayMaxIndex ArrayMin ' + 'ArrayMinIndex ArrayPermute ArrayPop ArrayPush ' + 'ArrayReverse ArraySearch ArrayShuffle ArraySort ArraySwap ' + 'ArrayToClip ArrayToString ArrayTranspose ArrayTrim ' + 'ArrayUnique Assert ChooseColor ChooseFont ' + 'ClipBoard_ChangeChain ClipBoard_Close ClipBoard_CountFormats ' + 'ClipBoard_Empty ClipBoard_EnumFormats ClipBoard_FormatStr ' + 'ClipBoard_GetData ClipBoard_GetDataEx ClipBoard_GetFormatName ' + 'ClipBoard_GetOpenWindow ClipBoard_GetOwner ' + 'ClipBoard_GetPriorityFormat ClipBoard_GetSequenceNumber ' + 'ClipBoard_GetViewer ClipBoard_IsFormatAvailable ' + 'ClipBoard_Open ClipBoard_RegisterFormat ClipBoard_SetData ' + 'ClipBoard_SetDataEx ClipBoard_SetViewer ClipPutFile ' + 'ColorConvertHSLtoRGB ColorConvertRGBtoHSL ColorGetBlue ' + 'ColorGetCOLORREF ColorGetGreen ColorGetRed ColorGetRGB ' + 'ColorSetCOLORREF ColorSetRGB Crypt_DecryptData ' + 'Crypt_DecryptFile Crypt_DeriveKey Crypt_DestroyKey ' + 'Crypt_EncryptData Crypt_EncryptFile Crypt_GenRandom ' + 'Crypt_HashData Crypt_HashFile Crypt_Shutdown Crypt_Startup ' + 'DateAdd DateDayOfWeek DateDaysInMonth DateDiff ' + 'DateIsLeapYear DateIsValid DateTimeFormat DateTimeSplit ' + 'DateToDayOfWeek DateToDayOfWeekISO DateToDayValue ' + 'DateToMonth Date_Time_CompareFileTime ' + 'Date_Time_DOSDateTimeToArray Date_Time_DOSDateTimeToFileTime ' + 'Date_Time_DOSDateTimeToStr Date_Time_DOSDateToArray ' + 'Date_Time_DOSDateToStr Date_Time_DOSTimeToArray ' + 'Date_Time_DOSTimeToStr Date_Time_EncodeFileTime ' + 'Date_Time_EncodeSystemTime Date_Time_FileTimeToArray ' + 'Date_Time_FileTimeToDOSDateTime ' + 'Date_Time_FileTimeToLocalFileTime Date_Time_FileTimeToStr ' + 'Date_Time_FileTimeToSystemTime Date_Time_GetFileTime ' + 'Date_Time_GetLocalTime Date_Time_GetSystemTime ' + 'Date_Time_GetSystemTimeAdjustment ' + 'Date_Time_GetSystemTimeAsFileTime Date_Time_GetSystemTimes ' + 'Date_Time_GetTickCount Date_Time_GetTimeZoneInformation ' + 'Date_Time_LocalFileTimeToFileTime Date_Time_SetFileTime ' + 'Date_Time_SetLocalTime Date_Time_SetSystemTime ' + 'Date_Time_SetSystemTimeAdjustment ' + 'Date_Time_SetTimeZoneInformation Date_Time_SystemTimeToArray ' + 'Date_Time_SystemTimeToDateStr Date_Time_SystemTimeToDateTimeStr ' + 'Date_Time_SystemTimeToFileTime Date_Time_SystemTimeToTimeStr ' + 'Date_Time_SystemTimeToTzSpecificLocalTime ' + 'Date_Time_TzSpecificLocalTimeToSystemTime DayValueToDate ' + 'DebugBugReportEnv DebugCOMError DebugOut DebugReport ' + 'DebugReportEx DebugReportVar DebugSetup Degree ' + 'EventLog__Backup EventLog__Clear EventLog__Close ' + 'EventLog__Count EventLog__DeregisterSource EventLog__Full ' + 'EventLog__Notify EventLog__Oldest EventLog__Open ' + 'EventLog__OpenBackup EventLog__Read EventLog__RegisterSource ' + 'EventLog__Report Excel_BookAttach Excel_BookClose ' + 'Excel_BookList Excel_BookNew Excel_BookOpen ' + 'Excel_BookOpenText Excel_BookSave Excel_BookSaveAs ' + 'Excel_Close Excel_ColumnToLetter Excel_ColumnToNumber ' + 'Excel_ConvertFormula Excel_Export Excel_FilterGet ' + 'Excel_FilterSet Excel_Open Excel_PictureAdd Excel_Print ' + 'Excel_RangeCopyPaste Excel_RangeDelete Excel_RangeFind ' + 'Excel_RangeInsert Excel_RangeLinkAddRemove Excel_RangeRead ' + 'Excel_RangeReplace Excel_RangeSort Excel_RangeValidate ' + 'Excel_RangeWrite Excel_SheetAdd Excel_SheetCopyMove ' + 'Excel_SheetDelete Excel_SheetList FileCountLines FileCreate ' + 'FileListToArray FileListToArrayRec FilePrint ' + 'FileReadToArray FileWriteFromArray FileWriteLog ' + 'FileWriteToLine FTP_Close FTP_Command FTP_Connect ' + 'FTP_DecodeInternetStatus FTP_DirCreate FTP_DirDelete ' + 'FTP_DirGetCurrent FTP_DirPutContents FTP_DirSetCurrent ' + 'FTP_FileClose FTP_FileDelete FTP_FileGet FTP_FileGetSize ' + 'FTP_FileOpen FTP_FilePut FTP_FileRead FTP_FileRename ' + 'FTP_FileTimeLoHiToStr FTP_FindFileClose FTP_FindFileFirst ' + 'FTP_FindFileNext FTP_GetLastResponseInfo FTP_ListToArray ' + 'FTP_ListToArray2D FTP_ListToArrayEx FTP_Open ' + 'FTP_ProgressDownload FTP_ProgressUpload FTP_SetStatusCallback ' + 'GDIPlus_ArrowCapCreate GDIPlus_ArrowCapDispose ' + 'GDIPlus_ArrowCapGetFillState GDIPlus_ArrowCapGetHeight ' + 'GDIPlus_ArrowCapGetMiddleInset GDIPlus_ArrowCapGetWidth ' + 'GDIPlus_ArrowCapSetFillState GDIPlus_ArrowCapSetHeight ' + 'GDIPlus_ArrowCapSetMiddleInset GDIPlus_ArrowCapSetWidth ' + 'GDIPlus_BitmapApplyEffect GDIPlus_BitmapApplyEffectEx ' + 'GDIPlus_BitmapCloneArea GDIPlus_BitmapConvertFormat ' + 'GDIPlus_BitmapCreateApplyEffect ' + 'GDIPlus_BitmapCreateApplyEffectEx ' + 'GDIPlus_BitmapCreateDIBFromBitmap GDIPlus_BitmapCreateFromFile ' + 'GDIPlus_BitmapCreateFromGraphics ' + 'GDIPlus_BitmapCreateFromHBITMAP GDIPlus_BitmapCreateFromHICON ' + 'GDIPlus_BitmapCreateFromHICON32 GDIPlus_BitmapCreateFromMemory ' + 'GDIPlus_BitmapCreateFromResource GDIPlus_BitmapCreateFromScan0 ' + 'GDIPlus_BitmapCreateFromStream ' + 'GDIPlus_BitmapCreateHBITMAPFromBitmap GDIPlus_BitmapDispose ' + 'GDIPlus_BitmapGetHistogram GDIPlus_BitmapGetHistogramEx ' + 'GDIPlus_BitmapGetHistogramSize GDIPlus_BitmapGetPixel ' + 'GDIPlus_BitmapLockBits GDIPlus_BitmapSetPixel ' + 'GDIPlus_BitmapUnlockBits GDIPlus_BrushClone ' + 'GDIPlus_BrushCreateSolid GDIPlus_BrushDispose ' + 'GDIPlus_BrushGetSolidColor GDIPlus_BrushGetType ' + 'GDIPlus_BrushSetSolidColor GDIPlus_ColorMatrixCreate ' + 'GDIPlus_ColorMatrixCreateGrayScale ' + 'GDIPlus_ColorMatrixCreateNegative ' + 'GDIPlus_ColorMatrixCreateSaturation ' + 'GDIPlus_ColorMatrixCreateScale ' + 'GDIPlus_ColorMatrixCreateTranslate GDIPlus_CustomLineCapClone ' + 'GDIPlus_CustomLineCapCreate GDIPlus_CustomLineCapDispose ' + 'GDIPlus_CustomLineCapGetStrokeCaps ' + 'GDIPlus_CustomLineCapSetStrokeCaps GDIPlus_Decoders ' + 'GDIPlus_DecodersGetCount GDIPlus_DecodersGetSize ' + 'GDIPlus_DrawImageFX GDIPlus_DrawImageFXEx ' + 'GDIPlus_DrawImagePoints GDIPlus_EffectCreate ' + 'GDIPlus_EffectCreateBlur GDIPlus_EffectCreateBrightnessContrast ' + 'GDIPlus_EffectCreateColorBalance GDIPlus_EffectCreateColorCurve ' + 'GDIPlus_EffectCreateColorLUT GDIPlus_EffectCreateColorMatrix ' + 'GDIPlus_EffectCreateHueSaturationLightness ' + 'GDIPlus_EffectCreateLevels GDIPlus_EffectCreateRedEyeCorrection ' + 'GDIPlus_EffectCreateSharpen GDIPlus_EffectCreateTint ' + 'GDIPlus_EffectDispose GDIPlus_EffectGetParameters ' + 'GDIPlus_EffectSetParameters GDIPlus_Encoders ' + 'GDIPlus_EncodersGetCLSID GDIPlus_EncodersGetCount ' + 'GDIPlus_EncodersGetParamList GDIPlus_EncodersGetParamListSize ' + 'GDIPlus_EncodersGetSize GDIPlus_FontCreate ' + 'GDIPlus_FontDispose GDIPlus_FontFamilyCreate ' + 'GDIPlus_FontFamilyCreateFromCollection ' + 'GDIPlus_FontFamilyDispose GDIPlus_FontFamilyGetCellAscent ' + 'GDIPlus_FontFamilyGetCellDescent GDIPlus_FontFamilyGetEmHeight ' + 'GDIPlus_FontFamilyGetLineSpacing GDIPlus_FontGetHeight ' + 'GDIPlus_FontPrivateAddFont GDIPlus_FontPrivateAddMemoryFont ' + 'GDIPlus_FontPrivateCollectionDispose ' + 'GDIPlus_FontPrivateCreateCollection GDIPlus_GraphicsClear ' + 'GDIPlus_GraphicsCreateFromHDC GDIPlus_GraphicsCreateFromHWND ' + 'GDIPlus_GraphicsDispose GDIPlus_GraphicsDrawArc ' + 'GDIPlus_GraphicsDrawBezier GDIPlus_GraphicsDrawClosedCurve ' + 'GDIPlus_GraphicsDrawClosedCurve2 GDIPlus_GraphicsDrawCurve ' + 'GDIPlus_GraphicsDrawCurve2 GDIPlus_GraphicsDrawEllipse ' + 'GDIPlus_GraphicsDrawImage GDIPlus_GraphicsDrawImagePointsRect ' + 'GDIPlus_GraphicsDrawImageRect GDIPlus_GraphicsDrawImageRectRect ' + 'GDIPlus_GraphicsDrawLine GDIPlus_GraphicsDrawPath ' + 'GDIPlus_GraphicsDrawPie GDIPlus_GraphicsDrawPolygon ' + 'GDIPlus_GraphicsDrawRect GDIPlus_GraphicsDrawString ' + 'GDIPlus_GraphicsDrawStringEx GDIPlus_GraphicsFillClosedCurve ' + 'GDIPlus_GraphicsFillClosedCurve2 GDIPlus_GraphicsFillEllipse ' + 'GDIPlus_GraphicsFillPath GDIPlus_GraphicsFillPie ' + 'GDIPlus_GraphicsFillPolygon GDIPlus_GraphicsFillRect ' + 'GDIPlus_GraphicsFillRegion GDIPlus_GraphicsGetCompositingMode ' + 'GDIPlus_GraphicsGetCompositingQuality GDIPlus_GraphicsGetDC ' + 'GDIPlus_GraphicsGetInterpolationMode ' + 'GDIPlus_GraphicsGetSmoothingMode GDIPlus_GraphicsGetTransform ' + 'GDIPlus_GraphicsMeasureCharacterRanges ' + 'GDIPlus_GraphicsMeasureString GDIPlus_GraphicsReleaseDC ' + 'GDIPlus_GraphicsResetClip GDIPlus_GraphicsResetTransform ' + 'GDIPlus_GraphicsRestore GDIPlus_GraphicsRotateTransform ' + 'GDIPlus_GraphicsSave GDIPlus_GraphicsScaleTransform ' + 'GDIPlus_GraphicsSetClipPath GDIPlus_GraphicsSetClipRect ' + 'GDIPlus_GraphicsSetClipRegion ' + 'GDIPlus_GraphicsSetCompositingMode ' + 'GDIPlus_GraphicsSetCompositingQuality ' + 'GDIPlus_GraphicsSetInterpolationMode ' + 'GDIPlus_GraphicsSetPixelOffsetMode ' + 'GDIPlus_GraphicsSetSmoothingMode ' + 'GDIPlus_GraphicsSetTextRenderingHint ' + 'GDIPlus_GraphicsSetTransform GDIPlus_GraphicsTransformPoints ' + 'GDIPlus_GraphicsTranslateTransform GDIPlus_HatchBrushCreate ' + 'GDIPlus_HICONCreateFromBitmap GDIPlus_ImageAttributesCreate ' + 'GDIPlus_ImageAttributesDispose ' + 'GDIPlus_ImageAttributesSetColorKeys ' + 'GDIPlus_ImageAttributesSetColorMatrix GDIPlus_ImageDispose ' + 'GDIPlus_ImageGetDimension GDIPlus_ImageGetFlags ' + 'GDIPlus_ImageGetGraphicsContext GDIPlus_ImageGetHeight ' + 'GDIPlus_ImageGetHorizontalResolution ' + 'GDIPlus_ImageGetPixelFormat GDIPlus_ImageGetRawFormat ' + 'GDIPlus_ImageGetThumbnail GDIPlus_ImageGetType ' + 'GDIPlus_ImageGetVerticalResolution GDIPlus_ImageGetWidth ' + 'GDIPlus_ImageLoadFromFile GDIPlus_ImageLoadFromStream ' + 'GDIPlus_ImageResize GDIPlus_ImageRotateFlip ' + 'GDIPlus_ImageSaveToFile GDIPlus_ImageSaveToFileEx ' + 'GDIPlus_ImageSaveToStream GDIPlus_ImageScale ' + 'GDIPlus_LineBrushCreate GDIPlus_LineBrushCreateFromRect ' + 'GDIPlus_LineBrushCreateFromRectWithAngle ' + 'GDIPlus_LineBrushGetColors GDIPlus_LineBrushGetRect ' + 'GDIPlus_LineBrushMultiplyTransform ' + 'GDIPlus_LineBrushResetTransform GDIPlus_LineBrushSetBlend ' + 'GDIPlus_LineBrushSetColors GDIPlus_LineBrushSetGammaCorrection ' + 'GDIPlus_LineBrushSetLinearBlend GDIPlus_LineBrushSetPresetBlend ' + 'GDIPlus_LineBrushSetSigmaBlend GDIPlus_LineBrushSetTransform ' + 'GDIPlus_MatrixClone GDIPlus_MatrixCreate ' + 'GDIPlus_MatrixDispose GDIPlus_MatrixGetElements ' + 'GDIPlus_MatrixInvert GDIPlus_MatrixMultiply ' + 'GDIPlus_MatrixRotate GDIPlus_MatrixScale ' + 'GDIPlus_MatrixSetElements GDIPlus_MatrixShear ' + 'GDIPlus_MatrixTransformPoints GDIPlus_MatrixTranslate ' + 'GDIPlus_PaletteInitialize GDIPlus_ParamAdd GDIPlus_ParamInit ' + 'GDIPlus_ParamSize GDIPlus_PathAddArc GDIPlus_PathAddBezier ' + 'GDIPlus_PathAddClosedCurve GDIPlus_PathAddClosedCurve2 ' + 'GDIPlus_PathAddCurve GDIPlus_PathAddCurve2 ' + 'GDIPlus_PathAddCurve3 GDIPlus_PathAddEllipse ' + 'GDIPlus_PathAddLine GDIPlus_PathAddLine2 GDIPlus_PathAddPath ' + 'GDIPlus_PathAddPie GDIPlus_PathAddPolygon ' + 'GDIPlus_PathAddRectangle GDIPlus_PathAddString ' + 'GDIPlus_PathBrushCreate GDIPlus_PathBrushCreateFromPath ' + 'GDIPlus_PathBrushGetCenterPoint GDIPlus_PathBrushGetFocusScales ' + 'GDIPlus_PathBrushGetPointCount GDIPlus_PathBrushGetRect ' + 'GDIPlus_PathBrushGetWrapMode GDIPlus_PathBrushMultiplyTransform ' + 'GDIPlus_PathBrushResetTransform GDIPlus_PathBrushSetBlend ' + 'GDIPlus_PathBrushSetCenterColor GDIPlus_PathBrushSetCenterPoint ' + 'GDIPlus_PathBrushSetFocusScales ' + 'GDIPlus_PathBrushSetGammaCorrection ' + 'GDIPlus_PathBrushSetLinearBlend GDIPlus_PathBrushSetPresetBlend ' + 'GDIPlus_PathBrushSetSigmaBlend ' + 'GDIPlus_PathBrushSetSurroundColor ' + 'GDIPlus_PathBrushSetSurroundColorsWithCount ' + 'GDIPlus_PathBrushSetTransform GDIPlus_PathBrushSetWrapMode ' + 'GDIPlus_PathClone GDIPlus_PathCloseFigure GDIPlus_PathCreate ' + 'GDIPlus_PathCreate2 GDIPlus_PathDispose GDIPlus_PathFlatten ' + 'GDIPlus_PathGetData GDIPlus_PathGetFillMode ' + 'GDIPlus_PathGetLastPoint GDIPlus_PathGetPointCount ' + 'GDIPlus_PathGetPoints GDIPlus_PathGetWorldBounds ' + 'GDIPlus_PathIsOutlineVisiblePoint GDIPlus_PathIsVisiblePoint ' + 'GDIPlus_PathIterCreate GDIPlus_PathIterDispose ' + 'GDIPlus_PathIterGetSubpathCount GDIPlus_PathIterNextMarkerPath ' + 'GDIPlus_PathIterNextSubpathPath GDIPlus_PathIterRewind ' + 'GDIPlus_PathReset GDIPlus_PathReverse GDIPlus_PathSetFillMode ' + 'GDIPlus_PathSetMarker GDIPlus_PathStartFigure ' + 'GDIPlus_PathTransform GDIPlus_PathWarp GDIPlus_PathWiden ' + 'GDIPlus_PathWindingModeOutline GDIPlus_PenCreate ' + 'GDIPlus_PenCreate2 GDIPlus_PenDispose GDIPlus_PenGetAlignment ' + 'GDIPlus_PenGetColor GDIPlus_PenGetCustomEndCap ' + 'GDIPlus_PenGetDashCap GDIPlus_PenGetDashStyle ' + 'GDIPlus_PenGetEndCap GDIPlus_PenGetMiterLimit ' + 'GDIPlus_PenGetWidth GDIPlus_PenSetAlignment ' + 'GDIPlus_PenSetColor GDIPlus_PenSetCustomEndCap ' + 'GDIPlus_PenSetDashCap GDIPlus_PenSetDashStyle ' + 'GDIPlus_PenSetEndCap GDIPlus_PenSetLineCap ' + 'GDIPlus_PenSetLineJoin GDIPlus_PenSetMiterLimit ' + 'GDIPlus_PenSetStartCap GDIPlus_PenSetWidth ' + 'GDIPlus_RectFCreate GDIPlus_RegionClone ' + 'GDIPlus_RegionCombinePath GDIPlus_RegionCombineRect ' + 'GDIPlus_RegionCombineRegion GDIPlus_RegionCreate ' + 'GDIPlus_RegionCreateFromPath GDIPlus_RegionCreateFromRect ' + 'GDIPlus_RegionDispose GDIPlus_RegionGetBounds ' + 'GDIPlus_RegionGetHRgn GDIPlus_RegionTransform ' + 'GDIPlus_RegionTranslate GDIPlus_Shutdown GDIPlus_Startup ' + 'GDIPlus_StringFormatCreate GDIPlus_StringFormatDispose ' + 'GDIPlus_StringFormatGetMeasurableCharacterRangeCount ' + 'GDIPlus_StringFormatSetAlign GDIPlus_StringFormatSetLineAlign ' + 'GDIPlus_StringFormatSetMeasurableCharacterRanges ' + 'GDIPlus_TextureCreate GDIPlus_TextureCreate2 ' + 'GDIPlus_TextureCreateIA GetIP GUICtrlAVI_Close ' + 'GUICtrlAVI_Create GUICtrlAVI_Destroy GUICtrlAVI_IsPlaying ' + 'GUICtrlAVI_Open GUICtrlAVI_OpenEx GUICtrlAVI_Play ' + 'GUICtrlAVI_Seek GUICtrlAVI_Show GUICtrlAVI_Stop ' + 'GUICtrlButton_Click GUICtrlButton_Create ' + 'GUICtrlButton_Destroy GUICtrlButton_Enable ' + 'GUICtrlButton_GetCheck GUICtrlButton_GetFocus ' + 'GUICtrlButton_GetIdealSize GUICtrlButton_GetImage ' + 'GUICtrlButton_GetImageList GUICtrlButton_GetNote ' + 'GUICtrlButton_GetNoteLength GUICtrlButton_GetSplitInfo ' + 'GUICtrlButton_GetState GUICtrlButton_GetText ' + 'GUICtrlButton_GetTextMargin GUICtrlButton_SetCheck ' + 'GUICtrlButton_SetDontClick GUICtrlButton_SetFocus ' + 'GUICtrlButton_SetImage GUICtrlButton_SetImageList ' + 'GUICtrlButton_SetNote GUICtrlButton_SetShield ' + 'GUICtrlButton_SetSize GUICtrlButton_SetSplitInfo ' + 'GUICtrlButton_SetState GUICtrlButton_SetStyle ' + 'GUICtrlButton_SetText GUICtrlButton_SetTextMargin ' + 'GUICtrlButton_Show GUICtrlComboBoxEx_AddDir ' + 'GUICtrlComboBoxEx_AddString GUICtrlComboBoxEx_BeginUpdate ' + 'GUICtrlComboBoxEx_Create GUICtrlComboBoxEx_CreateSolidBitMap ' + 'GUICtrlComboBoxEx_DeleteString GUICtrlComboBoxEx_Destroy ' + 'GUICtrlComboBoxEx_EndUpdate GUICtrlComboBoxEx_FindStringExact ' + 'GUICtrlComboBoxEx_GetComboBoxInfo ' + 'GUICtrlComboBoxEx_GetComboControl GUICtrlComboBoxEx_GetCount ' + 'GUICtrlComboBoxEx_GetCurSel ' + 'GUICtrlComboBoxEx_GetDroppedControlRect ' + 'GUICtrlComboBoxEx_GetDroppedControlRectEx ' + 'GUICtrlComboBoxEx_GetDroppedState ' + 'GUICtrlComboBoxEx_GetDroppedWidth ' + 'GUICtrlComboBoxEx_GetEditControl GUICtrlComboBoxEx_GetEditSel ' + 'GUICtrlComboBoxEx_GetEditText ' + 'GUICtrlComboBoxEx_GetExtendedStyle ' + 'GUICtrlComboBoxEx_GetExtendedUI GUICtrlComboBoxEx_GetImageList ' + 'GUICtrlComboBoxEx_GetItem GUICtrlComboBoxEx_GetItemEx ' + 'GUICtrlComboBoxEx_GetItemHeight GUICtrlComboBoxEx_GetItemImage ' + 'GUICtrlComboBoxEx_GetItemIndent ' + 'GUICtrlComboBoxEx_GetItemOverlayImage ' + 'GUICtrlComboBoxEx_GetItemParam ' + 'GUICtrlComboBoxEx_GetItemSelectedImage ' + 'GUICtrlComboBoxEx_GetItemText GUICtrlComboBoxEx_GetItemTextLen ' + 'GUICtrlComboBoxEx_GetList GUICtrlComboBoxEx_GetListArray ' + 'GUICtrlComboBoxEx_GetLocale GUICtrlComboBoxEx_GetLocaleCountry ' + 'GUICtrlComboBoxEx_GetLocaleLang ' + 'GUICtrlComboBoxEx_GetLocalePrimLang ' + 'GUICtrlComboBoxEx_GetLocaleSubLang ' + 'GUICtrlComboBoxEx_GetMinVisible GUICtrlComboBoxEx_GetTopIndex ' + 'GUICtrlComboBoxEx_GetUnicode GUICtrlComboBoxEx_InitStorage ' + 'GUICtrlComboBoxEx_InsertString GUICtrlComboBoxEx_LimitText ' + 'GUICtrlComboBoxEx_ReplaceEditSel GUICtrlComboBoxEx_ResetContent ' + 'GUICtrlComboBoxEx_SetCurSel GUICtrlComboBoxEx_SetDroppedWidth ' + 'GUICtrlComboBoxEx_SetEditSel GUICtrlComboBoxEx_SetEditText ' + 'GUICtrlComboBoxEx_SetExtendedStyle ' + 'GUICtrlComboBoxEx_SetExtendedUI GUICtrlComboBoxEx_SetImageList ' + 'GUICtrlComboBoxEx_SetItem GUICtrlComboBoxEx_SetItemEx ' + 'GUICtrlComboBoxEx_SetItemHeight GUICtrlComboBoxEx_SetItemImage ' + 'GUICtrlComboBoxEx_SetItemIndent ' + 'GUICtrlComboBoxEx_SetItemOverlayImage ' + 'GUICtrlComboBoxEx_SetItemParam ' + 'GUICtrlComboBoxEx_SetItemSelectedImage ' + 'GUICtrlComboBoxEx_SetMinVisible GUICtrlComboBoxEx_SetTopIndex ' + 'GUICtrlComboBoxEx_SetUnicode GUICtrlComboBoxEx_ShowDropDown ' + 'GUICtrlComboBox_AddDir GUICtrlComboBox_AddString ' + 'GUICtrlComboBox_AutoComplete GUICtrlComboBox_BeginUpdate ' + 'GUICtrlComboBox_Create GUICtrlComboBox_DeleteString ' + 'GUICtrlComboBox_Destroy GUICtrlComboBox_EndUpdate ' + 'GUICtrlComboBox_FindString GUICtrlComboBox_FindStringExact ' + 'GUICtrlComboBox_GetComboBoxInfo GUICtrlComboBox_GetCount ' + 'GUICtrlComboBox_GetCueBanner GUICtrlComboBox_GetCurSel ' + 'GUICtrlComboBox_GetDroppedControlRect ' + 'GUICtrlComboBox_GetDroppedControlRectEx ' + 'GUICtrlComboBox_GetDroppedState GUICtrlComboBox_GetDroppedWidth ' + 'GUICtrlComboBox_GetEditSel GUICtrlComboBox_GetEditText ' + 'GUICtrlComboBox_GetExtendedUI ' + 'GUICtrlComboBox_GetHorizontalExtent ' + 'GUICtrlComboBox_GetItemHeight GUICtrlComboBox_GetLBText ' + 'GUICtrlComboBox_GetLBTextLen GUICtrlComboBox_GetList ' + 'GUICtrlComboBox_GetListArray GUICtrlComboBox_GetLocale ' + 'GUICtrlComboBox_GetLocaleCountry GUICtrlComboBox_GetLocaleLang ' + 'GUICtrlComboBox_GetLocalePrimLang ' + 'GUICtrlComboBox_GetLocaleSubLang GUICtrlComboBox_GetMinVisible ' + 'GUICtrlComboBox_GetTopIndex GUICtrlComboBox_InitStorage ' + 'GUICtrlComboBox_InsertString GUICtrlComboBox_LimitText ' + 'GUICtrlComboBox_ReplaceEditSel GUICtrlComboBox_ResetContent ' + 'GUICtrlComboBox_SelectString GUICtrlComboBox_SetCueBanner ' + 'GUICtrlComboBox_SetCurSel GUICtrlComboBox_SetDroppedWidth ' + 'GUICtrlComboBox_SetEditSel GUICtrlComboBox_SetEditText ' + 'GUICtrlComboBox_SetExtendedUI ' + 'GUICtrlComboBox_SetHorizontalExtent ' + 'GUICtrlComboBox_SetItemHeight GUICtrlComboBox_SetMinVisible ' + 'GUICtrlComboBox_SetTopIndex GUICtrlComboBox_ShowDropDown ' + 'GUICtrlDTP_Create GUICtrlDTP_Destroy GUICtrlDTP_GetMCColor ' + 'GUICtrlDTP_GetMCFont GUICtrlDTP_GetMonthCal ' + 'GUICtrlDTP_GetRange GUICtrlDTP_GetRangeEx ' + 'GUICtrlDTP_GetSystemTime GUICtrlDTP_GetSystemTimeEx ' + 'GUICtrlDTP_SetFormat GUICtrlDTP_SetMCColor ' + 'GUICtrlDTP_SetMCFont GUICtrlDTP_SetRange ' + 'GUICtrlDTP_SetRangeEx GUICtrlDTP_SetSystemTime ' + 'GUICtrlDTP_SetSystemTimeEx GUICtrlEdit_AppendText ' + 'GUICtrlEdit_BeginUpdate GUICtrlEdit_CanUndo ' + 'GUICtrlEdit_CharFromPos GUICtrlEdit_Create ' + 'GUICtrlEdit_Destroy GUICtrlEdit_EmptyUndoBuffer ' + 'GUICtrlEdit_EndUpdate GUICtrlEdit_Find GUICtrlEdit_FmtLines ' + 'GUICtrlEdit_GetCueBanner GUICtrlEdit_GetFirstVisibleLine ' + 'GUICtrlEdit_GetLimitText GUICtrlEdit_GetLine ' + 'GUICtrlEdit_GetLineCount GUICtrlEdit_GetMargins ' + 'GUICtrlEdit_GetModify GUICtrlEdit_GetPasswordChar ' + 'GUICtrlEdit_GetRECT GUICtrlEdit_GetRECTEx GUICtrlEdit_GetSel ' + 'GUICtrlEdit_GetText GUICtrlEdit_GetTextLen ' + 'GUICtrlEdit_HideBalloonTip GUICtrlEdit_InsertText ' + 'GUICtrlEdit_LineFromChar GUICtrlEdit_LineIndex ' + 'GUICtrlEdit_LineLength GUICtrlEdit_LineScroll ' + 'GUICtrlEdit_PosFromChar GUICtrlEdit_ReplaceSel ' + 'GUICtrlEdit_Scroll GUICtrlEdit_SetCueBanner ' + 'GUICtrlEdit_SetLimitText GUICtrlEdit_SetMargins ' + 'GUICtrlEdit_SetModify GUICtrlEdit_SetPasswordChar ' + 'GUICtrlEdit_SetReadOnly GUICtrlEdit_SetRECT ' + 'GUICtrlEdit_SetRECTEx GUICtrlEdit_SetRECTNP ' + 'GUICtrlEdit_SetRectNPEx GUICtrlEdit_SetSel ' + 'GUICtrlEdit_SetTabStops GUICtrlEdit_SetText ' + 'GUICtrlEdit_ShowBalloonTip GUICtrlEdit_Undo ' + 'GUICtrlHeader_AddItem GUICtrlHeader_ClearFilter ' + 'GUICtrlHeader_ClearFilterAll GUICtrlHeader_Create ' + 'GUICtrlHeader_CreateDragImage GUICtrlHeader_DeleteItem ' + 'GUICtrlHeader_Destroy GUICtrlHeader_EditFilter ' + 'GUICtrlHeader_GetBitmapMargin GUICtrlHeader_GetImageList ' + 'GUICtrlHeader_GetItem GUICtrlHeader_GetItemAlign ' + 'GUICtrlHeader_GetItemBitmap GUICtrlHeader_GetItemCount ' + 'GUICtrlHeader_GetItemDisplay GUICtrlHeader_GetItemFlags ' + 'GUICtrlHeader_GetItemFormat GUICtrlHeader_GetItemImage ' + 'GUICtrlHeader_GetItemOrder GUICtrlHeader_GetItemParam ' + 'GUICtrlHeader_GetItemRect GUICtrlHeader_GetItemRectEx ' + 'GUICtrlHeader_GetItemText GUICtrlHeader_GetItemWidth ' + 'GUICtrlHeader_GetOrderArray GUICtrlHeader_GetUnicodeFormat ' + 'GUICtrlHeader_HitTest GUICtrlHeader_InsertItem ' + 'GUICtrlHeader_Layout GUICtrlHeader_OrderToIndex ' + 'GUICtrlHeader_SetBitmapMargin ' + 'GUICtrlHeader_SetFilterChangeTimeout ' + 'GUICtrlHeader_SetHotDivider GUICtrlHeader_SetImageList ' + 'GUICtrlHeader_SetItem GUICtrlHeader_SetItemAlign ' + 'GUICtrlHeader_SetItemBitmap GUICtrlHeader_SetItemDisplay ' + 'GUICtrlHeader_SetItemFlags GUICtrlHeader_SetItemFormat ' + 'GUICtrlHeader_SetItemImage GUICtrlHeader_SetItemOrder ' + 'GUICtrlHeader_SetItemParam GUICtrlHeader_SetItemText ' + 'GUICtrlHeader_SetItemWidth GUICtrlHeader_SetOrderArray ' + 'GUICtrlHeader_SetUnicodeFormat GUICtrlIpAddress_ClearAddress ' + 'GUICtrlIpAddress_Create GUICtrlIpAddress_Destroy ' + 'GUICtrlIpAddress_Get GUICtrlIpAddress_GetArray ' + 'GUICtrlIpAddress_GetEx GUICtrlIpAddress_IsBlank ' + 'GUICtrlIpAddress_Set GUICtrlIpAddress_SetArray ' + 'GUICtrlIpAddress_SetEx GUICtrlIpAddress_SetFocus ' + 'GUICtrlIpAddress_SetFont GUICtrlIpAddress_SetRange ' + 'GUICtrlIpAddress_ShowHide GUICtrlListBox_AddFile ' + 'GUICtrlListBox_AddString GUICtrlListBox_BeginUpdate ' + 'GUICtrlListBox_ClickItem GUICtrlListBox_Create ' + 'GUICtrlListBox_DeleteString GUICtrlListBox_Destroy ' + 'GUICtrlListBox_Dir GUICtrlListBox_EndUpdate ' + 'GUICtrlListBox_FindInText GUICtrlListBox_FindString ' + 'GUICtrlListBox_GetAnchorIndex GUICtrlListBox_GetCaretIndex ' + 'GUICtrlListBox_GetCount GUICtrlListBox_GetCurSel ' + 'GUICtrlListBox_GetHorizontalExtent GUICtrlListBox_GetItemData ' + 'GUICtrlListBox_GetItemHeight GUICtrlListBox_GetItemRect ' + 'GUICtrlListBox_GetItemRectEx GUICtrlListBox_GetListBoxInfo ' + 'GUICtrlListBox_GetLocale GUICtrlListBox_GetLocaleCountry ' + 'GUICtrlListBox_GetLocaleLang GUICtrlListBox_GetLocalePrimLang ' + 'GUICtrlListBox_GetLocaleSubLang GUICtrlListBox_GetSel ' + 'GUICtrlListBox_GetSelCount GUICtrlListBox_GetSelItems ' + 'GUICtrlListBox_GetSelItemsText GUICtrlListBox_GetText ' + 'GUICtrlListBox_GetTextLen GUICtrlListBox_GetTopIndex ' + 'GUICtrlListBox_InitStorage GUICtrlListBox_InsertString ' + 'GUICtrlListBox_ItemFromPoint GUICtrlListBox_ReplaceString ' + 'GUICtrlListBox_ResetContent GUICtrlListBox_SelectString ' + 'GUICtrlListBox_SelItemRange GUICtrlListBox_SelItemRangeEx ' + 'GUICtrlListBox_SetAnchorIndex GUICtrlListBox_SetCaretIndex ' + 'GUICtrlListBox_SetColumnWidth GUICtrlListBox_SetCurSel ' + 'GUICtrlListBox_SetHorizontalExtent GUICtrlListBox_SetItemData ' + 'GUICtrlListBox_SetItemHeight GUICtrlListBox_SetLocale ' + 'GUICtrlListBox_SetSel GUICtrlListBox_SetTabStops ' + 'GUICtrlListBox_SetTopIndex GUICtrlListBox_Sort ' + 'GUICtrlListBox_SwapString GUICtrlListBox_UpdateHScroll ' + 'GUICtrlListView_AddArray GUICtrlListView_AddColumn ' + 'GUICtrlListView_AddItem GUICtrlListView_AddSubItem ' + 'GUICtrlListView_ApproximateViewHeight ' + 'GUICtrlListView_ApproximateViewRect ' + 'GUICtrlListView_ApproximateViewWidth GUICtrlListView_Arrange ' + 'GUICtrlListView_BeginUpdate GUICtrlListView_CancelEditLabel ' + 'GUICtrlListView_ClickItem GUICtrlListView_CopyItems ' + 'GUICtrlListView_Create GUICtrlListView_CreateDragImage ' + 'GUICtrlListView_CreateSolidBitMap ' + 'GUICtrlListView_DeleteAllItems GUICtrlListView_DeleteColumn ' + 'GUICtrlListView_DeleteItem GUICtrlListView_DeleteItemsSelected ' + 'GUICtrlListView_Destroy GUICtrlListView_DrawDragImage ' + 'GUICtrlListView_EditLabel GUICtrlListView_EnableGroupView ' + 'GUICtrlListView_EndUpdate GUICtrlListView_EnsureVisible ' + 'GUICtrlListView_FindInText GUICtrlListView_FindItem ' + 'GUICtrlListView_FindNearest GUICtrlListView_FindParam ' + 'GUICtrlListView_FindText GUICtrlListView_GetBkColor ' + 'GUICtrlListView_GetBkImage GUICtrlListView_GetCallbackMask ' + 'GUICtrlListView_GetColumn GUICtrlListView_GetColumnCount ' + 'GUICtrlListView_GetColumnOrder ' + 'GUICtrlListView_GetColumnOrderArray ' + 'GUICtrlListView_GetColumnWidth GUICtrlListView_GetCounterPage ' + 'GUICtrlListView_GetEditControl ' + 'GUICtrlListView_GetExtendedListViewStyle ' + 'GUICtrlListView_GetFocusedGroup GUICtrlListView_GetGroupCount ' + 'GUICtrlListView_GetGroupInfo ' + 'GUICtrlListView_GetGroupInfoByIndex ' + 'GUICtrlListView_GetGroupRect ' + 'GUICtrlListView_GetGroupViewEnabled GUICtrlListView_GetHeader ' + 'GUICtrlListView_GetHotCursor GUICtrlListView_GetHotItem ' + 'GUICtrlListView_GetHoverTime GUICtrlListView_GetImageList ' + 'GUICtrlListView_GetISearchString GUICtrlListView_GetItem ' + 'GUICtrlListView_GetItemChecked GUICtrlListView_GetItemCount ' + 'GUICtrlListView_GetItemCut GUICtrlListView_GetItemDropHilited ' + 'GUICtrlListView_GetItemEx GUICtrlListView_GetItemFocused ' + 'GUICtrlListView_GetItemGroupID GUICtrlListView_GetItemImage ' + 'GUICtrlListView_GetItemIndent GUICtrlListView_GetItemParam ' + 'GUICtrlListView_GetItemPosition ' + 'GUICtrlListView_GetItemPositionX ' + 'GUICtrlListView_GetItemPositionY GUICtrlListView_GetItemRect ' + 'GUICtrlListView_GetItemRectEx GUICtrlListView_GetItemSelected ' + 'GUICtrlListView_GetItemSpacing GUICtrlListView_GetItemSpacingX ' + 'GUICtrlListView_GetItemSpacingY GUICtrlListView_GetItemState ' + 'GUICtrlListView_GetItemStateImage GUICtrlListView_GetItemText ' + 'GUICtrlListView_GetItemTextArray ' + 'GUICtrlListView_GetItemTextString GUICtrlListView_GetNextItem ' + 'GUICtrlListView_GetNumberOfWorkAreas GUICtrlListView_GetOrigin ' + 'GUICtrlListView_GetOriginX GUICtrlListView_GetOriginY ' + 'GUICtrlListView_GetOutlineColor ' + 'GUICtrlListView_GetSelectedColumn ' + 'GUICtrlListView_GetSelectedCount ' + 'GUICtrlListView_GetSelectedIndices ' + 'GUICtrlListView_GetSelectionMark GUICtrlListView_GetStringWidth ' + 'GUICtrlListView_GetSubItemRect GUICtrlListView_GetTextBkColor ' + 'GUICtrlListView_GetTextColor GUICtrlListView_GetToolTips ' + 'GUICtrlListView_GetTopIndex GUICtrlListView_GetUnicodeFormat ' + 'GUICtrlListView_GetView GUICtrlListView_GetViewDetails ' + 'GUICtrlListView_GetViewLarge GUICtrlListView_GetViewList ' + 'GUICtrlListView_GetViewRect GUICtrlListView_GetViewSmall ' + 'GUICtrlListView_GetViewTile GUICtrlListView_HideColumn ' + 'GUICtrlListView_HitTest GUICtrlListView_InsertColumn ' + 'GUICtrlListView_InsertGroup GUICtrlListView_InsertItem ' + 'GUICtrlListView_JustifyColumn GUICtrlListView_MapIDToIndex ' + 'GUICtrlListView_MapIndexToID GUICtrlListView_RedrawItems ' + 'GUICtrlListView_RegisterSortCallBack ' + 'GUICtrlListView_RemoveAllGroups GUICtrlListView_RemoveGroup ' + 'GUICtrlListView_Scroll GUICtrlListView_SetBkColor ' + 'GUICtrlListView_SetBkImage GUICtrlListView_SetCallBackMask ' + 'GUICtrlListView_SetColumn GUICtrlListView_SetColumnOrder ' + 'GUICtrlListView_SetColumnOrderArray ' + 'GUICtrlListView_SetColumnWidth ' + 'GUICtrlListView_SetExtendedListViewStyle ' + 'GUICtrlListView_SetGroupInfo GUICtrlListView_SetHotItem ' + 'GUICtrlListView_SetHoverTime GUICtrlListView_SetIconSpacing ' + 'GUICtrlListView_SetImageList GUICtrlListView_SetItem ' + 'GUICtrlListView_SetItemChecked GUICtrlListView_SetItemCount ' + 'GUICtrlListView_SetItemCut GUICtrlListView_SetItemDropHilited ' + 'GUICtrlListView_SetItemEx GUICtrlListView_SetItemFocused ' + 'GUICtrlListView_SetItemGroupID GUICtrlListView_SetItemImage ' + 'GUICtrlListView_SetItemIndent GUICtrlListView_SetItemParam ' + 'GUICtrlListView_SetItemPosition ' + 'GUICtrlListView_SetItemPosition32 ' + 'GUICtrlListView_SetItemSelected GUICtrlListView_SetItemState ' + 'GUICtrlListView_SetItemStateImage GUICtrlListView_SetItemText ' + 'GUICtrlListView_SetOutlineColor ' + 'GUICtrlListView_SetSelectedColumn ' + 'GUICtrlListView_SetSelectionMark GUICtrlListView_SetTextBkColor ' + 'GUICtrlListView_SetTextColor GUICtrlListView_SetToolTips ' + 'GUICtrlListView_SetUnicodeFormat GUICtrlListView_SetView ' + 'GUICtrlListView_SetWorkAreas GUICtrlListView_SimpleSort ' + 'GUICtrlListView_SortItems GUICtrlListView_SubItemHitTest ' + 'GUICtrlListView_UnRegisterSortCallBack GUICtrlMenu_AddMenuItem ' + 'GUICtrlMenu_AppendMenu GUICtrlMenu_CalculatePopupWindowPosition ' + 'GUICtrlMenu_CheckMenuItem GUICtrlMenu_CheckRadioItem ' + 'GUICtrlMenu_CreateMenu GUICtrlMenu_CreatePopup ' + 'GUICtrlMenu_DeleteMenu GUICtrlMenu_DestroyMenu ' + 'GUICtrlMenu_DrawMenuBar GUICtrlMenu_EnableMenuItem ' + 'GUICtrlMenu_FindItem GUICtrlMenu_FindParent ' + 'GUICtrlMenu_GetItemBmp GUICtrlMenu_GetItemBmpChecked ' + 'GUICtrlMenu_GetItemBmpUnchecked GUICtrlMenu_GetItemChecked ' + 'GUICtrlMenu_GetItemCount GUICtrlMenu_GetItemData ' + 'GUICtrlMenu_GetItemDefault GUICtrlMenu_GetItemDisabled ' + 'GUICtrlMenu_GetItemEnabled GUICtrlMenu_GetItemGrayed ' + 'GUICtrlMenu_GetItemHighlighted GUICtrlMenu_GetItemID ' + 'GUICtrlMenu_GetItemInfo GUICtrlMenu_GetItemRect ' + 'GUICtrlMenu_GetItemRectEx GUICtrlMenu_GetItemState ' + 'GUICtrlMenu_GetItemStateEx GUICtrlMenu_GetItemSubMenu ' + 'GUICtrlMenu_GetItemText GUICtrlMenu_GetItemType ' + 'GUICtrlMenu_GetMenu GUICtrlMenu_GetMenuBackground ' + 'GUICtrlMenu_GetMenuBarInfo GUICtrlMenu_GetMenuContextHelpID ' + 'GUICtrlMenu_GetMenuData GUICtrlMenu_GetMenuDefaultItem ' + 'GUICtrlMenu_GetMenuHeight GUICtrlMenu_GetMenuInfo ' + 'GUICtrlMenu_GetMenuStyle GUICtrlMenu_GetSystemMenu ' + 'GUICtrlMenu_InsertMenuItem GUICtrlMenu_InsertMenuItemEx ' + 'GUICtrlMenu_IsMenu GUICtrlMenu_LoadMenu ' + 'GUICtrlMenu_MapAccelerator GUICtrlMenu_MenuItemFromPoint ' + 'GUICtrlMenu_RemoveMenu GUICtrlMenu_SetItemBitmaps ' + 'GUICtrlMenu_SetItemBmp GUICtrlMenu_SetItemBmpChecked ' + 'GUICtrlMenu_SetItemBmpUnchecked GUICtrlMenu_SetItemChecked ' + 'GUICtrlMenu_SetItemData GUICtrlMenu_SetItemDefault ' + 'GUICtrlMenu_SetItemDisabled GUICtrlMenu_SetItemEnabled ' + 'GUICtrlMenu_SetItemGrayed GUICtrlMenu_SetItemHighlighted ' + 'GUICtrlMenu_SetItemID GUICtrlMenu_SetItemInfo ' + 'GUICtrlMenu_SetItemState GUICtrlMenu_SetItemSubMenu ' + 'GUICtrlMenu_SetItemText GUICtrlMenu_SetItemType ' + 'GUICtrlMenu_SetMenu GUICtrlMenu_SetMenuBackground ' + 'GUICtrlMenu_SetMenuContextHelpID GUICtrlMenu_SetMenuData ' + 'GUICtrlMenu_SetMenuDefaultItem GUICtrlMenu_SetMenuHeight ' + 'GUICtrlMenu_SetMenuInfo GUICtrlMenu_SetMenuStyle ' + 'GUICtrlMenu_TrackPopupMenu GUICtrlMonthCal_Create ' + 'GUICtrlMonthCal_Destroy GUICtrlMonthCal_GetCalendarBorder ' + 'GUICtrlMonthCal_GetCalendarCount GUICtrlMonthCal_GetColor ' + 'GUICtrlMonthCal_GetColorArray GUICtrlMonthCal_GetCurSel ' + 'GUICtrlMonthCal_GetCurSelStr GUICtrlMonthCal_GetFirstDOW ' + 'GUICtrlMonthCal_GetFirstDOWStr GUICtrlMonthCal_GetMaxSelCount ' + 'GUICtrlMonthCal_GetMaxTodayWidth ' + 'GUICtrlMonthCal_GetMinReqHeight GUICtrlMonthCal_GetMinReqRect ' + 'GUICtrlMonthCal_GetMinReqRectArray ' + 'GUICtrlMonthCal_GetMinReqWidth GUICtrlMonthCal_GetMonthDelta ' + 'GUICtrlMonthCal_GetMonthRange GUICtrlMonthCal_GetMonthRangeMax ' + 'GUICtrlMonthCal_GetMonthRangeMaxStr ' + 'GUICtrlMonthCal_GetMonthRangeMin ' + 'GUICtrlMonthCal_GetMonthRangeMinStr ' + 'GUICtrlMonthCal_GetMonthRangeSpan GUICtrlMonthCal_GetRange ' + 'GUICtrlMonthCal_GetRangeMax GUICtrlMonthCal_GetRangeMaxStr ' + 'GUICtrlMonthCal_GetRangeMin GUICtrlMonthCal_GetRangeMinStr ' + 'GUICtrlMonthCal_GetSelRange GUICtrlMonthCal_GetSelRangeMax ' + 'GUICtrlMonthCal_GetSelRangeMaxStr ' + 'GUICtrlMonthCal_GetSelRangeMin ' + 'GUICtrlMonthCal_GetSelRangeMinStr GUICtrlMonthCal_GetToday ' + 'GUICtrlMonthCal_GetTodayStr GUICtrlMonthCal_GetUnicodeFormat ' + 'GUICtrlMonthCal_HitTest GUICtrlMonthCal_SetCalendarBorder ' + 'GUICtrlMonthCal_SetColor GUICtrlMonthCal_SetCurSel ' + 'GUICtrlMonthCal_SetDayState GUICtrlMonthCal_SetFirstDOW ' + 'GUICtrlMonthCal_SetMaxSelCount GUICtrlMonthCal_SetMonthDelta ' + 'GUICtrlMonthCal_SetRange GUICtrlMonthCal_SetSelRange ' + 'GUICtrlMonthCal_SetToday GUICtrlMonthCal_SetUnicodeFormat ' + 'GUICtrlRebar_AddBand GUICtrlRebar_AddToolBarBand ' + 'GUICtrlRebar_BeginDrag GUICtrlRebar_Create ' + 'GUICtrlRebar_DeleteBand GUICtrlRebar_Destroy ' + 'GUICtrlRebar_DragMove GUICtrlRebar_EndDrag ' + 'GUICtrlRebar_GetBandBackColor GUICtrlRebar_GetBandBorders ' + 'GUICtrlRebar_GetBandBordersEx GUICtrlRebar_GetBandChildHandle ' + 'GUICtrlRebar_GetBandChildSize GUICtrlRebar_GetBandCount ' + 'GUICtrlRebar_GetBandForeColor GUICtrlRebar_GetBandHeaderSize ' + 'GUICtrlRebar_GetBandID GUICtrlRebar_GetBandIdealSize ' + 'GUICtrlRebar_GetBandLength GUICtrlRebar_GetBandLParam ' + 'GUICtrlRebar_GetBandMargins GUICtrlRebar_GetBandMarginsEx ' + 'GUICtrlRebar_GetBandRect GUICtrlRebar_GetBandRectEx ' + 'GUICtrlRebar_GetBandStyle GUICtrlRebar_GetBandStyleBreak ' + 'GUICtrlRebar_GetBandStyleChildEdge ' + 'GUICtrlRebar_GetBandStyleFixedBMP ' + 'GUICtrlRebar_GetBandStyleFixedSize ' + 'GUICtrlRebar_GetBandStyleGripperAlways ' + 'GUICtrlRebar_GetBandStyleHidden ' + 'GUICtrlRebar_GetBandStyleHideTitle ' + 'GUICtrlRebar_GetBandStyleNoGripper ' + 'GUICtrlRebar_GetBandStyleTopAlign ' + 'GUICtrlRebar_GetBandStyleUseChevron ' + 'GUICtrlRebar_GetBandStyleVariableHeight ' + 'GUICtrlRebar_GetBandText GUICtrlRebar_GetBarHeight ' + 'GUICtrlRebar_GetBarInfo GUICtrlRebar_GetBKColor ' + 'GUICtrlRebar_GetColorScheme GUICtrlRebar_GetRowCount ' + 'GUICtrlRebar_GetRowHeight GUICtrlRebar_GetTextColor ' + 'GUICtrlRebar_GetToolTips GUICtrlRebar_GetUnicodeFormat ' + 'GUICtrlRebar_HitTest GUICtrlRebar_IDToIndex ' + 'GUICtrlRebar_MaximizeBand GUICtrlRebar_MinimizeBand ' + 'GUICtrlRebar_MoveBand GUICtrlRebar_SetBandBackColor ' + 'GUICtrlRebar_SetBandForeColor GUICtrlRebar_SetBandHeaderSize ' + 'GUICtrlRebar_SetBandID GUICtrlRebar_SetBandIdealSize ' + 'GUICtrlRebar_SetBandLength GUICtrlRebar_SetBandLParam ' + 'GUICtrlRebar_SetBandStyle GUICtrlRebar_SetBandStyleBreak ' + 'GUICtrlRebar_SetBandStyleChildEdge ' + 'GUICtrlRebar_SetBandStyleFixedBMP ' + 'GUICtrlRebar_SetBandStyleFixedSize ' + 'GUICtrlRebar_SetBandStyleGripperAlways ' + 'GUICtrlRebar_SetBandStyleHidden ' + 'GUICtrlRebar_SetBandStyleHideTitle ' + 'GUICtrlRebar_SetBandStyleNoGripper ' + 'GUICtrlRebar_SetBandStyleTopAlign ' + 'GUICtrlRebar_SetBandStyleUseChevron ' + 'GUICtrlRebar_SetBandStyleVariableHeight ' + 'GUICtrlRebar_SetBandText GUICtrlRebar_SetBarInfo ' + 'GUICtrlRebar_SetBKColor GUICtrlRebar_SetColorScheme ' + 'GUICtrlRebar_SetTextColor GUICtrlRebar_SetToolTips ' + 'GUICtrlRebar_SetUnicodeFormat GUICtrlRebar_ShowBand ' + 'GUICtrlRichEdit_AppendText GUICtrlRichEdit_AutoDetectURL ' + 'GUICtrlRichEdit_CanPaste GUICtrlRichEdit_CanPasteSpecial ' + 'GUICtrlRichEdit_CanRedo GUICtrlRichEdit_CanUndo ' + 'GUICtrlRichEdit_ChangeFontSize GUICtrlRichEdit_Copy ' + 'GUICtrlRichEdit_Create GUICtrlRichEdit_Cut ' + 'GUICtrlRichEdit_Deselect GUICtrlRichEdit_Destroy ' + 'GUICtrlRichEdit_EmptyUndoBuffer GUICtrlRichEdit_FindText ' + 'GUICtrlRichEdit_FindTextInRange GUICtrlRichEdit_GetBkColor ' + 'GUICtrlRichEdit_GetCharAttributes ' + 'GUICtrlRichEdit_GetCharBkColor GUICtrlRichEdit_GetCharColor ' + 'GUICtrlRichEdit_GetCharPosFromXY ' + 'GUICtrlRichEdit_GetCharPosOfNextWord ' + 'GUICtrlRichEdit_GetCharPosOfPreviousWord ' + 'GUICtrlRichEdit_GetCharWordBreakInfo ' + 'GUICtrlRichEdit_GetFirstCharPosOnLine GUICtrlRichEdit_GetFont ' + 'GUICtrlRichEdit_GetLineCount GUICtrlRichEdit_GetLineLength ' + 'GUICtrlRichEdit_GetLineNumberFromCharPos ' + 'GUICtrlRichEdit_GetNextRedo GUICtrlRichEdit_GetNextUndo ' + 'GUICtrlRichEdit_GetNumberOfFirstVisibleLine ' + 'GUICtrlRichEdit_GetParaAlignment ' + 'GUICtrlRichEdit_GetParaAttributes GUICtrlRichEdit_GetParaBorder ' + 'GUICtrlRichEdit_GetParaIndents GUICtrlRichEdit_GetParaNumbering ' + 'GUICtrlRichEdit_GetParaShading GUICtrlRichEdit_GetParaSpacing ' + 'GUICtrlRichEdit_GetParaTabStops GUICtrlRichEdit_GetPasswordChar ' + 'GUICtrlRichEdit_GetRECT GUICtrlRichEdit_GetScrollPos ' + 'GUICtrlRichEdit_GetSel GUICtrlRichEdit_GetSelAA ' + 'GUICtrlRichEdit_GetSelText GUICtrlRichEdit_GetSpaceUnit ' + 'GUICtrlRichEdit_GetText GUICtrlRichEdit_GetTextInLine ' + 'GUICtrlRichEdit_GetTextInRange GUICtrlRichEdit_GetTextLength ' + 'GUICtrlRichEdit_GetVersion GUICtrlRichEdit_GetXYFromCharPos ' + 'GUICtrlRichEdit_GetZoom GUICtrlRichEdit_GotoCharPos ' + 'GUICtrlRichEdit_HideSelection GUICtrlRichEdit_InsertText ' + 'GUICtrlRichEdit_IsModified GUICtrlRichEdit_IsTextSelected ' + 'GUICtrlRichEdit_Paste GUICtrlRichEdit_PasteSpecial ' + 'GUICtrlRichEdit_PauseRedraw GUICtrlRichEdit_Redo ' + 'GUICtrlRichEdit_ReplaceText GUICtrlRichEdit_ResumeRedraw ' + 'GUICtrlRichEdit_ScrollLineOrPage GUICtrlRichEdit_ScrollLines ' + 'GUICtrlRichEdit_ScrollToCaret GUICtrlRichEdit_SetBkColor ' + 'GUICtrlRichEdit_SetCharAttributes ' + 'GUICtrlRichEdit_SetCharBkColor GUICtrlRichEdit_SetCharColor ' + 'GUICtrlRichEdit_SetEventMask GUICtrlRichEdit_SetFont ' + 'GUICtrlRichEdit_SetLimitOnText GUICtrlRichEdit_SetModified ' + 'GUICtrlRichEdit_SetParaAlignment ' + 'GUICtrlRichEdit_SetParaAttributes GUICtrlRichEdit_SetParaBorder ' + 'GUICtrlRichEdit_SetParaIndents GUICtrlRichEdit_SetParaNumbering ' + 'GUICtrlRichEdit_SetParaShading GUICtrlRichEdit_SetParaSpacing ' + 'GUICtrlRichEdit_SetParaTabStops GUICtrlRichEdit_SetPasswordChar ' + 'GUICtrlRichEdit_SetReadOnly GUICtrlRichEdit_SetRECT ' + 'GUICtrlRichEdit_SetScrollPos GUICtrlRichEdit_SetSel ' + 'GUICtrlRichEdit_SetSpaceUnit GUICtrlRichEdit_SetTabStops ' + 'GUICtrlRichEdit_SetText GUICtrlRichEdit_SetUndoLimit ' + 'GUICtrlRichEdit_SetZoom GUICtrlRichEdit_StreamFromFile ' + 'GUICtrlRichEdit_StreamFromVar GUICtrlRichEdit_StreamToFile ' + 'GUICtrlRichEdit_StreamToVar GUICtrlRichEdit_Undo ' + 'GUICtrlSlider_ClearSel GUICtrlSlider_ClearTics ' + 'GUICtrlSlider_Create GUICtrlSlider_Destroy ' + 'GUICtrlSlider_GetBuddy GUICtrlSlider_GetChannelRect ' + 'GUICtrlSlider_GetChannelRectEx GUICtrlSlider_GetLineSize ' + 'GUICtrlSlider_GetLogicalTics GUICtrlSlider_GetNumTics ' + 'GUICtrlSlider_GetPageSize GUICtrlSlider_GetPos ' + 'GUICtrlSlider_GetRange GUICtrlSlider_GetRangeMax ' + 'GUICtrlSlider_GetRangeMin GUICtrlSlider_GetSel ' + 'GUICtrlSlider_GetSelEnd GUICtrlSlider_GetSelStart ' + 'GUICtrlSlider_GetThumbLength GUICtrlSlider_GetThumbRect ' + 'GUICtrlSlider_GetThumbRectEx GUICtrlSlider_GetTic ' + 'GUICtrlSlider_GetTicPos GUICtrlSlider_GetToolTips ' + 'GUICtrlSlider_GetUnicodeFormat GUICtrlSlider_SetBuddy ' + 'GUICtrlSlider_SetLineSize GUICtrlSlider_SetPageSize ' + 'GUICtrlSlider_SetPos GUICtrlSlider_SetRange ' + 'GUICtrlSlider_SetRangeMax GUICtrlSlider_SetRangeMin ' + 'GUICtrlSlider_SetSel GUICtrlSlider_SetSelEnd ' + 'GUICtrlSlider_SetSelStart GUICtrlSlider_SetThumbLength ' + 'GUICtrlSlider_SetTic GUICtrlSlider_SetTicFreq ' + 'GUICtrlSlider_SetTipSide GUICtrlSlider_SetToolTips ' + 'GUICtrlSlider_SetUnicodeFormat GUICtrlStatusBar_Create ' + 'GUICtrlStatusBar_Destroy GUICtrlStatusBar_EmbedControl ' + 'GUICtrlStatusBar_GetBorders GUICtrlStatusBar_GetBordersHorz ' + 'GUICtrlStatusBar_GetBordersRect GUICtrlStatusBar_GetBordersVert ' + 'GUICtrlStatusBar_GetCount GUICtrlStatusBar_GetHeight ' + 'GUICtrlStatusBar_GetIcon GUICtrlStatusBar_GetParts ' + 'GUICtrlStatusBar_GetRect GUICtrlStatusBar_GetRectEx ' + 'GUICtrlStatusBar_GetText GUICtrlStatusBar_GetTextFlags ' + 'GUICtrlStatusBar_GetTextLength GUICtrlStatusBar_GetTextLengthEx ' + 'GUICtrlStatusBar_GetTipText GUICtrlStatusBar_GetUnicodeFormat ' + 'GUICtrlStatusBar_GetWidth GUICtrlStatusBar_IsSimple ' + 'GUICtrlStatusBar_Resize GUICtrlStatusBar_SetBkColor ' + 'GUICtrlStatusBar_SetIcon GUICtrlStatusBar_SetMinHeight ' + 'GUICtrlStatusBar_SetParts GUICtrlStatusBar_SetSimple ' + 'GUICtrlStatusBar_SetText GUICtrlStatusBar_SetTipText ' + 'GUICtrlStatusBar_SetUnicodeFormat GUICtrlStatusBar_ShowHide ' + 'GUICtrlTab_ActivateTab GUICtrlTab_ClickTab GUICtrlTab_Create ' + 'GUICtrlTab_DeleteAllItems GUICtrlTab_DeleteItem ' + 'GUICtrlTab_DeselectAll GUICtrlTab_Destroy GUICtrlTab_FindTab ' + 'GUICtrlTab_GetCurFocus GUICtrlTab_GetCurSel ' + 'GUICtrlTab_GetDisplayRect GUICtrlTab_GetDisplayRectEx ' + 'GUICtrlTab_GetExtendedStyle GUICtrlTab_GetImageList ' + 'GUICtrlTab_GetItem GUICtrlTab_GetItemCount ' + 'GUICtrlTab_GetItemImage GUICtrlTab_GetItemParam ' + 'GUICtrlTab_GetItemRect GUICtrlTab_GetItemRectEx ' + 'GUICtrlTab_GetItemState GUICtrlTab_GetItemText ' + 'GUICtrlTab_GetRowCount GUICtrlTab_GetToolTips ' + 'GUICtrlTab_GetUnicodeFormat GUICtrlTab_HighlightItem ' + 'GUICtrlTab_HitTest GUICtrlTab_InsertItem ' + 'GUICtrlTab_RemoveImage GUICtrlTab_SetCurFocus ' + 'GUICtrlTab_SetCurSel GUICtrlTab_SetExtendedStyle ' + 'GUICtrlTab_SetImageList GUICtrlTab_SetItem ' + 'GUICtrlTab_SetItemImage GUICtrlTab_SetItemParam ' + 'GUICtrlTab_SetItemSize GUICtrlTab_SetItemState ' + 'GUICtrlTab_SetItemText GUICtrlTab_SetMinTabWidth ' + 'GUICtrlTab_SetPadding GUICtrlTab_SetToolTips ' + 'GUICtrlTab_SetUnicodeFormat GUICtrlToolbar_AddBitmap ' + 'GUICtrlToolbar_AddButton GUICtrlToolbar_AddButtonSep ' + 'GUICtrlToolbar_AddString GUICtrlToolbar_ButtonCount ' + 'GUICtrlToolbar_CheckButton GUICtrlToolbar_ClickAccel ' + 'GUICtrlToolbar_ClickButton GUICtrlToolbar_ClickIndex ' + 'GUICtrlToolbar_CommandToIndex GUICtrlToolbar_Create ' + 'GUICtrlToolbar_Customize GUICtrlToolbar_DeleteButton ' + 'GUICtrlToolbar_Destroy GUICtrlToolbar_EnableButton ' + 'GUICtrlToolbar_FindToolbar GUICtrlToolbar_GetAnchorHighlight ' + 'GUICtrlToolbar_GetBitmapFlags GUICtrlToolbar_GetButtonBitmap ' + 'GUICtrlToolbar_GetButtonInfo GUICtrlToolbar_GetButtonInfoEx ' + 'GUICtrlToolbar_GetButtonParam GUICtrlToolbar_GetButtonRect ' + 'GUICtrlToolbar_GetButtonRectEx GUICtrlToolbar_GetButtonSize ' + 'GUICtrlToolbar_GetButtonState GUICtrlToolbar_GetButtonStyle ' + 'GUICtrlToolbar_GetButtonText GUICtrlToolbar_GetColorScheme ' + 'GUICtrlToolbar_GetDisabledImageList ' + 'GUICtrlToolbar_GetExtendedStyle GUICtrlToolbar_GetHotImageList ' + 'GUICtrlToolbar_GetHotItem GUICtrlToolbar_GetImageList ' + 'GUICtrlToolbar_GetInsertMark GUICtrlToolbar_GetInsertMarkColor ' + 'GUICtrlToolbar_GetMaxSize GUICtrlToolbar_GetMetrics ' + 'GUICtrlToolbar_GetPadding GUICtrlToolbar_GetRows ' + 'GUICtrlToolbar_GetString GUICtrlToolbar_GetStyle ' + 'GUICtrlToolbar_GetStyleAltDrag ' + 'GUICtrlToolbar_GetStyleCustomErase GUICtrlToolbar_GetStyleFlat ' + 'GUICtrlToolbar_GetStyleList GUICtrlToolbar_GetStyleRegisterDrop ' + 'GUICtrlToolbar_GetStyleToolTips ' + 'GUICtrlToolbar_GetStyleTransparent ' + 'GUICtrlToolbar_GetStyleWrapable GUICtrlToolbar_GetTextRows ' + 'GUICtrlToolbar_GetToolTips GUICtrlToolbar_GetUnicodeFormat ' + 'GUICtrlToolbar_HideButton GUICtrlToolbar_HighlightButton ' + 'GUICtrlToolbar_HitTest GUICtrlToolbar_IndexToCommand ' + 'GUICtrlToolbar_InsertButton GUICtrlToolbar_InsertMarkHitTest ' + 'GUICtrlToolbar_IsButtonChecked GUICtrlToolbar_IsButtonEnabled ' + 'GUICtrlToolbar_IsButtonHidden ' + 'GUICtrlToolbar_IsButtonHighlighted ' + 'GUICtrlToolbar_IsButtonIndeterminate ' + 'GUICtrlToolbar_IsButtonPressed GUICtrlToolbar_LoadBitmap ' + 'GUICtrlToolbar_LoadImages GUICtrlToolbar_MapAccelerator ' + 'GUICtrlToolbar_MoveButton GUICtrlToolbar_PressButton ' + 'GUICtrlToolbar_SetAnchorHighlight GUICtrlToolbar_SetBitmapSize ' + 'GUICtrlToolbar_SetButtonBitMap GUICtrlToolbar_SetButtonInfo ' + 'GUICtrlToolbar_SetButtonInfoEx GUICtrlToolbar_SetButtonParam ' + 'GUICtrlToolbar_SetButtonSize GUICtrlToolbar_SetButtonState ' + 'GUICtrlToolbar_SetButtonStyle GUICtrlToolbar_SetButtonText ' + 'GUICtrlToolbar_SetButtonWidth GUICtrlToolbar_SetCmdID ' + 'GUICtrlToolbar_SetColorScheme ' + 'GUICtrlToolbar_SetDisabledImageList ' + 'GUICtrlToolbar_SetDrawTextFlags GUICtrlToolbar_SetExtendedStyle ' + 'GUICtrlToolbar_SetHotImageList GUICtrlToolbar_SetHotItem ' + 'GUICtrlToolbar_SetImageList GUICtrlToolbar_SetIndent ' + 'GUICtrlToolbar_SetIndeterminate GUICtrlToolbar_SetInsertMark ' + 'GUICtrlToolbar_SetInsertMarkColor GUICtrlToolbar_SetMaxTextRows ' + 'GUICtrlToolbar_SetMetrics GUICtrlToolbar_SetPadding ' + 'GUICtrlToolbar_SetParent GUICtrlToolbar_SetRows ' + 'GUICtrlToolbar_SetStyle GUICtrlToolbar_SetStyleAltDrag ' + 'GUICtrlToolbar_SetStyleCustomErase GUICtrlToolbar_SetStyleFlat ' + 'GUICtrlToolbar_SetStyleList GUICtrlToolbar_SetStyleRegisterDrop ' + 'GUICtrlToolbar_SetStyleToolTips ' + 'GUICtrlToolbar_SetStyleTransparent ' + 'GUICtrlToolbar_SetStyleWrapable GUICtrlToolbar_SetToolTips ' + 'GUICtrlToolbar_SetUnicodeFormat GUICtrlToolbar_SetWindowTheme ' + 'GUICtrlTreeView_Add GUICtrlTreeView_AddChild ' + 'GUICtrlTreeView_AddChildFirst GUICtrlTreeView_AddFirst ' + 'GUICtrlTreeView_BeginUpdate GUICtrlTreeView_ClickItem ' + 'GUICtrlTreeView_Create GUICtrlTreeView_CreateDragImage ' + 'GUICtrlTreeView_CreateSolidBitMap GUICtrlTreeView_Delete ' + 'GUICtrlTreeView_DeleteAll GUICtrlTreeView_DeleteChildren ' + 'GUICtrlTreeView_Destroy GUICtrlTreeView_DisplayRect ' + 'GUICtrlTreeView_DisplayRectEx GUICtrlTreeView_EditText ' + 'GUICtrlTreeView_EndEdit GUICtrlTreeView_EndUpdate ' + 'GUICtrlTreeView_EnsureVisible GUICtrlTreeView_Expand ' + 'GUICtrlTreeView_ExpandedOnce GUICtrlTreeView_FindItem ' + 'GUICtrlTreeView_FindItemEx GUICtrlTreeView_GetBkColor ' + 'GUICtrlTreeView_GetBold GUICtrlTreeView_GetChecked ' + 'GUICtrlTreeView_GetChildCount GUICtrlTreeView_GetChildren ' + 'GUICtrlTreeView_GetCount GUICtrlTreeView_GetCut ' + 'GUICtrlTreeView_GetDropTarget GUICtrlTreeView_GetEditControl ' + 'GUICtrlTreeView_GetExpanded GUICtrlTreeView_GetFirstChild ' + 'GUICtrlTreeView_GetFirstItem GUICtrlTreeView_GetFirstVisible ' + 'GUICtrlTreeView_GetFocused GUICtrlTreeView_GetHeight ' + 'GUICtrlTreeView_GetImageIndex ' + 'GUICtrlTreeView_GetImageListIconHandle ' + 'GUICtrlTreeView_GetIndent GUICtrlTreeView_GetInsertMarkColor ' + 'GUICtrlTreeView_GetISearchString GUICtrlTreeView_GetItemByIndex ' + 'GUICtrlTreeView_GetItemHandle GUICtrlTreeView_GetItemParam ' + 'GUICtrlTreeView_GetLastChild GUICtrlTreeView_GetLineColor ' + 'GUICtrlTreeView_GetNext GUICtrlTreeView_GetNextChild ' + 'GUICtrlTreeView_GetNextSibling GUICtrlTreeView_GetNextVisible ' + 'GUICtrlTreeView_GetNormalImageList ' + 'GUICtrlTreeView_GetParentHandle GUICtrlTreeView_GetParentParam ' + 'GUICtrlTreeView_GetPrev GUICtrlTreeView_GetPrevChild ' + 'GUICtrlTreeView_GetPrevSibling GUICtrlTreeView_GetPrevVisible ' + 'GUICtrlTreeView_GetScrollTime GUICtrlTreeView_GetSelected ' + 'GUICtrlTreeView_GetSelectedImageIndex ' + 'GUICtrlTreeView_GetSelection GUICtrlTreeView_GetSiblingCount ' + 'GUICtrlTreeView_GetState GUICtrlTreeView_GetStateImageIndex ' + 'GUICtrlTreeView_GetStateImageList GUICtrlTreeView_GetText ' + 'GUICtrlTreeView_GetTextColor GUICtrlTreeView_GetToolTips ' + 'GUICtrlTreeView_GetTree GUICtrlTreeView_GetUnicodeFormat ' + 'GUICtrlTreeView_GetVisible GUICtrlTreeView_GetVisibleCount ' + 'GUICtrlTreeView_HitTest GUICtrlTreeView_HitTestEx ' + 'GUICtrlTreeView_HitTestItem GUICtrlTreeView_Index ' + 'GUICtrlTreeView_InsertItem GUICtrlTreeView_IsFirstItem ' + 'GUICtrlTreeView_IsParent GUICtrlTreeView_Level ' + 'GUICtrlTreeView_SelectItem GUICtrlTreeView_SelectItemByIndex ' + 'GUICtrlTreeView_SetBkColor GUICtrlTreeView_SetBold ' + 'GUICtrlTreeView_SetChecked GUICtrlTreeView_SetCheckedByIndex ' + 'GUICtrlTreeView_SetChildren GUICtrlTreeView_SetCut ' + 'GUICtrlTreeView_SetDropTarget GUICtrlTreeView_SetFocused ' + 'GUICtrlTreeView_SetHeight GUICtrlTreeView_SetIcon ' + 'GUICtrlTreeView_SetImageIndex GUICtrlTreeView_SetIndent ' + 'GUICtrlTreeView_SetInsertMark ' + 'GUICtrlTreeView_SetInsertMarkColor ' + 'GUICtrlTreeView_SetItemHeight GUICtrlTreeView_SetItemParam ' + 'GUICtrlTreeView_SetLineColor GUICtrlTreeView_SetNormalImageList ' + 'GUICtrlTreeView_SetScrollTime GUICtrlTreeView_SetSelected ' + 'GUICtrlTreeView_SetSelectedImageIndex GUICtrlTreeView_SetState ' + 'GUICtrlTreeView_SetStateImageIndex ' + 'GUICtrlTreeView_SetStateImageList GUICtrlTreeView_SetText ' + 'GUICtrlTreeView_SetTextColor GUICtrlTreeView_SetToolTips ' + 'GUICtrlTreeView_SetUnicodeFormat GUICtrlTreeView_Sort ' + 'GUIImageList_Add GUIImageList_AddBitmap GUIImageList_AddIcon ' + 'GUIImageList_AddMasked GUIImageList_BeginDrag ' + 'GUIImageList_Copy GUIImageList_Create GUIImageList_Destroy ' + 'GUIImageList_DestroyIcon GUIImageList_DragEnter ' + 'GUIImageList_DragLeave GUIImageList_DragMove ' + 'GUIImageList_Draw GUIImageList_DrawEx GUIImageList_Duplicate ' + 'GUIImageList_EndDrag GUIImageList_GetBkColor ' + 'GUIImageList_GetIcon GUIImageList_GetIconHeight ' + 'GUIImageList_GetIconSize GUIImageList_GetIconSizeEx ' + 'GUIImageList_GetIconWidth GUIImageList_GetImageCount ' + 'GUIImageList_GetImageInfoEx GUIImageList_Remove ' + 'GUIImageList_ReplaceIcon GUIImageList_SetBkColor ' + 'GUIImageList_SetIconSize GUIImageList_SetImageCount ' + 'GUIImageList_Swap GUIScrollBars_EnableScrollBar ' + 'GUIScrollBars_GetScrollBarInfoEx GUIScrollBars_GetScrollBarRect ' + 'GUIScrollBars_GetScrollBarRGState ' + 'GUIScrollBars_GetScrollBarXYLineButton ' + 'GUIScrollBars_GetScrollBarXYThumbBottom ' + 'GUIScrollBars_GetScrollBarXYThumbTop ' + 'GUIScrollBars_GetScrollInfo GUIScrollBars_GetScrollInfoEx ' + 'GUIScrollBars_GetScrollInfoMax GUIScrollBars_GetScrollInfoMin ' + 'GUIScrollBars_GetScrollInfoPage GUIScrollBars_GetScrollInfoPos ' + 'GUIScrollBars_GetScrollInfoTrackPos GUIScrollBars_GetScrollPos ' + 'GUIScrollBars_GetScrollRange GUIScrollBars_Init ' + 'GUIScrollBars_ScrollWindow GUIScrollBars_SetScrollInfo ' + 'GUIScrollBars_SetScrollInfoMax GUIScrollBars_SetScrollInfoMin ' + 'GUIScrollBars_SetScrollInfoPage GUIScrollBars_SetScrollInfoPos ' + 'GUIScrollBars_SetScrollRange GUIScrollBars_ShowScrollBar ' + 'GUIToolTip_Activate GUIToolTip_AddTool GUIToolTip_AdjustRect ' + 'GUIToolTip_BitsToTTF GUIToolTip_Create GUIToolTip_Deactivate ' + 'GUIToolTip_DelTool GUIToolTip_Destroy GUIToolTip_EnumTools ' + 'GUIToolTip_GetBubbleHeight GUIToolTip_GetBubbleSize ' + 'GUIToolTip_GetBubbleWidth GUIToolTip_GetCurrentTool ' + 'GUIToolTip_GetDelayTime GUIToolTip_GetMargin ' + 'GUIToolTip_GetMarginEx GUIToolTip_GetMaxTipWidth ' + 'GUIToolTip_GetText GUIToolTip_GetTipBkColor ' + 'GUIToolTip_GetTipTextColor GUIToolTip_GetTitleBitMap ' + 'GUIToolTip_GetTitleText GUIToolTip_GetToolCount ' + 'GUIToolTip_GetToolInfo GUIToolTip_HitTest ' + 'GUIToolTip_NewToolRect GUIToolTip_Pop GUIToolTip_PopUp ' + 'GUIToolTip_SetDelayTime GUIToolTip_SetMargin ' + 'GUIToolTip_SetMaxTipWidth GUIToolTip_SetTipBkColor ' + 'GUIToolTip_SetTipTextColor GUIToolTip_SetTitle ' + 'GUIToolTip_SetToolInfo GUIToolTip_SetWindowTheme ' + 'GUIToolTip_ToolExists GUIToolTip_ToolToArray ' + 'GUIToolTip_TrackActivate GUIToolTip_TrackPosition ' + 'GUIToolTip_Update GUIToolTip_UpdateTipText HexToString ' + 'IEAction IEAttach IEBodyReadHTML IEBodyReadText ' + 'IEBodyWriteHTML IECreate IECreateEmbedded IEDocGetObj ' + 'IEDocInsertHTML IEDocInsertText IEDocReadHTML ' + 'IEDocWriteHTML IEErrorNotify IEFormElementCheckBoxSelect ' + 'IEFormElementGetCollection IEFormElementGetObjByName ' + 'IEFormElementGetValue IEFormElementOptionSelect ' + 'IEFormElementRadioSelect IEFormElementSetValue ' + 'IEFormGetCollection IEFormGetObjByName IEFormImageClick ' + 'IEFormReset IEFormSubmit IEFrameGetCollection ' + 'IEFrameGetObjByName IEGetObjById IEGetObjByName ' + 'IEHeadInsertEventScript IEImgClick IEImgGetCollection ' + 'IEIsFrameSet IELinkClickByIndex IELinkClickByText ' + 'IELinkGetCollection IELoadWait IELoadWaitTimeout IENavigate ' + 'IEPropertyGet IEPropertySet IEQuit IETableGetCollection ' + 'IETableWriteToArray IETagNameAllGetCollection ' + 'IETagNameGetCollection IE_Example IE_Introduction ' + 'IE_VersionInfo INetExplorerCapable INetGetSource INetMail ' + 'INetSmtpMail IsPressed MathCheckDiv Max MemGlobalAlloc ' + 'MemGlobalFree MemGlobalLock MemGlobalSize MemGlobalUnlock ' + 'MemMoveMemory MemVirtualAlloc MemVirtualAllocEx ' + 'MemVirtualFree MemVirtualFreeEx Min MouseTrap ' + 'NamedPipes_CallNamedPipe NamedPipes_ConnectNamedPipe ' + 'NamedPipes_CreateNamedPipe NamedPipes_CreatePipe ' + 'NamedPipes_DisconnectNamedPipe ' + 'NamedPipes_GetNamedPipeHandleState NamedPipes_GetNamedPipeInfo ' + 'NamedPipes_PeekNamedPipe NamedPipes_SetNamedPipeHandleState ' + 'NamedPipes_TransactNamedPipe NamedPipes_WaitNamedPipe ' + 'Net_Share_ConnectionEnum Net_Share_FileClose ' + 'Net_Share_FileEnum Net_Share_FileGetInfo Net_Share_PermStr ' + 'Net_Share_ResourceStr Net_Share_SessionDel ' + 'Net_Share_SessionEnum Net_Share_SessionGetInfo ' + 'Net_Share_ShareAdd Net_Share_ShareCheck Net_Share_ShareDel ' + 'Net_Share_ShareEnum Net_Share_ShareGetInfo ' + 'Net_Share_ShareSetInfo Net_Share_StatisticsGetSvr ' + 'Net_Share_StatisticsGetWrk Now NowCalc NowCalcDate ' + 'NowDate NowTime PathFull PathGetRelative PathMake ' + 'PathSplit ProcessGetName ProcessGetPriority Radian ' + 'ReplaceStringInFile RunDos ScreenCapture_Capture ' + 'ScreenCapture_CaptureWnd ScreenCapture_SaveImage ' + 'ScreenCapture_SetBMPFormat ScreenCapture_SetJPGQuality ' + 'ScreenCapture_SetTIFColorDepth ScreenCapture_SetTIFCompression ' + 'Security__AdjustTokenPrivileges ' + 'Security__CreateProcessWithToken Security__DuplicateTokenEx ' + 'Security__GetAccountSid Security__GetLengthSid ' + 'Security__GetTokenInformation Security__ImpersonateSelf ' + 'Security__IsValidSid Security__LookupAccountName ' + 'Security__LookupAccountSid Security__LookupPrivilegeValue ' + 'Security__OpenProcessToken Security__OpenThreadToken ' + 'Security__OpenThreadTokenEx Security__SetPrivilege ' + 'Security__SetTokenInformation Security__SidToStringSid ' + 'Security__SidTypeStr Security__StringSidToSid SendMessage ' + 'SendMessageA SetDate SetTime Singleton SoundClose ' + 'SoundLength SoundOpen SoundPause SoundPlay SoundPos ' + 'SoundResume SoundSeek SoundStatus SoundStop ' + 'SQLite_Changes SQLite_Close SQLite_Display2DResult ' + 'SQLite_Encode SQLite_ErrCode SQLite_ErrMsg SQLite_Escape ' + 'SQLite_Exec SQLite_FastEncode SQLite_FastEscape ' + 'SQLite_FetchData SQLite_FetchNames SQLite_GetTable ' + 'SQLite_GetTable2d SQLite_LastInsertRowID SQLite_LibVersion ' + 'SQLite_Open SQLite_Query SQLite_QueryFinalize ' + 'SQLite_QueryReset SQLite_QuerySingleRow SQLite_SafeMode ' + 'SQLite_SetTimeout SQLite_Shutdown SQLite_SQLiteExe ' + 'SQLite_Startup SQLite_TotalChanges StringBetween ' + 'StringExplode StringInsert StringProper StringRepeat ' + 'StringTitleCase StringToHex TCPIpToName TempFile ' + 'TicksToTime Timer_Diff Timer_GetIdleTime Timer_GetTimerID ' + 'Timer_Init Timer_KillAllTimers Timer_KillTimer ' + 'Timer_SetTimer TimeToTicks VersionCompare viClose ' + 'viExecCommand viFindGpib viGpibBusReset viGTL ' + 'viInteractiveControl viOpen viSetAttribute viSetTimeout ' + 'WeekNumberISO WinAPI_AbortPath WinAPI_ActivateKeyboardLayout ' + 'WinAPI_AddClipboardFormatListener WinAPI_AddFontMemResourceEx ' + 'WinAPI_AddFontResourceEx WinAPI_AddIconOverlay ' + 'WinAPI_AddIconTransparency WinAPI_AddMRUString ' + 'WinAPI_AdjustBitmap WinAPI_AdjustTokenPrivileges ' + 'WinAPI_AdjustWindowRectEx WinAPI_AlphaBlend WinAPI_AngleArc ' + 'WinAPI_AnimateWindow WinAPI_Arc WinAPI_ArcTo ' + 'WinAPI_ArrayToStruct WinAPI_AssignProcessToJobObject ' + 'WinAPI_AssocGetPerceivedType WinAPI_AssocQueryString ' + 'WinAPI_AttachConsole WinAPI_AttachThreadInput ' + 'WinAPI_BackupRead WinAPI_BackupReadAbort WinAPI_BackupSeek ' + 'WinAPI_BackupWrite WinAPI_BackupWriteAbort WinAPI_Beep ' + 'WinAPI_BeginBufferedPaint WinAPI_BeginDeferWindowPos ' + 'WinAPI_BeginPaint WinAPI_BeginPath WinAPI_BeginUpdateResource ' + 'WinAPI_BitBlt WinAPI_BringWindowToTop ' + 'WinAPI_BroadcastSystemMessage WinAPI_BrowseForFolderDlg ' + 'WinAPI_BufferedPaintClear WinAPI_BufferedPaintInit ' + 'WinAPI_BufferedPaintSetAlpha WinAPI_BufferedPaintUnInit ' + 'WinAPI_CallNextHookEx WinAPI_CallWindowProc ' + 'WinAPI_CallWindowProcW WinAPI_CascadeWindows ' + 'WinAPI_ChangeWindowMessageFilterEx WinAPI_CharToOem ' + 'WinAPI_ChildWindowFromPointEx WinAPI_ClientToScreen ' + 'WinAPI_ClipCursor WinAPI_CloseDesktop WinAPI_CloseEnhMetaFile ' + 'WinAPI_CloseFigure WinAPI_CloseHandle WinAPI_CloseThemeData ' + 'WinAPI_CloseWindow WinAPI_CloseWindowStation ' + 'WinAPI_CLSIDFromProgID WinAPI_CoInitialize ' + 'WinAPI_ColorAdjustLuma WinAPI_ColorHLSToRGB ' + 'WinAPI_ColorRGBToHLS WinAPI_CombineRgn ' + 'WinAPI_CombineTransform WinAPI_CommandLineToArgv ' + 'WinAPI_CommDlgExtendedError WinAPI_CommDlgExtendedErrorEx ' + 'WinAPI_CompareString WinAPI_CompressBitmapBits ' + 'WinAPI_CompressBuffer WinAPI_ComputeCrc32 ' + 'WinAPI_ConfirmCredentials WinAPI_CopyBitmap WinAPI_CopyCursor ' + 'WinAPI_CopyEnhMetaFile WinAPI_CopyFileEx WinAPI_CopyIcon ' + 'WinAPI_CopyImage WinAPI_CopyRect WinAPI_CopyStruct ' + 'WinAPI_CoTaskMemAlloc WinAPI_CoTaskMemFree ' + 'WinAPI_CoTaskMemRealloc WinAPI_CoUninitialize ' + 'WinAPI_Create32BitHBITMAP WinAPI_Create32BitHICON ' + 'WinAPI_CreateANDBitmap WinAPI_CreateBitmap ' + 'WinAPI_CreateBitmapIndirect WinAPI_CreateBrushIndirect ' + 'WinAPI_CreateBuffer WinAPI_CreateBufferFromStruct ' + 'WinAPI_CreateCaret WinAPI_CreateColorAdjustment ' + 'WinAPI_CreateCompatibleBitmap WinAPI_CreateCompatibleBitmapEx ' + 'WinAPI_CreateCompatibleDC WinAPI_CreateDesktop ' + 'WinAPI_CreateDIB WinAPI_CreateDIBColorTable ' + 'WinAPI_CreateDIBitmap WinAPI_CreateDIBSection ' + 'WinAPI_CreateDirectory WinAPI_CreateDirectoryEx ' + 'WinAPI_CreateEllipticRgn WinAPI_CreateEmptyIcon ' + 'WinAPI_CreateEnhMetaFile WinAPI_CreateEvent WinAPI_CreateFile ' + 'WinAPI_CreateFileEx WinAPI_CreateFileMapping ' + 'WinAPI_CreateFont WinAPI_CreateFontEx ' + 'WinAPI_CreateFontIndirect WinAPI_CreateGUID ' + 'WinAPI_CreateHardLink WinAPI_CreateIcon ' + 'WinAPI_CreateIconFromResourceEx WinAPI_CreateIconIndirect ' + 'WinAPI_CreateJobObject WinAPI_CreateMargins ' + 'WinAPI_CreateMRUList WinAPI_CreateMutex WinAPI_CreateNullRgn ' + 'WinAPI_CreateNumberFormatInfo WinAPI_CreateObjectID ' + 'WinAPI_CreatePen WinAPI_CreatePoint WinAPI_CreatePolygonRgn ' + 'WinAPI_CreateProcess WinAPI_CreateProcessWithToken ' + 'WinAPI_CreateRect WinAPI_CreateRectEx WinAPI_CreateRectRgn ' + 'WinAPI_CreateRectRgnIndirect WinAPI_CreateRoundRectRgn ' + 'WinAPI_CreateSemaphore WinAPI_CreateSize ' + 'WinAPI_CreateSolidBitmap WinAPI_CreateSolidBrush ' + 'WinAPI_CreateStreamOnHGlobal WinAPI_CreateString ' + 'WinAPI_CreateSymbolicLink WinAPI_CreateTransform ' + 'WinAPI_CreateWindowEx WinAPI_CreateWindowStation ' + 'WinAPI_DecompressBuffer WinAPI_DecryptFile ' + 'WinAPI_DeferWindowPos WinAPI_DefineDosDevice ' + 'WinAPI_DefRawInputProc WinAPI_DefSubclassProc ' + 'WinAPI_DefWindowProc WinAPI_DefWindowProcW WinAPI_DeleteDC ' + 'WinAPI_DeleteEnhMetaFile WinAPI_DeleteFile ' + 'WinAPI_DeleteObject WinAPI_DeleteObjectID ' + 'WinAPI_DeleteVolumeMountPoint WinAPI_DeregisterShellHookWindow ' + 'WinAPI_DestroyCaret WinAPI_DestroyCursor WinAPI_DestroyIcon ' + 'WinAPI_DestroyWindow WinAPI_DeviceIoControl ' + 'WinAPI_DisplayStruct WinAPI_DllGetVersion WinAPI_DllInstall ' + 'WinAPI_DllUninstall WinAPI_DPtoLP WinAPI_DragAcceptFiles ' + 'WinAPI_DragFinish WinAPI_DragQueryFileEx ' + 'WinAPI_DragQueryPoint WinAPI_DrawAnimatedRects ' + 'WinAPI_DrawBitmap WinAPI_DrawEdge WinAPI_DrawFocusRect ' + 'WinAPI_DrawFrameControl WinAPI_DrawIcon WinAPI_DrawIconEx ' + 'WinAPI_DrawLine WinAPI_DrawShadowText WinAPI_DrawText ' + 'WinAPI_DrawThemeBackground WinAPI_DrawThemeEdge ' + 'WinAPI_DrawThemeIcon WinAPI_DrawThemeParentBackground ' + 'WinAPI_DrawThemeText WinAPI_DrawThemeTextEx ' + 'WinAPI_DuplicateEncryptionInfoFile WinAPI_DuplicateHandle ' + 'WinAPI_DuplicateTokenEx WinAPI_DwmDefWindowProc ' + 'WinAPI_DwmEnableBlurBehindWindow WinAPI_DwmEnableComposition ' + 'WinAPI_DwmExtendFrameIntoClientArea ' + 'WinAPI_DwmGetColorizationColor ' + 'WinAPI_DwmGetColorizationParameters ' + 'WinAPI_DwmGetWindowAttribute WinAPI_DwmInvalidateIconicBitmaps ' + 'WinAPI_DwmIsCompositionEnabled ' + 'WinAPI_DwmQueryThumbnailSourceSize WinAPI_DwmRegisterThumbnail ' + 'WinAPI_DwmSetColorizationParameters ' + 'WinAPI_DwmSetIconicLivePreviewBitmap ' + 'WinAPI_DwmSetIconicThumbnail WinAPI_DwmSetWindowAttribute ' + 'WinAPI_DwmUnregisterThumbnail ' + 'WinAPI_DwmUpdateThumbnailProperties WinAPI_DWordToFloat ' + 'WinAPI_DWordToInt WinAPI_EjectMedia WinAPI_Ellipse ' + 'WinAPI_EmptyWorkingSet WinAPI_EnableWindow WinAPI_EncryptFile ' + 'WinAPI_EncryptionDisable WinAPI_EndBufferedPaint ' + 'WinAPI_EndDeferWindowPos WinAPI_EndPaint WinAPI_EndPath ' + 'WinAPI_EndUpdateResource WinAPI_EnumChildProcess ' + 'WinAPI_EnumChildWindows WinAPI_EnumDesktops ' + 'WinAPI_EnumDesktopWindows WinAPI_EnumDeviceDrivers ' + 'WinAPI_EnumDisplayDevices WinAPI_EnumDisplayMonitors ' + 'WinAPI_EnumDisplaySettings WinAPI_EnumDllProc ' + 'WinAPI_EnumFiles WinAPI_EnumFileStreams ' + 'WinAPI_EnumFontFamilies WinAPI_EnumHardLinks ' + 'WinAPI_EnumMRUList WinAPI_EnumPageFiles ' + 'WinAPI_EnumProcessHandles WinAPI_EnumProcessModules ' + 'WinAPI_EnumProcessThreads WinAPI_EnumProcessWindows ' + 'WinAPI_EnumRawInputDevices WinAPI_EnumResourceLanguages ' + 'WinAPI_EnumResourceNames WinAPI_EnumResourceTypes ' + 'WinAPI_EnumSystemGeoID WinAPI_EnumSystemLocales ' + 'WinAPI_EnumUILanguages WinAPI_EnumWindows ' + 'WinAPI_EnumWindowsPopup WinAPI_EnumWindowStations ' + 'WinAPI_EnumWindowsTop WinAPI_EqualMemory WinAPI_EqualRect ' + 'WinAPI_EqualRgn WinAPI_ExcludeClipRect ' + 'WinAPI_ExpandEnvironmentStrings WinAPI_ExtCreatePen ' + 'WinAPI_ExtCreateRegion WinAPI_ExtFloodFill WinAPI_ExtractIcon ' + 'WinAPI_ExtractIconEx WinAPI_ExtSelectClipRgn ' + 'WinAPI_FatalAppExit WinAPI_FatalExit ' + 'WinAPI_FileEncryptionStatus WinAPI_FileExists ' + 'WinAPI_FileIconInit WinAPI_FileInUse WinAPI_FillMemory ' + 'WinAPI_FillPath WinAPI_FillRect WinAPI_FillRgn ' + 'WinAPI_FindClose WinAPI_FindCloseChangeNotification ' + 'WinAPI_FindExecutable WinAPI_FindFirstChangeNotification ' + 'WinAPI_FindFirstFile WinAPI_FindFirstFileName ' + 'WinAPI_FindFirstStream WinAPI_FindNextChangeNotification ' + 'WinAPI_FindNextFile WinAPI_FindNextFileName ' + 'WinAPI_FindNextStream WinAPI_FindResource ' + 'WinAPI_FindResourceEx WinAPI_FindTextDlg WinAPI_FindWindow ' + 'WinAPI_FlashWindow WinAPI_FlashWindowEx WinAPI_FlattenPath ' + 'WinAPI_FloatToDWord WinAPI_FloatToInt WinAPI_FlushFileBuffers ' + 'WinAPI_FlushFRBuffer WinAPI_FlushViewOfFile ' + 'WinAPI_FormatDriveDlg WinAPI_FormatMessage WinAPI_FrameRect ' + 'WinAPI_FrameRgn WinAPI_FreeLibrary WinAPI_FreeMemory ' + 'WinAPI_FreeMRUList WinAPI_FreeResource WinAPI_GdiComment ' + 'WinAPI_GetActiveWindow WinAPI_GetAllUsersProfileDirectory ' + 'WinAPI_GetAncestor WinAPI_GetApplicationRestartSettings ' + 'WinAPI_GetArcDirection WinAPI_GetAsyncKeyState ' + 'WinAPI_GetBinaryType WinAPI_GetBitmapBits ' + 'WinAPI_GetBitmapDimension WinAPI_GetBitmapDimensionEx ' + 'WinAPI_GetBkColor WinAPI_GetBkMode WinAPI_GetBoundsRect ' + 'WinAPI_GetBrushOrg WinAPI_GetBufferedPaintBits ' + 'WinAPI_GetBufferedPaintDC WinAPI_GetBufferedPaintTargetDC ' + 'WinAPI_GetBufferedPaintTargetRect WinAPI_GetBValue ' + 'WinAPI_GetCaretBlinkTime WinAPI_GetCaretPos WinAPI_GetCDType ' + 'WinAPI_GetClassInfoEx WinAPI_GetClassLongEx ' + 'WinAPI_GetClassName WinAPI_GetClientHeight ' + 'WinAPI_GetClientRect WinAPI_GetClientWidth ' + 'WinAPI_GetClipboardSequenceNumber WinAPI_GetClipBox ' + 'WinAPI_GetClipCursor WinAPI_GetClipRgn ' + 'WinAPI_GetColorAdjustment WinAPI_GetCompressedFileSize ' + 'WinAPI_GetCompression WinAPI_GetConnectedDlg ' + 'WinAPI_GetCurrentDirectory WinAPI_GetCurrentHwProfile ' + 'WinAPI_GetCurrentObject WinAPI_GetCurrentPosition ' + 'WinAPI_GetCurrentProcess ' + 'WinAPI_GetCurrentProcessExplicitAppUserModelID ' + 'WinAPI_GetCurrentProcessID WinAPI_GetCurrentThemeName ' + 'WinAPI_GetCurrentThread WinAPI_GetCurrentThreadId ' + 'WinAPI_GetCursor WinAPI_GetCursorInfo WinAPI_GetDateFormat ' + 'WinAPI_GetDC WinAPI_GetDCEx WinAPI_GetDefaultPrinter ' + 'WinAPI_GetDefaultUserProfileDirectory WinAPI_GetDesktopWindow ' + 'WinAPI_GetDeviceCaps WinAPI_GetDeviceDriverBaseName ' + 'WinAPI_GetDeviceDriverFileName WinAPI_GetDeviceGammaRamp ' + 'WinAPI_GetDIBColorTable WinAPI_GetDIBits ' + 'WinAPI_GetDiskFreeSpaceEx WinAPI_GetDlgCtrlID ' + 'WinAPI_GetDlgItem WinAPI_GetDllDirectory ' + 'WinAPI_GetDriveBusType WinAPI_GetDriveGeometryEx ' + 'WinAPI_GetDriveNumber WinAPI_GetDriveType ' + 'WinAPI_GetDurationFormat WinAPI_GetEffectiveClientRect ' + 'WinAPI_GetEnhMetaFile WinAPI_GetEnhMetaFileBits ' + 'WinAPI_GetEnhMetaFileDescription WinAPI_GetEnhMetaFileDimension ' + 'WinAPI_GetEnhMetaFileHeader WinAPI_GetErrorMessage ' + 'WinAPI_GetErrorMode WinAPI_GetExitCodeProcess ' + 'WinAPI_GetExtended WinAPI_GetFileAttributes WinAPI_GetFileID ' + 'WinAPI_GetFileInformationByHandle ' + 'WinAPI_GetFileInformationByHandleEx WinAPI_GetFilePointerEx ' + 'WinAPI_GetFileSizeEx WinAPI_GetFileSizeOnDisk ' + 'WinAPI_GetFileTitle WinAPI_GetFileType ' + 'WinAPI_GetFileVersionInfo WinAPI_GetFinalPathNameByHandle ' + 'WinAPI_GetFinalPathNameByHandleEx WinAPI_GetFocus ' + 'WinAPI_GetFontMemoryResourceInfo WinAPI_GetFontName ' + 'WinAPI_GetFontResourceInfo WinAPI_GetForegroundWindow ' + 'WinAPI_GetFRBuffer WinAPI_GetFullPathName WinAPI_GetGeoInfo ' + 'WinAPI_GetGlyphOutline WinAPI_GetGraphicsMode ' + 'WinAPI_GetGuiResources WinAPI_GetGUIThreadInfo ' + 'WinAPI_GetGValue WinAPI_GetHandleInformation ' + 'WinAPI_GetHGlobalFromStream WinAPI_GetIconDimension ' + 'WinAPI_GetIconInfo WinAPI_GetIconInfoEx WinAPI_GetIdleTime ' + 'WinAPI_GetKeyboardLayout WinAPI_GetKeyboardLayoutList ' + 'WinAPI_GetKeyboardState WinAPI_GetKeyboardType ' + 'WinAPI_GetKeyNameText WinAPI_GetKeyState ' + 'WinAPI_GetLastActivePopup WinAPI_GetLastError ' + 'WinAPI_GetLastErrorMessage WinAPI_GetLayeredWindowAttributes ' + 'WinAPI_GetLocaleInfo WinAPI_GetLogicalDrives ' + 'WinAPI_GetMapMode WinAPI_GetMemorySize ' + 'WinAPI_GetMessageExtraInfo WinAPI_GetModuleFileNameEx ' + 'WinAPI_GetModuleHandle WinAPI_GetModuleHandleEx ' + 'WinAPI_GetModuleInformation WinAPI_GetMonitorInfo ' + 'WinAPI_GetMousePos WinAPI_GetMousePosX WinAPI_GetMousePosY ' + 'WinAPI_GetMUILanguage WinAPI_GetNumberFormat WinAPI_GetObject ' + 'WinAPI_GetObjectID WinAPI_GetObjectInfoByHandle ' + 'WinAPI_GetObjectNameByHandle WinAPI_GetObjectType ' + 'WinAPI_GetOpenFileName WinAPI_GetOutlineTextMetrics ' + 'WinAPI_GetOverlappedResult WinAPI_GetParent ' + 'WinAPI_GetParentProcess WinAPI_GetPerformanceInfo ' + 'WinAPI_GetPEType WinAPI_GetPhysicallyInstalledSystemMemory ' + 'WinAPI_GetPixel WinAPI_GetPolyFillMode WinAPI_GetPosFromRect ' + 'WinAPI_GetPriorityClass WinAPI_GetProcAddress ' + 'WinAPI_GetProcessAffinityMask WinAPI_GetProcessCommandLine ' + 'WinAPI_GetProcessFileName WinAPI_GetProcessHandleCount ' + 'WinAPI_GetProcessID WinAPI_GetProcessIoCounters ' + 'WinAPI_GetProcessMemoryInfo WinAPI_GetProcessName ' + 'WinAPI_GetProcessShutdownParameters WinAPI_GetProcessTimes ' + 'WinAPI_GetProcessUser WinAPI_GetProcessWindowStation ' + 'WinAPI_GetProcessWorkingDirectory WinAPI_GetProfilesDirectory ' + 'WinAPI_GetPwrCapabilities WinAPI_GetRawInputBuffer ' + 'WinAPI_GetRawInputBufferLength WinAPI_GetRawInputData ' + 'WinAPI_GetRawInputDeviceInfo WinAPI_GetRegionData ' + 'WinAPI_GetRegisteredRawInputDevices ' + 'WinAPI_GetRegKeyNameByHandle WinAPI_GetRgnBox WinAPI_GetROP2 ' + 'WinAPI_GetRValue WinAPI_GetSaveFileName WinAPI_GetShellWindow ' + 'WinAPI_GetStartupInfo WinAPI_GetStdHandle ' + 'WinAPI_GetStockObject WinAPI_GetStretchBltMode ' + 'WinAPI_GetString WinAPI_GetSysColor WinAPI_GetSysColorBrush ' + 'WinAPI_GetSystemDefaultLangID WinAPI_GetSystemDefaultLCID ' + 'WinAPI_GetSystemDefaultUILanguage WinAPI_GetSystemDEPPolicy ' + 'WinAPI_GetSystemInfo WinAPI_GetSystemMetrics ' + 'WinAPI_GetSystemPowerStatus WinAPI_GetSystemTimes ' + 'WinAPI_GetSystemWow64Directory WinAPI_GetTabbedTextExtent ' + 'WinAPI_GetTempFileName WinAPI_GetTextAlign ' + 'WinAPI_GetTextCharacterExtra WinAPI_GetTextColor ' + 'WinAPI_GetTextExtentPoint32 WinAPI_GetTextFace ' + 'WinAPI_GetTextMetrics WinAPI_GetThemeAppProperties ' + 'WinAPI_GetThemeBackgroundContentRect ' + 'WinAPI_GetThemeBackgroundExtent WinAPI_GetThemeBackgroundRegion ' + 'WinAPI_GetThemeBitmap WinAPI_GetThemeBool ' + 'WinAPI_GetThemeColor WinAPI_GetThemeDocumentationProperty ' + 'WinAPI_GetThemeEnumValue WinAPI_GetThemeFilename ' + 'WinAPI_GetThemeFont WinAPI_GetThemeInt WinAPI_GetThemeMargins ' + 'WinAPI_GetThemeMetric WinAPI_GetThemePartSize ' + 'WinAPI_GetThemePosition WinAPI_GetThemePropertyOrigin ' + 'WinAPI_GetThemeRect WinAPI_GetThemeString ' + 'WinAPI_GetThemeSysBool WinAPI_GetThemeSysColor ' + 'WinAPI_GetThemeSysColorBrush WinAPI_GetThemeSysFont ' + 'WinAPI_GetThemeSysInt WinAPI_GetThemeSysSize ' + 'WinAPI_GetThemeSysString WinAPI_GetThemeTextExtent ' + 'WinAPI_GetThemeTextMetrics WinAPI_GetThemeTransitionDuration ' + 'WinAPI_GetThreadDesktop WinAPI_GetThreadErrorMode ' + 'WinAPI_GetThreadLocale WinAPI_GetThreadUILanguage ' + 'WinAPI_GetTickCount WinAPI_GetTickCount64 ' + 'WinAPI_GetTimeFormat WinAPI_GetTopWindow ' + 'WinAPI_GetUDFColorMode WinAPI_GetUpdateRect ' + 'WinAPI_GetUpdateRgn WinAPI_GetUserDefaultLangID ' + 'WinAPI_GetUserDefaultLCID WinAPI_GetUserDefaultUILanguage ' + 'WinAPI_GetUserGeoID WinAPI_GetUserObjectInformation ' + 'WinAPI_GetVersion WinAPI_GetVersionEx ' + 'WinAPI_GetVolumeInformation WinAPI_GetVolumeInformationByHandle ' + 'WinAPI_GetVolumeNameForVolumeMountPoint WinAPI_GetWindow ' + 'WinAPI_GetWindowDC WinAPI_GetWindowDisplayAffinity ' + 'WinAPI_GetWindowExt WinAPI_GetWindowFileName ' + 'WinAPI_GetWindowHeight WinAPI_GetWindowInfo ' + 'WinAPI_GetWindowLong WinAPI_GetWindowOrg ' + 'WinAPI_GetWindowPlacement WinAPI_GetWindowRect ' + 'WinAPI_GetWindowRgn WinAPI_GetWindowRgnBox ' + 'WinAPI_GetWindowSubclass WinAPI_GetWindowText ' + 'WinAPI_GetWindowTheme WinAPI_GetWindowThreadProcessId ' + 'WinAPI_GetWindowWidth WinAPI_GetWorkArea ' + 'WinAPI_GetWorldTransform WinAPI_GetXYFromPoint ' + 'WinAPI_GlobalMemoryStatus WinAPI_GradientFill ' + 'WinAPI_GUIDFromString WinAPI_GUIDFromStringEx WinAPI_HashData ' + 'WinAPI_HashString WinAPI_HiByte WinAPI_HideCaret ' + 'WinAPI_HiDWord WinAPI_HiWord WinAPI_InflateRect ' + 'WinAPI_InitMUILanguage WinAPI_InProcess ' + 'WinAPI_IntersectClipRect WinAPI_IntersectRect ' + 'WinAPI_IntToDWord WinAPI_IntToFloat WinAPI_InvalidateRect ' + 'WinAPI_InvalidateRgn WinAPI_InvertANDBitmap ' + 'WinAPI_InvertColor WinAPI_InvertRect WinAPI_InvertRgn ' + 'WinAPI_IOCTL WinAPI_IsAlphaBitmap WinAPI_IsBadCodePtr ' + 'WinAPI_IsBadReadPtr WinAPI_IsBadStringPtr ' + 'WinAPI_IsBadWritePtr WinAPI_IsChild WinAPI_IsClassName ' + 'WinAPI_IsDoorOpen WinAPI_IsElevated WinAPI_IsHungAppWindow ' + 'WinAPI_IsIconic WinAPI_IsInternetConnected ' + 'WinAPI_IsLoadKBLayout WinAPI_IsMemory ' + 'WinAPI_IsNameInExpression WinAPI_IsNetworkAlive ' + 'WinAPI_IsPathShared WinAPI_IsProcessInJob ' + 'WinAPI_IsProcessorFeaturePresent WinAPI_IsRectEmpty ' + 'WinAPI_IsThemeActive ' + 'WinAPI_IsThemeBackgroundPartiallyTransparent ' + 'WinAPI_IsThemePartDefined WinAPI_IsValidLocale ' + 'WinAPI_IsWindow WinAPI_IsWindowEnabled WinAPI_IsWindowUnicode ' + 'WinAPI_IsWindowVisible WinAPI_IsWow64Process ' + 'WinAPI_IsWritable WinAPI_IsZoomed WinAPI_Keybd_Event ' + 'WinAPI_KillTimer WinAPI_LineDDA WinAPI_LineTo ' + 'WinAPI_LoadBitmap WinAPI_LoadCursor WinAPI_LoadCursorFromFile ' + 'WinAPI_LoadIcon WinAPI_LoadIconMetric ' + 'WinAPI_LoadIconWithScaleDown WinAPI_LoadImage ' + 'WinAPI_LoadIndirectString WinAPI_LoadKeyboardLayout ' + 'WinAPI_LoadLibrary WinAPI_LoadLibraryEx WinAPI_LoadMedia ' + 'WinAPI_LoadResource WinAPI_LoadShell32Icon WinAPI_LoadString ' + 'WinAPI_LoadStringEx WinAPI_LoByte WinAPI_LocalFree ' + 'WinAPI_LockDevice WinAPI_LockFile WinAPI_LockResource ' + 'WinAPI_LockWindowUpdate WinAPI_LockWorkStation WinAPI_LoDWord ' + 'WinAPI_LongMid WinAPI_LookupIconIdFromDirectoryEx ' + 'WinAPI_LoWord WinAPI_LPtoDP WinAPI_MAKELANGID ' + 'WinAPI_MAKELCID WinAPI_MakeLong WinAPI_MakeQWord ' + 'WinAPI_MakeWord WinAPI_MapViewOfFile WinAPI_MapVirtualKey ' + 'WinAPI_MaskBlt WinAPI_MessageBeep WinAPI_MessageBoxCheck ' + 'WinAPI_MessageBoxIndirect WinAPI_MirrorIcon ' + 'WinAPI_ModifyWorldTransform WinAPI_MonitorFromPoint ' + 'WinAPI_MonitorFromRect WinAPI_MonitorFromWindow ' + 'WinAPI_Mouse_Event WinAPI_MoveFileEx WinAPI_MoveMemory ' + 'WinAPI_MoveTo WinAPI_MoveToEx WinAPI_MoveWindow ' + 'WinAPI_MsgBox WinAPI_MulDiv WinAPI_MultiByteToWideChar ' + 'WinAPI_MultiByteToWideCharEx WinAPI_NtStatusToDosError ' + 'WinAPI_OemToChar WinAPI_OffsetClipRgn WinAPI_OffsetPoints ' + 'WinAPI_OffsetRect WinAPI_OffsetRgn WinAPI_OffsetWindowOrg ' + 'WinAPI_OpenDesktop WinAPI_OpenFileById WinAPI_OpenFileDlg ' + 'WinAPI_OpenFileMapping WinAPI_OpenIcon ' + 'WinAPI_OpenInputDesktop WinAPI_OpenJobObject WinAPI_OpenMutex ' + 'WinAPI_OpenProcess WinAPI_OpenProcessToken ' + 'WinAPI_OpenSemaphore WinAPI_OpenThemeData ' + 'WinAPI_OpenWindowStation WinAPI_PageSetupDlg ' + 'WinAPI_PaintDesktop WinAPI_PaintRgn WinAPI_ParseURL ' + 'WinAPI_ParseUserName WinAPI_PatBlt WinAPI_PathAddBackslash ' + 'WinAPI_PathAddExtension WinAPI_PathAppend ' + 'WinAPI_PathBuildRoot WinAPI_PathCanonicalize ' + 'WinAPI_PathCommonPrefix WinAPI_PathCompactPath ' + 'WinAPI_PathCompactPathEx WinAPI_PathCreateFromUrl ' + 'WinAPI_PathFindExtension WinAPI_PathFindFileName ' + 'WinAPI_PathFindNextComponent WinAPI_PathFindOnPath ' + 'WinAPI_PathGetArgs WinAPI_PathGetCharType ' + 'WinAPI_PathGetDriveNumber WinAPI_PathIsContentType ' + 'WinAPI_PathIsDirectory WinAPI_PathIsDirectoryEmpty ' + 'WinAPI_PathIsExe WinAPI_PathIsFileSpec ' + 'WinAPI_PathIsLFNFileSpec WinAPI_PathIsRelative ' + 'WinAPI_PathIsRoot WinAPI_PathIsSameRoot ' + 'WinAPI_PathIsSystemFolder WinAPI_PathIsUNC ' + 'WinAPI_PathIsUNCServer WinAPI_PathIsUNCServerShare ' + 'WinAPI_PathMakeSystemFolder WinAPI_PathMatchSpec ' + 'WinAPI_PathParseIconLocation WinAPI_PathRelativePathTo ' + 'WinAPI_PathRemoveArgs WinAPI_PathRemoveBackslash ' + 'WinAPI_PathRemoveExtension WinAPI_PathRemoveFileSpec ' + 'WinAPI_PathRenameExtension WinAPI_PathSearchAndQualify ' + 'WinAPI_PathSkipRoot WinAPI_PathStripPath ' + 'WinAPI_PathStripToRoot WinAPI_PathToRegion ' + 'WinAPI_PathUndecorate WinAPI_PathUnExpandEnvStrings ' + 'WinAPI_PathUnmakeSystemFolder WinAPI_PathUnquoteSpaces ' + 'WinAPI_PathYetAnotherMakeUniqueName WinAPI_PickIconDlg ' + 'WinAPI_PlayEnhMetaFile WinAPI_PlaySound WinAPI_PlgBlt ' + 'WinAPI_PointFromRect WinAPI_PolyBezier WinAPI_PolyBezierTo ' + 'WinAPI_PolyDraw WinAPI_Polygon WinAPI_PostMessage ' + 'WinAPI_PrimaryLangId WinAPI_PrintDlg WinAPI_PrintDlgEx ' + 'WinAPI_PrintWindow WinAPI_ProgIDFromCLSID WinAPI_PtInRect ' + 'WinAPI_PtInRectEx WinAPI_PtInRegion WinAPI_PtVisible ' + 'WinAPI_QueryDosDevice WinAPI_QueryInformationJobObject ' + 'WinAPI_QueryPerformanceCounter WinAPI_QueryPerformanceFrequency ' + 'WinAPI_RadialGradientFill WinAPI_ReadDirectoryChanges ' + 'WinAPI_ReadFile WinAPI_ReadProcessMemory WinAPI_Rectangle ' + 'WinAPI_RectInRegion WinAPI_RectIsEmpty WinAPI_RectVisible ' + 'WinAPI_RedrawWindow WinAPI_RegCloseKey ' + 'WinAPI_RegConnectRegistry WinAPI_RegCopyTree ' + 'WinAPI_RegCopyTreeEx WinAPI_RegCreateKey ' + 'WinAPI_RegDeleteEmptyKey WinAPI_RegDeleteKey ' + 'WinAPI_RegDeleteKeyValue WinAPI_RegDeleteTree ' + 'WinAPI_RegDeleteTreeEx WinAPI_RegDeleteValue ' + 'WinAPI_RegDisableReflectionKey WinAPI_RegDuplicateHKey ' + 'WinAPI_RegEnableReflectionKey WinAPI_RegEnumKey ' + 'WinAPI_RegEnumValue WinAPI_RegFlushKey ' + 'WinAPI_RegisterApplicationRestart WinAPI_RegisterClass ' + 'WinAPI_RegisterClassEx WinAPI_RegisterHotKey ' + 'WinAPI_RegisterPowerSettingNotification ' + 'WinAPI_RegisterRawInputDevices WinAPI_RegisterShellHookWindow ' + 'WinAPI_RegisterWindowMessage WinAPI_RegLoadMUIString ' + 'WinAPI_RegNotifyChangeKeyValue WinAPI_RegOpenKey ' + 'WinAPI_RegQueryInfoKey WinAPI_RegQueryLastWriteTime ' + 'WinAPI_RegQueryMultipleValues WinAPI_RegQueryReflectionKey ' + 'WinAPI_RegQueryValue WinAPI_RegRestoreKey WinAPI_RegSaveKey ' + 'WinAPI_RegSetValue WinAPI_ReleaseCapture WinAPI_ReleaseDC ' + 'WinAPI_ReleaseMutex WinAPI_ReleaseSemaphore ' + 'WinAPI_ReleaseStream WinAPI_RemoveClipboardFormatListener ' + 'WinAPI_RemoveDirectory WinAPI_RemoveFontMemResourceEx ' + 'WinAPI_RemoveFontResourceEx WinAPI_RemoveWindowSubclass ' + 'WinAPI_ReOpenFile WinAPI_ReplaceFile WinAPI_ReplaceTextDlg ' + 'WinAPI_ResetEvent WinAPI_RestartDlg WinAPI_RestoreDC ' + 'WinAPI_RGB WinAPI_RotatePoints WinAPI_RoundRect ' + 'WinAPI_SaveDC WinAPI_SaveFileDlg WinAPI_SaveHBITMAPToFile ' + 'WinAPI_SaveHICONToFile WinAPI_ScaleWindowExt ' + 'WinAPI_ScreenToClient WinAPI_SearchPath WinAPI_SelectClipPath ' + 'WinAPI_SelectClipRgn WinAPI_SelectObject ' + 'WinAPI_SendMessageTimeout WinAPI_SetActiveWindow ' + 'WinAPI_SetArcDirection WinAPI_SetBitmapBits ' + 'WinAPI_SetBitmapDimensionEx WinAPI_SetBkColor ' + 'WinAPI_SetBkMode WinAPI_SetBoundsRect WinAPI_SetBrushOrg ' + 'WinAPI_SetCapture WinAPI_SetCaretBlinkTime WinAPI_SetCaretPos ' + 'WinAPI_SetClassLongEx WinAPI_SetColorAdjustment ' + 'WinAPI_SetCompression WinAPI_SetCurrentDirectory ' + 'WinAPI_SetCurrentProcessExplicitAppUserModelID WinAPI_SetCursor ' + 'WinAPI_SetDCBrushColor WinAPI_SetDCPenColor ' + 'WinAPI_SetDefaultPrinter WinAPI_SetDeviceGammaRamp ' + 'WinAPI_SetDIBColorTable WinAPI_SetDIBits ' + 'WinAPI_SetDIBitsToDevice WinAPI_SetDllDirectory ' + 'WinAPI_SetEndOfFile WinAPI_SetEnhMetaFileBits ' + 'WinAPI_SetErrorMode WinAPI_SetEvent WinAPI_SetFileAttributes ' + 'WinAPI_SetFileInformationByHandleEx WinAPI_SetFilePointer ' + 'WinAPI_SetFilePointerEx WinAPI_SetFileShortName ' + 'WinAPI_SetFileValidData WinAPI_SetFocus WinAPI_SetFont ' + 'WinAPI_SetForegroundWindow WinAPI_SetFRBuffer ' + 'WinAPI_SetGraphicsMode WinAPI_SetHandleInformation ' + 'WinAPI_SetInformationJobObject WinAPI_SetKeyboardLayout ' + 'WinAPI_SetKeyboardState WinAPI_SetLastError ' + 'WinAPI_SetLayeredWindowAttributes WinAPI_SetLocaleInfo ' + 'WinAPI_SetMapMode WinAPI_SetMessageExtraInfo WinAPI_SetParent ' + 'WinAPI_SetPixel WinAPI_SetPolyFillMode ' + 'WinAPI_SetPriorityClass WinAPI_SetProcessAffinityMask ' + 'WinAPI_SetProcessShutdownParameters ' + 'WinAPI_SetProcessWindowStation WinAPI_SetRectRgn ' + 'WinAPI_SetROP2 WinAPI_SetSearchPathMode ' + 'WinAPI_SetStretchBltMode WinAPI_SetSysColors ' + 'WinAPI_SetSystemCursor WinAPI_SetTextAlign ' + 'WinAPI_SetTextCharacterExtra WinAPI_SetTextColor ' + 'WinAPI_SetTextJustification WinAPI_SetThemeAppProperties ' + 'WinAPI_SetThreadDesktop WinAPI_SetThreadErrorMode ' + 'WinAPI_SetThreadExecutionState WinAPI_SetThreadLocale ' + 'WinAPI_SetThreadUILanguage WinAPI_SetTimer ' + 'WinAPI_SetUDFColorMode WinAPI_SetUserGeoID ' + 'WinAPI_SetUserObjectInformation WinAPI_SetVolumeMountPoint ' + 'WinAPI_SetWindowDisplayAffinity WinAPI_SetWindowExt ' + 'WinAPI_SetWindowLong WinAPI_SetWindowOrg ' + 'WinAPI_SetWindowPlacement WinAPI_SetWindowPos ' + 'WinAPI_SetWindowRgn WinAPI_SetWindowsHookEx ' + 'WinAPI_SetWindowSubclass WinAPI_SetWindowText ' + 'WinAPI_SetWindowTheme WinAPI_SetWinEventHook ' + 'WinAPI_SetWorldTransform WinAPI_SfcIsFileProtected ' + 'WinAPI_SfcIsKeyProtected WinAPI_ShellAboutDlg ' + 'WinAPI_ShellAddToRecentDocs WinAPI_ShellChangeNotify ' + 'WinAPI_ShellChangeNotifyDeregister ' + 'WinAPI_ShellChangeNotifyRegister WinAPI_ShellCreateDirectory ' + 'WinAPI_ShellEmptyRecycleBin WinAPI_ShellExecute ' + 'WinAPI_ShellExecuteEx WinAPI_ShellExtractAssociatedIcon ' + 'WinAPI_ShellExtractIcon WinAPI_ShellFileOperation ' + 'WinAPI_ShellFlushSFCache WinAPI_ShellGetFileInfo ' + 'WinAPI_ShellGetIconOverlayIndex WinAPI_ShellGetImageList ' + 'WinAPI_ShellGetKnownFolderIDList WinAPI_ShellGetKnownFolderPath ' + 'WinAPI_ShellGetLocalizedName WinAPI_ShellGetPathFromIDList ' + 'WinAPI_ShellGetSetFolderCustomSettings WinAPI_ShellGetSettings ' + 'WinAPI_ShellGetSpecialFolderLocation ' + 'WinAPI_ShellGetSpecialFolderPath WinAPI_ShellGetStockIconInfo ' + 'WinAPI_ShellILCreateFromPath WinAPI_ShellNotifyIcon ' + 'WinAPI_ShellNotifyIconGetRect WinAPI_ShellObjectProperties ' + 'WinAPI_ShellOpenFolderAndSelectItems WinAPI_ShellOpenWithDlg ' + 'WinAPI_ShellQueryRecycleBin ' + 'WinAPI_ShellQueryUserNotificationState ' + 'WinAPI_ShellRemoveLocalizedName WinAPI_ShellRestricted ' + 'WinAPI_ShellSetKnownFolderPath WinAPI_ShellSetLocalizedName ' + 'WinAPI_ShellSetSettings WinAPI_ShellStartNetConnectionDlg ' + 'WinAPI_ShellUpdateImage WinAPI_ShellUserAuthenticationDlg ' + 'WinAPI_ShellUserAuthenticationDlgEx WinAPI_ShortToWord ' + 'WinAPI_ShowCaret WinAPI_ShowCursor WinAPI_ShowError ' + 'WinAPI_ShowLastError WinAPI_ShowMsg WinAPI_ShowOwnedPopups ' + 'WinAPI_ShowWindow WinAPI_ShutdownBlockReasonCreate ' + 'WinAPI_ShutdownBlockReasonDestroy ' + 'WinAPI_ShutdownBlockReasonQuery WinAPI_SizeOfResource ' + 'WinAPI_StretchBlt WinAPI_StretchDIBits ' + 'WinAPI_StrFormatByteSize WinAPI_StrFormatByteSizeEx ' + 'WinAPI_StrFormatKBSize WinAPI_StrFromTimeInterval ' + 'WinAPI_StringFromGUID WinAPI_StringLenA WinAPI_StringLenW ' + 'WinAPI_StrLen WinAPI_StrokeAndFillPath WinAPI_StrokePath ' + 'WinAPI_StructToArray WinAPI_SubLangId WinAPI_SubtractRect ' + 'WinAPI_SwapDWord WinAPI_SwapQWord WinAPI_SwapWord ' + 'WinAPI_SwitchColor WinAPI_SwitchDesktop ' + 'WinAPI_SwitchToThisWindow WinAPI_SystemParametersInfo ' + 'WinAPI_TabbedTextOut WinAPI_TerminateJobObject ' + 'WinAPI_TerminateProcess WinAPI_TextOut WinAPI_TileWindows ' + 'WinAPI_TrackMouseEvent WinAPI_TransparentBlt ' + 'WinAPI_TwipsPerPixelX WinAPI_TwipsPerPixelY ' + 'WinAPI_UnhookWindowsHookEx WinAPI_UnhookWinEvent ' + 'WinAPI_UnionRect WinAPI_UnionStruct WinAPI_UniqueHardwareID ' + 'WinAPI_UnloadKeyboardLayout WinAPI_UnlockFile ' + 'WinAPI_UnmapViewOfFile WinAPI_UnregisterApplicationRestart ' + 'WinAPI_UnregisterClass WinAPI_UnregisterHotKey ' + 'WinAPI_UnregisterPowerSettingNotification ' + 'WinAPI_UpdateLayeredWindow WinAPI_UpdateLayeredWindowEx ' + 'WinAPI_UpdateLayeredWindowIndirect WinAPI_UpdateResource ' + 'WinAPI_UpdateWindow WinAPI_UrlApplyScheme ' + 'WinAPI_UrlCanonicalize WinAPI_UrlCombine WinAPI_UrlCompare ' + 'WinAPI_UrlCreateFromPath WinAPI_UrlFixup WinAPI_UrlGetPart ' + 'WinAPI_UrlHash WinAPI_UrlIs WinAPI_UserHandleGrantAccess ' + 'WinAPI_ValidateRect WinAPI_ValidateRgn WinAPI_VerQueryRoot ' + 'WinAPI_VerQueryValue WinAPI_VerQueryValueEx ' + 'WinAPI_WaitForInputIdle WinAPI_WaitForMultipleObjects ' + 'WinAPI_WaitForSingleObject WinAPI_WideCharToMultiByte ' + 'WinAPI_WidenPath WinAPI_WindowFromDC WinAPI_WindowFromPoint ' + 'WinAPI_WordToShort WinAPI_Wow64EnableWow64FsRedirection ' + 'WinAPI_WriteConsole WinAPI_WriteFile ' + 'WinAPI_WriteProcessMemory WinAPI_ZeroMemory ' + 'WinNet_AddConnection WinNet_AddConnection2 ' + 'WinNet_AddConnection3 WinNet_CancelConnection ' + 'WinNet_CancelConnection2 WinNet_CloseEnum ' + 'WinNet_ConnectionDialog WinNet_ConnectionDialog1 ' + 'WinNet_DisconnectDialog WinNet_DisconnectDialog1 ' + 'WinNet_EnumResource WinNet_GetConnection ' + 'WinNet_GetConnectionPerformance WinNet_GetLastError ' + 'WinNet_GetNetworkInformation WinNet_GetProviderName ' + 'WinNet_GetResourceInformation WinNet_GetResourceParent ' + 'WinNet_GetUniversalName WinNet_GetUser WinNet_OpenEnum ' + 'WinNet_RestoreConnection WinNet_UseConnection Word_Create ' + 'Word_DocAdd Word_DocAttach Word_DocClose Word_DocExport ' + 'Word_DocFind Word_DocFindReplace Word_DocGet ' + 'Word_DocLinkAdd Word_DocLinkGet Word_DocOpen ' + 'Word_DocPictureAdd Word_DocPrint Word_DocRangeSet ' + 'Word_DocSave Word_DocSaveAs Word_DocTableRead ' + 'Word_DocTableWrite Word_Quit',COMMENT={variants:[hljs.COMMENT(';','$',{relevance:0}),hljs.COMMENT('#cs','#ce'),hljs.COMMENT('#comments-start','#comments-end')]},VARIABLE={className:'variable',begin:'\\$[A-z0-9_]+'},STRING={className:'string',variants:[{begin:/"/,end:/"/,contains:[{begin:/""/,relevance:0}]},{begin:/'/,end:/'/,contains:[{begin:/''/,relevance:0}]}]},NUMBER={variants:[hljs.BINARY_NUMBER_MODE,hljs.C_NUMBER_MODE]},PREPROCESSOR={className:'preprocessor',begin:'#',end:'$',keywords:'include include-once NoTrayIcon OnAutoItStartRegister RequireAdmin pragma ' + 'Au3Stripper_Ignore_Funcs Au3Stripper_Ignore_Variables ' + 'Au3Stripper_Off Au3Stripper_On Au3Stripper_Parameters ' + 'AutoIt3Wrapper_Add_Constants AutoIt3Wrapper_Au3Check_Parameters ' + 'AutoIt3Wrapper_Au3Check_Stop_OnWarning AutoIt3Wrapper_Aut2Exe ' + 'AutoIt3Wrapper_AutoIt3 AutoIt3Wrapper_AutoIt3Dir ' + 'AutoIt3Wrapper_Change2CUI AutoIt3Wrapper_Compile_Both ' + 'AutoIt3Wrapper_Compression AutoIt3Wrapper_EndIf ' + 'AutoIt3Wrapper_Icon AutoIt3Wrapper_If_Compile ' + 'AutoIt3Wrapper_If_Run AutoIt3Wrapper_Jump_To_First_Error ' + 'AutoIt3Wrapper_OutFile AutoIt3Wrapper_OutFile_Type ' + 'AutoIt3Wrapper_OutFile_X64 AutoIt3Wrapper_PlugIn_Funcs ' + 'AutoIt3Wrapper_Res_Comment Autoit3Wrapper_Res_Compatibility ' + 'AutoIt3Wrapper_Res_Description AutoIt3Wrapper_Res_Field ' + 'AutoIt3Wrapper_Res_File_Add AutoIt3Wrapper_Res_FileVersion ' + 'AutoIt3Wrapper_Res_FileVersion_AutoIncrement ' + 'AutoIt3Wrapper_Res_Icon_Add AutoIt3Wrapper_Res_Language ' + 'AutoIt3Wrapper_Res_LegalCopyright ' + 'AutoIt3Wrapper_Res_ProductVersion ' + 'AutoIt3Wrapper_Res_requestedExecutionLevel ' + 'AutoIt3Wrapper_Res_SaveSource AutoIt3Wrapper_Run_After ' + 'AutoIt3Wrapper_Run_Au3Check AutoIt3Wrapper_Run_Au3Stripper ' + 'AutoIt3Wrapper_Run_Before AutoIt3Wrapper_Run_Debug_Mode ' + 'AutoIt3Wrapper_Run_SciTE_Minimized ' + 'AutoIt3Wrapper_Run_SciTE_OutputPane_Minimized ' + 'AutoIt3Wrapper_Run_Tidy AutoIt3Wrapper_ShowProgress ' + 'AutoIt3Wrapper_Testing AutoIt3Wrapper_Tidy_Stop_OnError ' + 'AutoIt3Wrapper_UPX_Parameters AutoIt3Wrapper_UseUPX ' + 'AutoIt3Wrapper_UseX64 AutoIt3Wrapper_Version ' + 'AutoIt3Wrapper_Versioning AutoIt3Wrapper_Versioning_Parameters ' + 'Tidy_Off Tidy_On Tidy_Parameters EndRegion Region',contains:[{begin:/\\\n/,relevance:0},{beginKeywords:'include',end:'$',contains:[STRING,{className:'string',variants:[{begin:'<',end:'>'},{begin:/"/,end:/"/,contains:[{begin:/""/,relevance:0}]},{begin:/'/,end:/'/,contains:[{begin:/''/,relevance:0}]}]}]},STRING,COMMENT]},CONSTANT={className:'constant', // begin: '@',
@@ -3270,7 +3332,7 @@
 	begin:'@[A-z0-9_]+'},FUNCTION={className:'function',beginKeywords:'Func',end:'$',excludeEnd:true,illegal:'\\$|\\[|%',contains:[hljs.UNDERSCORE_TITLE_MODE,{className:'params',begin:'\\(',end:'\\)',contains:[VARIABLE,STRING,NUMBER]}]};return {case_insensitive:true,illegal:/\/\*/,keywords:{keyword:KEYWORDS,built_in:BUILT_IN,literal:LITERAL},contains:[COMMENT,VARIABLE,STRING,NUMBER,PREPROCESSOR,CONSTANT,FUNCTION]};};
 
 /***/ },
-/* 31 */
+/* 34 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3307,7 +3369,7 @@
 	};
 
 /***/ },
-/* 32 */
+/* 35 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3326,7 +3388,7 @@
 	};
 
 /***/ },
-/* 33 */
+/* 36 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3381,7 +3443,7 @@
 	};
 
 /***/ },
-/* 34 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3412,7 +3474,7 @@
 	};
 
 /***/ },
-/* 35 */
+/* 38 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3470,7 +3532,7 @@
 	};
 
 /***/ },
-/* 36 */
+/* 39 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3507,7 +3569,7 @@
 	};
 
 /***/ },
-/* 37 */
+/* 40 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3563,7 +3625,7 @@
 	};
 
 /***/ },
-/* 38 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3634,7 +3696,7 @@
 	};
 
 /***/ },
-/* 39 */
+/* 42 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3651,7 +3713,7 @@
 	};
 
 /***/ },
-/* 40 */
+/* 43 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3670,7 +3732,7 @@
 	};
 
 /***/ },
-/* 41 */
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3786,7 +3848,7 @@
 	};
 
 /***/ },
-/* 42 */
+/* 45 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3874,7 +3936,7 @@
 	};
 
 /***/ },
-/* 43 */
+/* 46 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -3960,7 +4022,7 @@
 	};
 
 /***/ },
-/* 44 */
+/* 47 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4082,7 +4144,7 @@
 	};
 
 /***/ },
-/* 45 */
+/* 48 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4157,7 +4219,7 @@
 	};
 
 /***/ },
-/* 46 */
+/* 49 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4233,7 +4295,7 @@
 	};
 
 /***/ },
-/* 47 */
+/* 50 */
 /***/ function(module, exports) {
 
 	module.exports = /**
@@ -4443,7 +4505,7 @@
 	};
 
 /***/ },
-/* 48 */
+/* 51 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4532,7 +4594,7 @@
 	};
 
 /***/ },
-/* 49 */
+/* 52 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4603,7 +4665,7 @@
 	};
 
 /***/ },
-/* 50 */
+/* 53 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4645,7 +4707,7 @@
 	};
 
 /***/ },
-/* 51 */
+/* 54 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4672,7 +4734,7 @@
 	};
 
 /***/ },
-/* 52 */
+/* 55 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4701,7 +4763,7 @@
 	};
 
 /***/ },
-/* 53 */
+/* 56 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4728,7 +4790,7 @@
 	};
 
 /***/ },
-/* 54 */
+/* 57 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4758,7 +4820,7 @@
 	};
 
 /***/ },
-/* 55 */
+/* 58 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4796,7 +4858,7 @@
 	};
 
 /***/ },
-/* 56 */
+/* 59 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4828,7 +4890,7 @@
 	};
 
 /***/ },
-/* 57 */
+/* 60 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4908,7 +4970,7 @@
 	};
 
 /***/ },
-/* 58 */
+/* 61 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -4978,7 +5040,7 @@
 	};
 
 /***/ },
-/* 59 */
+/* 62 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5095,7 +5157,7 @@
 	};
 
 /***/ },
-/* 60 */
+/* 63 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5111,7 +5173,7 @@
 	};
 
 /***/ },
-/* 61 */
+/* 64 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5148,7 +5210,7 @@
 	};
 
 /***/ },
-/* 62 */
+/* 65 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5259,7 +5321,7 @@
 	};
 
 /***/ },
-/* 63 */
+/* 66 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5289,7 +5351,7 @@
 	};
 
 /***/ },
-/* 64 */
+/* 67 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5323,7 +5385,7 @@
 	};
 
 /***/ },
-/* 65 */
+/* 68 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5364,7 +5426,7 @@
 	};
 
 /***/ },
-/* 66 */
+/* 69 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5394,7 +5456,7 @@
 	};
 
 /***/ },
-/* 67 */
+/* 70 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5449,7 +5511,7 @@
 	};
 
 /***/ },
-/* 68 */
+/* 71 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5476,7 +5538,7 @@
 	};
 
 /***/ },
-/* 69 */
+/* 72 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5495,7 +5557,7 @@
 	};
 
 /***/ },
-/* 70 */
+/* 73 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5524,7 +5586,7 @@
 	};
 
 /***/ },
-/* 71 */
+/* 74 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5541,7 +5603,7 @@
 	};
 
 /***/ },
-/* 72 */
+/* 75 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5555,7 +5617,7 @@
 	};
 
 /***/ },
-/* 73 */
+/* 76 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5618,7 +5680,7 @@
 	};
 
 /***/ },
-/* 74 */
+/* 77 */
 /***/ function(module, exports) {
 
 	module.exports = // TODO support filter tags like :javascript, support inline HTML
@@ -5701,7 +5763,7 @@
 	};
 
 /***/ },
-/* 75 */
+/* 78 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5731,7 +5793,7 @@
 	};
 
 /***/ },
-/* 76 */
+/* 79 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5828,7 +5890,7 @@
 	};
 
 /***/ },
-/* 77 */
+/* 80 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5870,7 +5932,7 @@
 	};
 
 /***/ },
-/* 78 */
+/* 81 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5902,7 +5964,7 @@
 	};
 
 /***/ },
-/* 79 */
+/* 82 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -5954,7 +6016,7 @@
 	};
 
 /***/ },
-/* 80 */
+/* 83 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6001,7 +6063,7 @@
 	};
 
 /***/ },
-/* 81 */
+/* 84 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6038,7 +6100,7 @@
 	};
 
 /***/ },
-/* 82 */
+/* 85 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6100,7 +6162,7 @@
 	};
 
 /***/ },
-/* 83 */
+/* 86 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6167,7 +6229,7 @@
 	};
 
 /***/ },
-/* 84 */
+/* 87 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6204,7 +6266,7 @@
 	};
 
 /***/ },
-/* 85 */
+/* 88 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6328,7 +6390,7 @@
 	};
 
 /***/ },
-/* 86 */
+/* 89 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6404,7 +6466,7 @@
 	};
 
 /***/ },
-/* 87 */
+/* 90 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6528,7 +6590,7 @@
 	};
 
 /***/ },
-/* 88 */
+/* 91 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6641,7 +6703,7 @@
 	};
 
 /***/ },
-/* 89 */
+/* 92 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6720,7 +6782,7 @@
 	};
 
 /***/ },
-/* 90 */
+/* 93 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6769,7 +6831,7 @@
 	};
 
 /***/ },
-/* 91 */
+/* 94 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6889,7 +6951,7 @@
 	};
 
 /***/ },
-/* 92 */
+/* 95 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6927,7 +6989,7 @@
 	};
 
 /***/ },
-/* 93 */
+/* 96 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6966,7 +7028,7 @@
 	};
 
 /***/ },
-/* 94 */
+/* 97 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -6986,7 +7048,7 @@
 	};
 
 /***/ },
-/* 95 */
+/* 98 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7045,7 +7107,7 @@
 	};
 
 /***/ },
-/* 96 */
+/* 99 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7064,7 +7126,7 @@
 	};
 
 /***/ },
-/* 97 */
+/* 100 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7118,7 +7180,7 @@
 	};
 
 /***/ },
-/* 98 */
+/* 101 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7129,7 +7191,7 @@
 	};
 
 /***/ },
-/* 99 */
+/* 102 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7235,7 +7297,7 @@
 	};
 
 /***/ },
-/* 100 */
+/* 103 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7262,7 +7324,7 @@
 	};
 
 /***/ },
-/* 101 */
+/* 104 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7318,7 +7380,7 @@
 	};
 
 /***/ },
-/* 102 */
+/* 105 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7382,7 +7444,7 @@
 	};
 
 /***/ },
-/* 103 */
+/* 106 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7434,7 +7496,7 @@
 	};
 
 /***/ },
-/* 104 */
+/* 107 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7477,7 +7539,7 @@
 	};
 
 /***/ },
-/* 105 */
+/* 108 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7544,7 +7606,7 @@
 	};
 
 /***/ },
-/* 106 */
+/* 109 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7596,7 +7658,7 @@
 	};
 
 /***/ },
-/* 107 */
+/* 110 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7646,7 +7708,7 @@
 	};
 
 /***/ },
-/* 108 */
+/* 111 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7699,7 +7761,7 @@
 	};
 
 /***/ },
-/* 109 */
+/* 112 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7743,7 +7805,7 @@
 	};
 
 /***/ },
-/* 110 */
+/* 113 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7776,7 +7838,7 @@
 	};
 
 /***/ },
-/* 111 */
+/* 114 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7809,7 +7871,7 @@
 	};
 
 /***/ },
-/* 112 */
+/* 115 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7880,7 +7942,7 @@
 	};
 
 /***/ },
-/* 113 */
+/* 116 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7920,7 +7982,7 @@
 	};
 
 /***/ },
-/* 114 */
+/* 117 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7939,7 +8001,7 @@
 	};
 
 /***/ },
-/* 115 */
+/* 118 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -7974,7 +8036,7 @@
 	};
 
 /***/ },
-/* 116 */
+/* 119 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8048,7 +8110,7 @@
 	};
 
 /***/ },
-/* 117 */
+/* 120 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8079,7 +8141,7 @@
 	};
 
 /***/ },
-/* 118 */
+/* 121 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8147,7 +8209,7 @@
 	};
 
 /***/ },
-/* 119 */
+/* 122 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8208,7 +8270,7 @@
 	};
 
 /***/ },
-/* 120 */
+/* 123 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8227,7 +8289,7 @@
 	};
 
 /***/ },
-/* 121 */
+/* 124 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8281,7 +8343,7 @@
 	};
 
 /***/ },
-/* 122 */
+/* 125 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8293,7 +8355,7 @@
 	};
 
 /***/ },
-/* 123 */
+/* 126 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8350,7 +8412,7 @@
 	};
 
 /***/ },
-/* 124 */
+/* 127 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8374,7 +8436,7 @@
 	};
 
 /***/ },
-/* 125 */
+/* 128 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8392,7 +8454,7 @@
 	};
 
 /***/ },
-/* 126 */
+/* 129 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8443,7 +8505,7 @@
 	};
 
 /***/ },
-/* 127 */
+/* 130 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8499,7 +8561,7 @@
 	};
 
 /***/ },
-/* 128 */
+/* 131 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8573,7 +8635,7 @@
 	};
 
 /***/ },
-/* 129 */
+/* 132 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8614,7 +8676,7 @@
 	};
 
 /***/ },
-/* 130 */
+/* 133 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8696,7 +8758,7 @@
 	};
 
 /***/ },
-/* 131 */
+/* 134 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8764,7 +8826,7 @@
 	};
 
 /***/ },
-/* 132 */
+/* 135 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8806,7 +8868,7 @@
 	};
 
 /***/ },
-/* 133 */
+/* 136 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8852,7 +8914,7 @@
 	};
 
 /***/ },
-/* 134 */
+/* 137 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8927,7 +8989,7 @@
 	};
 
 /***/ },
-/* 135 */
+/* 138 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8962,7 +9024,7 @@
 	};
 
 /***/ },
-/* 136 */
+/* 139 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -8986,7 +9048,7 @@
 	};
 
 /***/ },
-/* 137 */
+/* 140 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9027,7 +9089,7 @@
 	};
 
 /***/ },
-/* 138 */
+/* 141 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9148,7 +9210,7 @@
 	};
 
 /***/ },
-/* 139 */
+/* 142 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9222,7 +9284,7 @@
 	};
 
 /***/ },
-/* 140 */
+/* 143 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9262,7 +9324,7 @@
 	};
 
 /***/ },
-/* 141 */
+/* 144 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9307,7 +9369,7 @@
 	};
 
 /***/ },
-/* 142 */
+/* 145 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9334,7 +9396,7 @@
 	};
 
 /***/ },
-/* 143 */
+/* 146 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9393,7 +9455,7 @@
 	};
 
 /***/ },
-/* 144 */
+/* 147 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9442,7 +9504,7 @@
 	};
 
 /***/ },
-/* 145 */
+/* 148 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9503,7 +9565,7 @@
 	};
 
 /***/ },
-/* 146 */
+/* 149 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9547,7 +9609,7 @@
 	};
 
 /***/ },
-/* 147 */
+/* 150 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9592,7 +9654,7 @@
 	};
 
 /***/ },
-/* 148 */
+/* 151 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9612,7 +9674,7 @@
 	};
 
 /***/ },
-/* 149 */
+/* 152 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9626,7 +9688,7 @@
 	};
 
 /***/ },
-/* 150 */
+/* 153 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9664,7 +9726,7 @@
 	};
 
 /***/ },
-/* 151 */
+/* 154 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9705,7 +9767,7 @@
 	};
 
 /***/ },
-/* 152 */
+/* 155 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9741,7 +9803,7 @@
 	};
 
 /***/ },
-/* 153 */
+/* 156 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9844,7 +9906,7 @@
 	};
 
 /***/ },
-/* 154 */
+/* 157 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9915,7 +9977,7 @@
 	};
 
 /***/ },
-/* 155 */
+/* 158 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -9973,7 +10035,7 @@
 	};
 
 /***/ },
-/* 156 */
+/* 159 */
 /***/ function(module, exports) {
 
 	module.exports = function (hljs) {
@@ -10035,35 +10097,35 @@
 	};
 
 /***/ },
-/* 157 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(158);
+	module.exports = __webpack_require__(161);
 
 /***/ },
-/* 158 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Main perser class
 
 	'use strict';
 
-	var utils = __webpack_require__(159);
-	var helpers = __webpack_require__(173);
-	var Renderer = __webpack_require__(177);
-	var ParserCore = __webpack_require__(178);
-	var ParserBlock = __webpack_require__(188);
-	var ParserInline = __webpack_require__(203);
-	var LinkifyIt = __webpack_require__(219);
-	var mdurl = __webpack_require__(163);
-	var punycode = __webpack_require__(221);
+	var utils = __webpack_require__(162);
+	var helpers = __webpack_require__(176);
+	var Renderer = __webpack_require__(180);
+	var ParserCore = __webpack_require__(181);
+	var ParserBlock = __webpack_require__(191);
+	var ParserInline = __webpack_require__(206);
+	var LinkifyIt = __webpack_require__(222);
+	var mdurl = __webpack_require__(166);
+	var punycode = __webpack_require__(224);
 
 	var config = {
-	  'default': __webpack_require__(223),
-	  zero: __webpack_require__(224),
-	  commonmark: __webpack_require__(225)
+	  'default': __webpack_require__(226),
+	  zero: __webpack_require__(227),
+	  commonmark: __webpack_require__(228)
 	};
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -10607,7 +10669,7 @@
 	module.exports = MarkdownIt;
 
 /***/ },
-/* 159 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Utilities
@@ -10709,7 +10771,7 @@
 
 	var DIGITAL_ENTITY_TEST_RE = /^#((?:x[a-f0-9]{1,8}|[0-9]{1,8}))/i;
 
-	var entities = __webpack_require__(160);
+	var entities = __webpack_require__(163);
 
 	function replaceEntityPattern(match, name) {
 	  var code = 0;
@@ -10820,7 +10882,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 
 	/*eslint-disable max-len*/
-	var UNICODE_PUNCT_RE = __webpack_require__(162);
+	var UNICODE_PUNCT_RE = __webpack_require__(165);
 
 	// Currently without astral characters support.
 	function isPunctChar(ch) {
@@ -10890,8 +10952,8 @@
 	// bundled size (e.g. a browser build).
 	//
 	exports.lib = {};
-	exports.lib.mdurl = __webpack_require__(163);
-	exports.lib.ucmicro = __webpack_require__(168);
+	exports.lib.mdurl = __webpack_require__(166);
+	exports.lib.ucmicro = __webpack_require__(171);
 
 	exports.assign = assign;
 	exports.isString = isString;
@@ -10911,7 +10973,7 @@
 	exports.normalizeReference = normalizeReference;
 
 /***/ },
-/* 160 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// HTML5 entities map: { name -> utf16string }
@@ -10920,10 +10982,10 @@
 
 	/*eslint quotes:0*/
 	;
-	module.exports = __webpack_require__(161);
+	module.exports = __webpack_require__(164);
 
 /***/ },
-/* 161 */
+/* 164 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -13055,24 +13117,24 @@
 	};
 
 /***/ },
-/* 162 */
+/* 165 */
 /***/ function(module, exports) {
 
 	module.exports = /[!-#%-\*,-/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u0AF0\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166D\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E42\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC8\uDDCD\uDE38-\uDE3D]|\uD805[\uDCC6\uDDC1-\uDDC9\uDE41-\uDE43]|\uD809[\uDC70-\uDC74]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD82F\uDC9F/;
 
 /***/ },
-/* 163 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports.encode = __webpack_require__(164);
-	module.exports.decode = __webpack_require__(165);
-	module.exports.format = __webpack_require__(166);
-	module.exports.parse = __webpack_require__(167);
+	module.exports.encode = __webpack_require__(167);
+	module.exports.decode = __webpack_require__(168);
+	module.exports.format = __webpack_require__(169);
+	module.exports.parse = __webpack_require__(170);
 
 /***/ },
-/* 164 */
+/* 167 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13178,7 +13240,7 @@
 	module.exports = encode;
 
 /***/ },
-/* 165 */
+/* 168 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -13311,7 +13373,7 @@
 	module.exports = decode;
 
 /***/ },
-/* 166 */
+/* 169 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13339,7 +13401,7 @@
 	};
 
 /***/ },
-/* 167 */
+/* 170 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -13670,53 +13732,53 @@
 	module.exports = urlParse;
 
 /***/ },
-/* 168 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports.Any = __webpack_require__(169);
-	module.exports.Cc = __webpack_require__(170);
-	module.exports.Cf = __webpack_require__(171);
-	module.exports.P = __webpack_require__(162);
-	module.exports.Z = __webpack_require__(172);
-
-/***/ },
-/* 169 */
-/***/ function(module, exports) {
-
-	module.exports = /[\0-\uD7FF\uDC00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF]/;
-
-/***/ },
-/* 170 */
-/***/ function(module, exports) {
-
-	module.exports = /[\0-\x1F\x7F-\x9F]/;
-
-/***/ },
-/* 171 */
-/***/ function(module, exports) {
-
-	module.exports = /[\xAD\u0600-\u0605\u061C\u06DD\u070F\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF\uFFF9-\uFFFB]|\uD804\uDCBD|\uD82F[\uDCA0-\uDCA3]|\uD834[\uDD73-\uDD7A]|\uDB40[\uDC01\uDC20-\uDC7F]/;
+	module.exports.Any = __webpack_require__(172);
+	module.exports.Cc = __webpack_require__(173);
+	module.exports.Cf = __webpack_require__(174);
+	module.exports.P = __webpack_require__(165);
+	module.exports.Z = __webpack_require__(175);
 
 /***/ },
 /* 172 */
 /***/ function(module, exports) {
 
-	module.exports = /[ \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]/;
+	module.exports = /[\0-\uD7FF\uDC00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF]/;
 
 /***/ },
 /* 173 */
+/***/ function(module, exports) {
+
+	module.exports = /[\0-\x1F\x7F-\x9F]/;
+
+/***/ },
+/* 174 */
+/***/ function(module, exports) {
+
+	module.exports = /[\xAD\u0600-\u0605\u061C\u06DD\u070F\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF\uFFF9-\uFFFB]|\uD804\uDCBD|\uD82F[\uDCA0-\uDCA3]|\uD834[\uDD73-\uDD7A]|\uDB40[\uDC01\uDC20-\uDC7F]/;
+
+/***/ },
+/* 175 */
+/***/ function(module, exports) {
+
+	module.exports = /[ \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]/;
+
+/***/ },
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Just a shortcut for bulk export
 	'use strict';
 
-	exports.parseLinkLabel = __webpack_require__(174);
-	exports.parseLinkDestination = __webpack_require__(175);
-	exports.parseLinkTitle = __webpack_require__(176);
+	exports.parseLinkLabel = __webpack_require__(177);
+	exports.parseLinkDestination = __webpack_require__(178);
+	exports.parseLinkTitle = __webpack_require__(179);
 
 /***/ },
-/* 174 */
+/* 177 */
 /***/ function(module, exports) {
 
 	// Parse link label
@@ -13772,14 +13834,14 @@
 	};
 
 /***/ },
-/* 175 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Parse link destination
 	//
 	'use strict';
 
-	var unescapeAll = __webpack_require__(159).unescapeAll;
+	var unescapeAll = __webpack_require__(162).unescapeAll;
 
 	module.exports = function parseLinkDestination(str, pos, max) {
 	  var code,
@@ -13867,14 +13929,14 @@
 	};
 
 /***/ },
-/* 176 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Parse link title
 	//
 	'use strict';
 
-	var unescapeAll = __webpack_require__(159).unescapeAll;
+	var unescapeAll = __webpack_require__(162).unescapeAll;
 
 	module.exports = function parseLinkTitle(str, pos, max) {
 	  var code,
@@ -13929,7 +13991,7 @@
 	};
 
 /***/ },
-/* 177 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13941,9 +14003,9 @@
 	 **/
 	'use strict';
 
-	var assign = __webpack_require__(159).assign;
-	var unescapeAll = __webpack_require__(159).unescapeAll;
-	var escapeHtml = __webpack_require__(159).escapeHtml;
+	var assign = __webpack_require__(162).assign;
+	var unescapeAll = __webpack_require__(162).unescapeAll;
+	var escapeHtml = __webpack_require__(162).escapeHtml;
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -14220,7 +14282,7 @@
 	module.exports = Renderer;
 
 /***/ },
-/* 178 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** internal
@@ -14231,9 +14293,9 @@
 	 **/
 	'use strict';
 
-	var Ruler = __webpack_require__(179);
+	var Ruler = __webpack_require__(182);
 
-	var _rules = [['normalize', __webpack_require__(180)], ['block', __webpack_require__(181)], ['inline', __webpack_require__(182)], ['linkify', __webpack_require__(183)], ['replacements', __webpack_require__(184)], ['smartquotes', __webpack_require__(185)]];
+	var _rules = [['normalize', __webpack_require__(183)], ['block', __webpack_require__(184)], ['inline', __webpack_require__(185)], ['linkify', __webpack_require__(186)], ['replacements', __webpack_require__(187)], ['smartquotes', __webpack_require__(188)]];
 
 	/**
 	 * new Core()
@@ -14266,12 +14328,12 @@
 	  }
 	};
 
-	Core.prototype.State = __webpack_require__(186);
+	Core.prototype.State = __webpack_require__(189);
 
 	module.exports = Core;
 
 /***/ },
-/* 179 */
+/* 182 */
 /***/ function(module, exports) {
 
 	/**
@@ -14643,7 +14705,7 @@
 	module.exports = Ruler;
 
 /***/ },
-/* 180 */
+/* 183 */
 /***/ function(module, exports) {
 
 	// Normalize input string
@@ -14666,7 +14728,7 @@
 	};
 
 /***/ },
-/* 181 */
+/* 184 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14686,7 +14748,7 @@
 	};
 
 /***/ },
-/* 182 */
+/* 185 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14707,7 +14769,7 @@
 	};
 
 /***/ },
-/* 183 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Replace link-like texts with link nodes.
@@ -14716,7 +14778,7 @@
 	//
 	'use strict';
 
-	var arrayReplaceAt = __webpack_require__(159).arrayReplaceAt;
+	var arrayReplaceAt = __webpack_require__(162).arrayReplaceAt;
 
 	function isLinkOpen(str) {
 	  return (/^<a[>\s]/i.test(str)
@@ -14863,7 +14925,7 @@
 	};
 
 /***/ },
-/* 184 */
+/* 187 */
 /***/ function(module, exports) {
 
 	// Simple typographyc replacements
@@ -14957,16 +15019,16 @@
 	};
 
 /***/ },
-/* 185 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Convert straight quotation marks to typographic ones
 	//
 	'use strict';
 
-	var isWhiteSpace = __webpack_require__(159).isWhiteSpace;
-	var isPunctChar = __webpack_require__(159).isPunctChar;
-	var isMdAsciiPunct = __webpack_require__(159).isMdAsciiPunct;
+	var isWhiteSpace = __webpack_require__(162).isWhiteSpace;
+	var isPunctChar = __webpack_require__(162).isPunctChar;
+	var isMdAsciiPunct = __webpack_require__(162).isMdAsciiPunct;
 
 	var QUOTE_TEST_RE = /['"]/;
 	var QUOTE_RE = /['"]/g;
@@ -15131,14 +15193,14 @@
 	};
 
 /***/ },
-/* 186 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Core state object
 	//
 	'use strict';
 
-	var Token = __webpack_require__(187);
+	var Token = __webpack_require__(190);
 
 	function StateCore(src, md, env) {
 	  this.src = src;
@@ -15154,7 +15216,7 @@
 	module.exports = StateCore;
 
 /***/ },
-/* 187 */
+/* 190 */
 /***/ function(module, exports) {
 
 	// Token class
@@ -15309,7 +15371,7 @@
 	module.exports = Token;
 
 /***/ },
-/* 188 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** internal
@@ -15319,12 +15381,12 @@
 	 **/
 	'use strict';
 
-	var Ruler = __webpack_require__(179);
+	var Ruler = __webpack_require__(182);
 
 	var _rules = [
 	// First 2 params - rule name & source. Secondary array - list of rules,
 	// which can be terminated by this one.
-	['table', __webpack_require__(189), ['paragraph', 'reference']], ['code', __webpack_require__(190)], ['fence', __webpack_require__(191), ['paragraph', 'reference', 'blockquote', 'list']], ['blockquote', __webpack_require__(192), ['paragraph', 'reference', 'list']], ['hr', __webpack_require__(193), ['paragraph', 'reference', 'blockquote', 'list']], ['list', __webpack_require__(194), ['paragraph', 'reference', 'blockquote']], ['reference', __webpack_require__(195)], ['heading', __webpack_require__(196), ['paragraph', 'reference', 'blockquote']], ['lheading', __webpack_require__(197)], ['html_block', __webpack_require__(198), ['paragraph', 'reference', 'blockquote']], ['paragraph', __webpack_require__(201)]];
+	['table', __webpack_require__(192), ['paragraph', 'reference']], ['code', __webpack_require__(193)], ['fence', __webpack_require__(194), ['paragraph', 'reference', 'blockquote', 'list']], ['blockquote', __webpack_require__(195), ['paragraph', 'reference', 'list']], ['hr', __webpack_require__(196), ['paragraph', 'reference', 'blockquote', 'list']], ['list', __webpack_require__(197), ['paragraph', 'reference', 'blockquote']], ['reference', __webpack_require__(198)], ['heading', __webpack_require__(199), ['paragraph', 'reference', 'blockquote']], ['lheading', __webpack_require__(200)], ['html_block', __webpack_require__(201), ['paragraph', 'reference', 'blockquote']], ['paragraph', __webpack_require__(204)]];
 
 	/**
 	 * new ParserBlock()
@@ -15427,12 +15489,12 @@
 	  this.tokenize(state, state.line, state.lineMax);
 	};
 
-	ParserBlock.prototype.State = __webpack_require__(202);
+	ParserBlock.prototype.State = __webpack_require__(205);
 
 	module.exports = ParserBlock;
 
 /***/ },
-/* 189 */
+/* 192 */
 /***/ function(module, exports) {
 
 	// GFM table, non-standard
@@ -15628,7 +15690,7 @@
 	};
 
 /***/ },
-/* 190 */
+/* 193 */
 /***/ function(module, exports) {
 
 	// Code block (4 spaces padded)
@@ -15667,7 +15729,7 @@
 	};
 
 /***/ },
-/* 191 */
+/* 194 */
 /***/ function(module, exports) {
 
 	// fences (``` lang, ~~~ lang)
@@ -15782,14 +15844,14 @@
 	};
 
 /***/ },
-/* 192 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Block quotes
 
 	'use strict';
 
-	var isSpace = __webpack_require__(159).isSpace;
+	var isSpace = __webpack_require__(162).isSpace;
 
 	module.exports = function blockquote(state, startLine, endLine, silent) {
 	  var nextLine,
@@ -15987,14 +16049,14 @@
 	};
 
 /***/ },
-/* 193 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Horizontal rule
 
 	'use strict';
 
-	var isSpace = __webpack_require__(159).isSpace;
+	var isSpace = __webpack_require__(162).isSpace;
 
 	module.exports = function hr(state, startLine, endLine, silent) {
 	  var marker,
@@ -16042,14 +16104,14 @@
 	};
 
 /***/ },
-/* 194 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Lists
 
 	'use strict';
 
-	var isSpace = __webpack_require__(159).isSpace;
+	var isSpace = __webpack_require__(162).isSpace;
 
 	// Search `[-+*][\n ]`, returns next pos arter marker on success
 	// or -1 on fail.
@@ -16367,15 +16429,15 @@
 	};
 
 /***/ },
-/* 195 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var parseLinkDestination = __webpack_require__(175);
-	var parseLinkTitle = __webpack_require__(176);
-	var normalizeReference = __webpack_require__(159).normalizeReference;
-	var isSpace = __webpack_require__(159).isSpace;
+	var parseLinkDestination = __webpack_require__(178);
+	var parseLinkTitle = __webpack_require__(179);
+	var normalizeReference = __webpack_require__(162).normalizeReference;
+	var isSpace = __webpack_require__(162).isSpace;
 
 	module.exports = function reference(state, startLine, _endLine, silent) {
 	  var ch,
@@ -16584,14 +16646,14 @@
 	};
 
 /***/ },
-/* 196 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// heading (#, ##, ...)
 
 	'use strict';
 
-	var isSpace = __webpack_require__(159).isSpace;
+	var isSpace = __webpack_require__(162).isSpace;
 
 	module.exports = function heading(state, startLine, endLine, silent) {
 	  var ch,
@@ -16649,7 +16711,7 @@
 	};
 
 /***/ },
-/* 197 */
+/* 200 */
 /***/ function(module, exports) {
 
 	// lheading (---, ===)
@@ -16719,15 +16781,15 @@
 	};
 
 /***/ },
-/* 198 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// HTML block
 
 	'use strict';
 
-	var block_names = __webpack_require__(199);
-	var HTML_OPEN_CLOSE_TAG_RE = __webpack_require__(200).HTML_OPEN_CLOSE_TAG_RE;
+	var block_names = __webpack_require__(202);
+	var HTML_OPEN_CLOSE_TAG_RE = __webpack_require__(203).HTML_OPEN_CLOSE_TAG_RE;
 
 	// An array of opening and corresponding closing sequences for html tags,
 	// last argument defines whether it can terminate a paragraph or not
@@ -16800,7 +16862,7 @@
 	};
 
 /***/ },
-/* 199 */
+/* 202 */
 /***/ function(module, exports) {
 
 	// List of valid html blocks names, accorting to commonmark spec
@@ -16811,7 +16873,7 @@
 	module.exports = ['address', 'article', 'aside', 'base', 'basefont', 'blockquote', 'body', 'caption', 'center', 'col', 'colgroup', 'dd', 'details', 'dialog', 'dir', 'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'frame', 'frameset', 'h1', 'head', 'header', 'hr', 'html', 'iframe', 'legend', 'li', 'link', 'main', 'menu', 'menuitem', 'meta', 'nav', 'noframes', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 'section', 'source', 'title', 'summary', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'title', 'tr', 'track', 'ul'];
 
 /***/ },
-/* 200 */
+/* 203 */
 /***/ function(module, exports) {
 
 	// Regexps to match html elements
@@ -16843,7 +16905,7 @@
 	module.exports.HTML_OPEN_CLOSE_TAG_RE = HTML_OPEN_CLOSE_TAG_RE;
 
 /***/ },
-/* 201 */
+/* 204 */
 /***/ function(module, exports) {
 
 	// Paragraph
@@ -16904,15 +16966,15 @@
 	};
 
 /***/ },
-/* 202 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Parser state class
 
 	'use strict';
 
-	var Token = __webpack_require__(187);
-	var isSpace = __webpack_require__(159).isSpace;
+	var Token = __webpack_require__(190);
+	var isSpace = __webpack_require__(162).isSpace;
 
 	function StateBlock(src, md, env, tokens) {
 	  var ch, s, start, pos, len, indent, offset, indent_found;
@@ -17138,7 +17200,7 @@
 	module.exports = StateBlock;
 
 /***/ },
-/* 203 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** internal
@@ -17148,14 +17210,14 @@
 	 **/
 	'use strict';
 
-	var Ruler = __webpack_require__(179);
+	var Ruler = __webpack_require__(182);
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Parser rules
 
-	var _rules = [['text', __webpack_require__(204)], ['newline', __webpack_require__(205)], ['escape', __webpack_require__(206)], ['backticks', __webpack_require__(207)], ['strikethrough', __webpack_require__(208).tokenize], ['emphasis', __webpack_require__(209).tokenize], ['link', __webpack_require__(210)], ['image', __webpack_require__(211)], ['autolink', __webpack_require__(212)], ['html_inline', __webpack_require__(214)], ['entity', __webpack_require__(215)]];
+	var _rules = [['text', __webpack_require__(207)], ['newline', __webpack_require__(208)], ['escape', __webpack_require__(209)], ['backticks', __webpack_require__(210)], ['strikethrough', __webpack_require__(211).tokenize], ['emphasis', __webpack_require__(212).tokenize], ['link', __webpack_require__(213)], ['image', __webpack_require__(214)], ['autolink', __webpack_require__(215)], ['html_inline', __webpack_require__(217)], ['entity', __webpack_require__(218)]];
 
-	var _rules2 = [['balance_pairs', __webpack_require__(216)], ['strikethrough', __webpack_require__(208).postProcess], ['emphasis', __webpack_require__(209).postProcess], ['text_collapse', __webpack_require__(217)]];
+	var _rules2 = [['balance_pairs', __webpack_require__(219)], ['strikethrough', __webpack_require__(211).postProcess], ['emphasis', __webpack_require__(212).postProcess], ['text_collapse', __webpack_require__(220)]];
 
 	/**
 	 * new ParserInline()
@@ -17278,12 +17340,12 @@
 	  }
 	};
 
-	ParserInline.prototype.State = __webpack_require__(218);
+	ParserInline.prototype.State = __webpack_require__(221);
 
 	module.exports = ParserInline;
 
 /***/ },
-/* 204 */
+/* 207 */
 /***/ function(module, exports) {
 
 	// Skip text characters for text token, place those to pending buffer
@@ -17381,7 +17443,7 @@
 	};*/
 
 /***/ },
-/* 205 */
+/* 208 */
 /***/ function(module, exports) {
 
 	// Proceess '\n'
@@ -17430,14 +17492,14 @@
 	};
 
 /***/ },
-/* 206 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Proceess escaped chars and hardbreaks
 
 	'use strict';
 
-	var isSpace = __webpack_require__(159).isSpace;
+	var isSpace = __webpack_require__(162).isSpace;
 
 	var ESCAPED = [];
 
@@ -17499,7 +17561,7 @@
 	};
 
 /***/ },
-/* 207 */
+/* 210 */
 /***/ function(module, exports) {
 
 	// Parse backticks
@@ -17558,7 +17620,7 @@
 	};
 
 /***/ },
-/* 208 */
+/* 211 */
 /***/ function(module, exports) {
 
 	// ~~strike through~~
@@ -17689,7 +17751,7 @@
 	};
 
 /***/ },
-/* 209 */
+/* 212 */
 /***/ function(module, exports) {
 
 	// Process *this* and _that_
@@ -17818,18 +17880,18 @@
 	};
 
 /***/ },
-/* 210 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Process [link](<to> "stuff")
 
 	'use strict';
 
-	var parseLinkLabel = __webpack_require__(174);
-	var parseLinkDestination = __webpack_require__(175);
-	var parseLinkTitle = __webpack_require__(176);
-	var normalizeReference = __webpack_require__(159).normalizeReference;
-	var isSpace = __webpack_require__(159).isSpace;
+	var parseLinkLabel = __webpack_require__(177);
+	var parseLinkDestination = __webpack_require__(178);
+	var parseLinkTitle = __webpack_require__(179);
+	var normalizeReference = __webpack_require__(162).normalizeReference;
+	var isSpace = __webpack_require__(162).isSpace;
 
 	module.exports = function link(state, silent) {
 	  var attrs,
@@ -17994,18 +18056,18 @@
 	};
 
 /***/ },
-/* 211 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Process ![image](<src> "title")
 
 	'use strict';
 
-	var parseLinkLabel = __webpack_require__(174);
-	var parseLinkDestination = __webpack_require__(175);
-	var parseLinkTitle = __webpack_require__(176);
-	var normalizeReference = __webpack_require__(159).normalizeReference;
-	var isSpace = __webpack_require__(159).isSpace;
+	var parseLinkLabel = __webpack_require__(177);
+	var parseLinkDestination = __webpack_require__(178);
+	var parseLinkTitle = __webpack_require__(179);
+	var normalizeReference = __webpack_require__(162).normalizeReference;
+	var isSpace = __webpack_require__(162).isSpace;
 
 	module.exports = function image(state, silent) {
 	  var attrs,
@@ -18170,14 +18232,14 @@
 	};
 
 /***/ },
-/* 212 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Process autolinks '<protocol:...>'
 
 	'use strict';
 
-	var url_schemas = __webpack_require__(213);
+	var url_schemas = __webpack_require__(216);
 
 	/*eslint max-len:0*/
 	var EMAIL_RE = /^<([a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>/;
@@ -18260,7 +18322,7 @@
 	};
 
 /***/ },
-/* 213 */
+/* 216 */
 /***/ function(module, exports) {
 
 	// List of valid url schemas, accorting to commonmark spec
@@ -18271,14 +18333,14 @@
 	module.exports = ['coap', 'doi', 'javascript', 'aaa', 'aaas', 'about', 'acap', 'cap', 'cid', 'crid', 'data', 'dav', 'dict', 'dns', 'file', 'ftp', 'geo', 'go', 'gopher', 'h323', 'http', 'https', 'iax', 'icap', 'im', 'imap', 'info', 'ipp', 'iris', 'iris.beep', 'iris.xpc', 'iris.xpcs', 'iris.lwz', 'ldap', 'mailto', 'mid', 'msrp', 'msrps', 'mtqp', 'mupdate', 'news', 'nfs', 'ni', 'nih', 'nntp', 'opaquelocktoken', 'pop', 'pres', 'rtsp', 'service', 'session', 'shttp', 'sieve', 'sip', 'sips', 'sms', 'snmp', 'soap.beep', 'soap.beeps', 'tag', 'tel', 'telnet', 'tftp', 'thismessage', 'tn3270', 'tip', 'tv', 'urn', 'vemmi', 'ws', 'wss', 'xcon', 'xcon-userid', 'xmlrpc.beep', 'xmlrpc.beeps', 'xmpp', 'z39.50r', 'z39.50s', 'adiumxtra', 'afp', 'afs', 'aim', 'apt', 'attachment', 'aw', 'beshare', 'bitcoin', 'bolo', 'callto', 'chrome', 'chrome-extension', 'com-eventbrite-attendee', 'content', 'cvs', 'dlna-playsingle', 'dlna-playcontainer', 'dtn', 'dvb', 'ed2k', 'facetime', 'feed', 'finger', 'fish', 'gg', 'git', 'gizmoproject', 'gtalk', 'hcp', 'icon', 'ipn', 'irc', 'irc6', 'ircs', 'itms', 'jar', 'jms', 'keyparc', 'lastfm', 'ldaps', 'magnet', 'maps', 'market', 'message', 'mms', 'ms-help', 'msnim', 'mumble', 'mvn', 'notes', 'oid', 'palm', 'paparazzi', 'platform', 'proxy', 'psyc', 'query', 'res', 'resource', 'rmi', 'rsync', 'rtmp', 'secondlife', 'sftp', 'sgn', 'skype', 'smb', 'soldat', 'spotify', 'ssh', 'steam', 'svn', 'teamspeak', 'things', 'udp', 'unreal', 'ut2004', 'ventrilo', 'view-source', 'webcal', 'wtai', 'wyciwyg', 'xfire', 'xri', 'ymsgr'];
 
 /***/ },
-/* 214 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Process html tags
 
 	'use strict';
 
-	var HTML_TAG_RE = __webpack_require__(200).HTML_TAG_RE;
+	var HTML_TAG_RE = __webpack_require__(203).HTML_TAG_RE;
 
 	function isLetter(ch) {
 	  /*eslint no-bitwise:0*/
@@ -18323,17 +18385,17 @@
 	};
 
 /***/ },
-/* 215 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Process html entity - &#123;, &#xAF;, &quot;, ...
 
 	'use strict';
 
-	var entities = __webpack_require__(160);
-	var has = __webpack_require__(159).has;
-	var isValidEntityCode = __webpack_require__(159).isValidEntityCode;
-	var fromCodePoint = __webpack_require__(159).fromCodePoint;
+	var entities = __webpack_require__(163);
+	var has = __webpack_require__(162).has;
+	var isValidEntityCode = __webpack_require__(162).isValidEntityCode;
+	var fromCodePoint = __webpack_require__(162).fromCodePoint;
 
 	var DIGITAL_RE = /^&#((?:x[a-f0-9]{1,8}|[0-9]{1,8}));/i;
 	var NAMED_RE = /^&([a-z][a-z0-9]{1,31});/i;
@@ -18384,7 +18446,7 @@
 	};
 
 /***/ },
-/* 216 */
+/* 219 */
 /***/ function(module, exports) {
 
 	// For each opening emphasis-like marker find a matching closing one
@@ -18426,7 +18488,7 @@
 	};
 
 /***/ },
-/* 217 */
+/* 220 */
 /***/ function(module, exports) {
 
 	// Merge adjacent text nodes into one, and re-calculate all token levels
@@ -18464,17 +18526,17 @@
 	};
 
 /***/ },
-/* 218 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Inline parser state
 
 	'use strict';
 
-	var Token = __webpack_require__(187);
-	var isWhiteSpace = __webpack_require__(159).isWhiteSpace;
-	var isPunctChar = __webpack_require__(159).isPunctChar;
-	var isMdAsciiPunct = __webpack_require__(159).isMdAsciiPunct;
+	var Token = __webpack_require__(190);
+	var isWhiteSpace = __webpack_require__(162).isWhiteSpace;
+	var isPunctChar = __webpack_require__(162).isPunctChar;
+	var isMdAsciiPunct = __webpack_require__(162).isMdAsciiPunct;
 
 	function StateInline(src, md, env, outTokens) {
 	  this.src = src;
@@ -18605,7 +18667,7 @@
 	module.exports = StateInline;
 
 /***/ },
-/* 219 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
@@ -18756,7 +18818,7 @@
 	function compile(self) {
 
 	  // Load & clone RE patterns.
-	  var re = self.re = assign({}, __webpack_require__(220));
+	  var re = self.re = assign({}, __webpack_require__(223));
 
 	  // Define dynamic patterns
 	  var tlds = self.__tlds__.slice();
@@ -19219,17 +19281,17 @@
 	module.exports = LinkifyIt;
 
 /***/ },
-/* 220 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
 	// Use direct extract instead of `regenerate` to reduse browserified size
 	;
-	var src_Any = exports.src_Any = __webpack_require__(169).source;
-	var src_Cc = exports.src_Cc = __webpack_require__(170).source;
-	var src_Z = exports.src_Z = __webpack_require__(172).source;
-	var src_P = exports.src_P = __webpack_require__(162).source;
+	var src_Any = exports.src_Any = __webpack_require__(172).source;
+	var src_Cc = exports.src_Cc = __webpack_require__(173).source;
+	var src_Z = exports.src_Z = __webpack_require__(175).source;
+	var src_P = exports.src_P = __webpack_require__(165).source;
 
 	// \p{\Z\P\Cc\CF} (white spaces + control + format + punctuation)
 	var src_ZPCc = exports.src_ZPCc = [src_Z, src_P, src_Cc].join('|');
@@ -19317,7 +19379,7 @@
 	'(^|(?![.:/\\-_@])(?:[$+<=>^`|]|' + src_ZPCc + '))' + '((?![$+<=>^`|])' + tpl_host_port_no_ip_fuzzy_strict + src_path + ')';
 
 /***/ },
-/* 221 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/punycode v1.3.2 by @mathias */
@@ -19845,10 +19907,10 @@
 			root.punycode = punycode;
 		}
 	})(this);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(222)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(225)(module), (function() { return this; }())))
 
 /***/ },
-/* 222 */
+/* 225 */
 /***/ function(module, exports) {
 
 	module.exports = function (module) {
@@ -19863,7 +19925,7 @@
 	};
 
 /***/ },
-/* 223 */
+/* 226 */
 /***/ function(module, exports) {
 
 	// markdown-it default options
@@ -19907,7 +19969,7 @@
 	};
 
 /***/ },
-/* 224 */
+/* 227 */
 /***/ function(module, exports) {
 
 	// "Zero" preset, with nothing enabled. Useful for manual configuring of simple
@@ -19961,7 +20023,7 @@
 	};
 
 /***/ },
-/* 225 */
+/* 228 */
 /***/ function(module, exports) {
 
 	// Commonmark default options
@@ -20014,7 +20076,7 @@
 	};
 
 /***/ },
-/* 226 */
+/* 229 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -20043,7 +20105,7 @@
 	};
 
 /***/ },
-/* 227 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -21503,7 +21565,14 @@
 	if(typeof noGlobal === strundefined){window.jQuery = window.$ = jQuery;}return jQuery;});
 
 /***/ },
-/* 228 */
+/* 231 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 232 */,
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -22508,14 +22577,7 @@
 	CodeMirror.version = "5.8.0";return CodeMirror;});
 
 /***/ },
-/* 229 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 230 */,
-/* 231 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -22525,7 +22587,7 @@
 
 	(function (mod) {
 	  if (true) // CommonJS
-	    mod(__webpack_require__(228));else if (typeof define == "function" && define.amd) // AMD
+	    mod(__webpack_require__(233));else if (typeof define == "function" && define.amd) // AMD
 	    define(["../../lib/codemirror"], mod);else // Plain browser env
 	    mod(CodeMirror);
 	})(function (CodeMirror) {
@@ -23253,7 +23315,7 @@
 	});
 
 /***/ },
-/* 232 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -23261,7 +23323,7 @@
 
 	(function (mod) {
 	  if (true) // CommonJS
-	    mod(__webpack_require__(228));else if (typeof define == "function" && define.amd) // AMD
+	    mod(__webpack_require__(233));else if (typeof define == "function" && define.amd) // AMD
 	    define(["../../lib/codemirror"], mod);else // Plain browser env
 	    mod(CodeMirror);
 	})(function (CodeMirror) {
@@ -23624,7 +23686,7 @@
 	});
 
 /***/ },
-/* 233 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -23632,7 +23694,7 @@
 
 	(function (mod) {
 	  if (true) // CommonJS
-	    mod(__webpack_require__(228), __webpack_require__(232), __webpack_require__(234));else if (typeof define == "function" && define.amd) // AMD
+	    mod(__webpack_require__(233), __webpack_require__(235), __webpack_require__(237));else if (typeof define == "function" && define.amd) // AMD
 	    define(["../../lib/codemirror", "../xml/xml", "../meta"], mod);else // Plain browser env
 	    mod(CodeMirror);
 	})(function (CodeMirror) {
@@ -24451,7 +24513,7 @@
 	});
 
 /***/ },
-/* 234 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -24459,7 +24521,7 @@
 
 	(function (mod) {
 	  if (true) // CommonJS
-	    mod(__webpack_require__(228));else if (typeof define == "function" && define.amd) // AMD
+	    mod(__webpack_require__(233));else if (typeof define == "function" && define.amd) // AMD
 	    define(["../lib/codemirror"], mod);else // Plain browser env
 	    mod(CodeMirror);
 	})(function (CodeMirror) {
@@ -24508,30 +24570,6 @@
 	    }
 	  };
 	});
-
-/***/ },
-/* 235 */
-/***/ function(module, exports) {
-
-	var origin = window.location.origin;
-	var loc = decodeURI(window.location.href);
-
-	var page = loc.split("/");
-	page = page[page.length - 1].split("?")[0];
-
-	var wiki = loc.split("/");
-	wiki = wiki[wiki.length - 3];
-
-	var markup_page = page || "index";
-	var markup_loc = origin + "/markup/" + markup_page + ".md";
-
-	exports.markup_loc = markup_loc;
-
-/***/ },
-/* 236 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);

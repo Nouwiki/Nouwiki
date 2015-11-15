@@ -8,14 +8,14 @@ var toml = require('toml');
 var appDir = path.dirname(require.main.filename);
 
 function buildWiki(path_abs, target, assets, copy) {
-	var site = path.join(path_abs, "/site");
+	var site = path.join(path_abs, "/"); // /site
 	removeAndCreateSiteDir(site, target);
 
 	if (target == "all") {
-		var template = path.join(appDir, "/templates/default");
+		/*var template = path.join(appDir, "/templates/default");
 		var index_src = path.join(template, "index.html");
 		var index_dest = path.join(site, "index.html");
-		fs.copySync(index_src, index_dest);
+		fs.copySync(index_src, index_dest);*/
 	}
 
 	var markup_dir = path.join(path_abs, "/markup");
@@ -26,13 +26,13 @@ function buildWiki(path_abs, target, assets, copy) {
 	}
 
 	buildTemplateAssets(site, target);
-	if (copy) {
+	/*if (copy) {
 		copyAssets(path_abs);
 		copyMarkup(path_abs);
 	} else {
 		linkAssets(path_abs);
 		linkMarkup(path_abs);
-	}
+	}*/
 
 	if (assets) {
 		generateAssetPages(path_abs, target);
@@ -40,16 +40,17 @@ function buildWiki(path_abs, target, assets, copy) {
 }
 
 function removeAndCreateSiteDir(site, target) {
-	fs.removeSync(site);
-	fs.mkdirSync(site);
+	var template_assets = path.join(site, "/assets/template_assets");
+	fs.removeSync(template_assets);
+	//fs.mkdirSync(site);
 
 	if (target == "all") {
-		var fragment = path.join(site, "/fragment");
+		/*var fragment = path.join(site, "/fragment");
 		var stat = path.join(site, "/static");
 		var dynamic = path.join(site, "/dynamic");
 		fs.mkdirSync(fragment);
 		fs.mkdirSync(stat);
-		fs.mkdirSync(dynamic);
+		fs.mkdirSync(dynamic);*/
 	}
 }
 
@@ -77,9 +78,9 @@ function parseAndWriteMarkup(root, data, file_name, target) {
 		global_css: global_data.css
 	}
 
-	var site = path.join(root, "/site");
+	var site = path.join(root, "/"); // /site
 	if (target == "all") {
-		buildAll(site, file_name, template_data)
+		//buildAll(site, file_name, template_data);
 	} else {
 		var build_path = path.join(site, file_name);
 		if (target == "fragment") {
@@ -95,12 +96,12 @@ function parseAndWriteMarkup(root, data, file_name, target) {
 }
 
 function buildAll(site, file_name, template_data) {
-	var fragment_path = path.join(site, "/fragment", file_name);
+	/*var fragment_path = path.join(site, "/fragment", file_name);
 	buildFragment(template_data, fragment_path);
 	var stat_path = path.join(site, "/static", file_name);
 	buildStatic(template_data, stat_path);
 	var dynamic_path = path.join(site, "/dynamic", file_name);
-	buildDynamic(template_data, dynamic_path);
+	buildDynamic(template_data, dynamic_path);*/
 }
 
 function buildFragment(template_data, build_path) {
@@ -115,7 +116,6 @@ function buildStatic(template_data, build_path) {
   var template_string = fs.readFileSync(template_path, 'utf8');
   var stat_template = doT.template(template_string);
   var stat = stat_template(template_data);
-  console.log(stat_path, stat)
   fs.writeFileSync(stat_path, stat);
 }
 
@@ -129,19 +129,20 @@ function buildDynamic(template_data, build_path) {
 }
 
 function buildTemplateAssets(site, target) {
-	var template_assets = path.join(site, "/template_assets");
+	var template_assets = path.join(site, "/assets/template_assets");
+
 	var stat_src = path.join(appDir, "/templates/default/static");
 	var stat_dest = path.join(template_assets, "/static");
 	fs.copySync(stat_src, stat_dest);
 
-	if (target == "all" || target == "dynamic") {
+	if (/*target == "all" || */target == "dynamic") {
 		var dynamic_src = path.join(appDir, "/templates/default/dynamic");
 		var dynamic_dest = path.join(template_assets, "/dynamic");
 		fs.copySync(dynamic_src, dynamic_dest);
 	}
 }
 
-function linkAssets(root) {
+/*function linkAssets(root) {
 	var assets_abs = path.join(root, "/assets");
 	var site = path.join(root, "/site");
 	var assets_dest = path.join(site, "/assets");
@@ -169,7 +170,7 @@ function copyMarkup(root) {
 	var site = path.join(root, "/site");
 	var markup_dest = path.join(site, "/markup");
 	fs.copySync(markup_abs, markup_dest);
-}
+}*/
 
 function generateAssetPages(root, target) {
 	var assets_abs = path.join(root, "/assets");
