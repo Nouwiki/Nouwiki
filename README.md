@@ -41,4 +41,13 @@ Note that this is a very early prototype, but if you want to play with it:
 
 ## ToDo
 
-...
+- Saner split between dev dependancies and regular dependancies.
+- Next Stage
+	- in-browser editing on github (using in-browser markdown parsing + js-git)
+		- How do we edit repos that are master and gh-pages where gh-pages are just the site directory?
+		- Can we make gh-pages and master identical?
+		- Fact: You can't use oauth 100% in the browser because it requires client_secret which can't be plainly written, so our only option is *maybe* to use Basic Auth, and if that doesn't work we need a Prose.io type service, or.. a very minimalistic client_secret service.
+	- Make sure all current build targets work
+	- Reconsider commander options
+	- could we have the HTML in a specific folder? Because there are two things to delete, template assets and html, template assets is easy, html is a bit more difficult due to its location and can be made less difficult by setting it all in a folder, except for index.html which rests in the root, which also makes it easy given its a single file, but.. that would mess up the URLs
+	- Elecron GUI should have the options "serve on port: <insert>", which uses the server part of the Universal App.
