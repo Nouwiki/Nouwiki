@@ -15,7 +15,7 @@ Nouwiki's vision is of a wiki-network where humanity collaborates on documenting
 - [ ] Multiple build targets (fragments, static, md.html, standalone, full-standalone, dynamic).
 - [ ] Great text editor support (atom+sublime+vim+emacs plugins. custom nouwiki editor).
 - [ ] Theme/Template support.
-- [ ] Expendable (extend the markup parsers, nouwiki plugins, add your own js or css globally or locally on a page, etc).
+- [ ] Extendability (extend the markup parsers, nouwiki plugins, add your own js or css globally or locally on a page, etc).
 - [ ] Scales (from a personal notebook to the size of wikipedia).
 - [ ] Federated (cross node wikilinks, fork, push, pull).
 - [ ] Universal Asset Manager (audio, font, img, js, style, text, video, etc)
