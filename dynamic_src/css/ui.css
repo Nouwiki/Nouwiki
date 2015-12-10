@@ -16,6 +16,11 @@
 #editor {
   display: none;
   margin-top: 37px;
+  height: 100%;
+}
+
+#editor div.CodeMirror {
+  height: 100%;
 }
 
 #edit {

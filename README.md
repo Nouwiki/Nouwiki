@@ -8,7 +8,7 @@ Nouwiki's vision is of a wiki-network where humanity collaborates on documenting
 
 - [ ] Multiple collaboration models (solve Wikipedia's bureaucracy).
 - [ ] Edit anywhere (text editor, markup editor, nouwiki editor, in-browser editor, etc).
-- [ ] Serve anywhere (**static:** local filesystem, simple server, static web hosting. **dynamic:** github, local nouwiki server, dedicated nouwiki server)
+- [ ] Serve anywhere (local filesystem (`file:///`), simple server (`http-server`, `python -m SimpleHTTPServer`, etc), localstorage, static web hosting, github, local nouwiki server, dedicated nouwiki server)
 - [x] View anywhere (text-browser, no-js, modern browser, mobile).
 - [ ] Use any language (markdown, asciidoc, mediawiki, etc).
 - [ ] Wikilink support in all markup languages.

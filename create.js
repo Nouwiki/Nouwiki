@@ -4,49 +4,28 @@ var fs = require('fs-extra');
 var appDir = path.dirname(require.main.filename);
 
 function createWiki(p) {
-	var path_abs = path.resolve(p);
-	var wiki_name = path.basename(path_abs);
-	createNewWikiDirStructure(path_abs);
-	var markup_path = path.join(path_abs, "/markup");
+	var wiki_abs_dir = path.resolve(p);
+	var wiki_name = path.basename(wiki_abs_dir);
+	createNewWikiDirStructure(wiki_abs_dir);
+	var markup_path = path.join(wiki_abs_dir, "/markup");
 	var index_path = path.join(markup_path, "/index.md");
 	var index_markup = "+++\ntitle = \""+wiki_name+"\"\n+++\n\nWelcome to your new wiki!";
 	fs.writeFileSync(index_path, index_markup);
-	//buildWiki(path_abs);
-	createConfigFile(path_abs, wiki_name);
+	//buildWiki(wiki_abs_dir);
+	createConfigFile(wiki_abs_dir, wiki_name);
 }
 
-function createNewWikiDirStructure(path_abs) {
+function createNewWikiDirStructure(wiki_abs_dir) {
 	try {
-		fs.mkdirSync(path_abs);
+		fs.mkdirSync(wiki_abs_dir);
 	} catch(e) {
 		if ( e.code != 'EEXIST' ) throw e;
 	}
-
-	//var wiki_init = path.join(appDir, "/wiki_init");
-	//var assets_init = path.join(wiki_init, "/assets");
-	//var templates_init = path.join(wiki_init, "/templates");
-	//var assets_dest = path.join(path_abs, "/assets");
-	//var templates_dest = path.join(path_abs, "/templates");
-	//fs.copySync(assets_init, assets_dest);
-	//fs.copySync(templates_init, templates_dest);
-
-	//var index_init = path.join(wiki_init, "index.html");
-	//var index_dest = path.join(path_abs, "index.html");
-	//fs.copySync(index_init, index_dest);
-
-	createEmptyDirs(path_abs);
-
-	//var app_assets_src = path.join(appDir, "/assets");
-	//var app_assets_dest = path.join(path_abs, "/assets/core");
-	//fs.symlinkSync(app_assets_src, app_assets_dest);
-
-	//var templates_src = path.join(appDir, "/templates/default");
-	//var templates_dest = path.join(path_abs, "/templates/default");
-	//fs.symlinkSync(templates_src, templates_dest);
+	createEmptyDirs(wiki_abs_dir);
 }
 
-function createEmptyDirs(path_abs) {
-	var assets = path.join(path_abs, "/assets");
+function createEmptyDirs(wiki_abs_dir) {
+	var assets = path.join(wiki_abs_dir, "/assets");
 	var audio = path.join(assets, "/audio");
 	var style = path.join(assets, "/style");
 	var font = path.join(assets, "/font");
@@ -63,33 +42,16 @@ function createEmptyDirs(path_abs) {
 	fs.mkdirSync(text);
 	fs.mkdirSync(video);
 
-	//var assets = path.join(path_abs, "/assets");
-	//fs.mkdirSync(assets);
-
-	//var dynamic = path.join(path_abs, "/dynamic");
-	//var fragment = path.join(path_abs, "/fragment");
-	var markup = path.join(path_abs, "/markup");
-	//var md_html = path.join(path_abs, "/md.html");
-	//var stat = path.join(path_abs, "/static");
-	//fs.mkdirSync(dynamic);
-	//fs.mkdirSync(fragment);
+	var markup = path.join(wiki_abs_dir, "/markup");
 	fs.mkdirSync(markup);
-	//fs.mkdirSync(md_html);
-	//fs.mkdirSync(stat);
 
-	var templates = path.join(path_abs, "/templates");
+	var templates = path.join(wiki_abs_dir, "/templates");
 	fs.mkdirSync(templates);
-
-	/*var site = path.join(path_abs, "/site");
-	fs.mkdirSync(site);*/
-
-	//var core = path.join(path_abs, "/.core");
-	//fs.mkdirSync(core);
 }
 
-function createConfigFile(path_abs, wiki_name) {
-	var config_dest = path.join(path_abs, "/config.toml");
-	var config_string = 'title = "'+wiki_name+'"\njs = []\ncss = []';
+function createConfigFile(wiki_abs_dir, wiki_name) {
+	var config_dest = path.join(wiki_abs_dir, "/config.toml");
+	var config_string = 'title = "'+wiki_name+'"\njs = []\ncss = []\ntarget = "dynamic"';
 	fs.writeFileSync(config_dest, config_string);
 }
 

@@ -63,5 +63,14 @@ function save() {
 
   $("#editor").hide();
   $("#content").show();
-  console.log(parse.parse(myCodeMirror.getValue()).html);
+  $.ajax({
+      url: '/api/modify',
+      type: 'PUT',
+      data: myCodeMirror.getValue(),
+      contentType: "text/plain",
+      success: function(result) {
+        console.log(result)
+      }
+  });
+  $("#content").html(parse.parse(myCodeMirror.getValue()).html);
 }

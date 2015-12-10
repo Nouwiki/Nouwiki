@@ -1,12 +1,12 @@
 var matter = require('gray-matter');
-var hljs = require('highlight.js') // https://highlightjs.org/
+//var hljs = require('highlight.js') // https://highlightjs.org/
 //hljs.configure({classPrefix: ''});
 //hljs.initHighlightingOnLoad();
 
 var md = require('markdown-it')({
   html: true,
   linkify: true,
-  typographer: true,
+  typographer: true/*,
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
@@ -19,7 +19,7 @@ var md = require('markdown-it')({
     } catch (__) {}
 
     return ''; // use external default escaping
-  }
+  }*/
 }).use(require('markdown-it-wikilink'))//.use(require('markdown-it-attrs'));
 
 /* --- */
