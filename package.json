@@ -32,6 +32,7 @@
     "commander": "^2.9.0",
     "css-loader": "^0.23.0",
     "directory-tree": "^0.1.1",
+    "dot": "^1.0.3",
     "extract-text-webpack-plugin": "^0.9.1",
     "file-loader": "^0.8.5",
     "fs-extra": "^0.26.2",

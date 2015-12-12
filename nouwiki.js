@@ -11,15 +11,11 @@ program
   .version('0.0.1')
 
 program
-  .command('new <type> [paths...]')
-  .action(function (type, paths) {
-    if (type == "wiki") {
-    	for (var x = 0; x < paths.length; x++) {
-    		create.createWiki(paths[x])
-    	}
-    } else if (type == "page") {
-
-    }
+  .command('forge [paths...]')
+  .action(function (paths) {
+  	for (var x = 0; x < paths.length; x++) {
+  		create.createWiki(paths[x])
+  	}
   });
 
 var targets = ["all", "fragment", "static", "dynamic"];

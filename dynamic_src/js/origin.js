@@ -22,6 +22,4 @@ git_clone_url = "https://github.com/"+git_user+"/"+git_repo+".git";
 var markup_page = page
 var markup_loc = root + "markup/" + markup_page + ".md";
 
-console.log(markup_loc, "binni")
-
 exports.markup_loc = markup_loc;

@@ -36,10 +36,13 @@ In more abstract terms we want it to be:
 Note that this is a very early prototype, but if you want to play with it:
 
 - `npm i -g git+https://github.com/01AutoMonkey/nouwiki.git`
-- `nouwiki new wiki ./directory`
-- `nouwiki build ./directory`
-- `nouwiki serve ./directory -p 8000`
+- `nouwiki forge ./wiki_directory`
+- `nouwiki build ./wiki_directory`
+- `nouwiki serve ./wiki_directory -p 8000`
 
 ## ToDo
 
-...
+- Version Control
+- Create nonexisting pages within browser
+- Handle TOML, YAML, JSON, front-matter in-browser through a form
+- ...

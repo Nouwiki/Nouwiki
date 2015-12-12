@@ -1,50 +1,14 @@
 var path = require('path');
-var doT = require('dot');
 var fs = require('fs-extra');
 var parse = require('./parse');
 var dirTree = require('directory-tree');
 var toml = require('toml');
 
+var parse = require('./parse');
+
 var appDir = path.dirname(require.main.filename);
 
 var config;
-
-function buildMarkupFile(root, markup_file, target) {
-	var file_name = path.basename(markup_file, '.md') + ".html";
-	var data = fs.readFileSync(markup_file, 'utf8');
-	parseAndWriteMarkup(root, data, file_name, target);
-}
-
-function parseAndWriteMarkup(root, data, file_name, target) {
-	var wiki = path.basename(root);
-	data = parse.parse(data); // .html .content.*
-
-	var config_src = path.join(root, "/config.toml");
-	var config_src_string = fs.readFileSync(config_src, 'utf8');
-	var global_data = toml.parse(config_src_string);
-
-	template_data = {
-		wiki: wiki,
-		html: data.html,
-		title: data.content.title,
-		local_js: data.content.js,
-		local_css: data.content.css,
-		global_js: global_data.js,
-		global_css: global_data.css
-	}
-
-	var site = path.join(root, "/"); // /site
-	var build_path = path.join(site, file_name);
-	if (target == "fragment") {
-			buildFragment(template_data, build_path);
-	}
-	if (target == "static") {
-			buildStatic(template_data, build_path);
-	}
-	if (target == "dynamic") {
-			buildDynamic(template_data, build_path);
-	}
-}
 
 function buildWiki(wiki_abs_dir, assets) {
 	var config_src = path.join(wiki_abs_dir, "/config.toml");
@@ -58,7 +22,7 @@ function buildWiki(wiki_abs_dir, assets) {
 	var markup_files = fs.readdirSync(markup_dir);
 	for (var x = 0; x < markup_files.length; x++) {
 		var markup_file = path.join(markup_dir, markup_files[x]);
-		buildMarkupFile(wiki_abs_dir, markup_file, config.target);
+		buildMarkupFile(markup_file, config, wiki_abs_dir);
 	}
 
 	buildTemplateAssets(site);
@@ -68,47 +32,34 @@ function buildWiki(wiki_abs_dir, assets) {
 	}
 }
 
+function buildMarkupFile(markup_file, config, wiki_abs_dir) {
+	var wiki = path.basename(wiki_abs_dir);
+	var markup = fs.readFileSync(markup_file, 'utf8');
+	var template;
+	if (config.target == "static") {
+		var template_path = path.join(appDir, "/templates/default/static/", "static.dot.jst");
+		template = fs.readFileSync(template_path, 'utf8');
+	} else if (config.target == "dynamic") {
+		var template_path = path.join(appDir, "/templates/default/dynamic/", "dynamic.dot.jst");
+		template = fs.readFileSync(template_path, 'utf8');
+	}
+	var html = parse.parse(markup, config, template, wiki);
+	var file_name = path.basename(markup_file, '.md') + ".html";
+	var build_path = path.join(wiki_abs_dir, file_name);
+	fs.writeFileSync(build_path, html);
+}
+
 function removeAndCreateSiteDir(site) {
 	var template_assets = path.join(site, "/template_assets");
 	fs.removeSync(template_assets);
 }
 
-function buildFragment(template_data, build_path) {
-  var fragment_path = build_path;
-  var fragment = template_data.html;
-  fs.writeFileSync(fragment_path, fragment);
-}
-
-function buildStatic(template_data, build_path) {
-  var stat_path = build_path;
-  var template_path = path.join(appDir, "/templates/default/", "static.html");
-  var template_string = fs.readFileSync(template_path, 'utf8');
-  var stat_template = doT.template(template_string);
-  var stat = stat_template(template_data);
-  fs.writeFileSync(stat_path, stat);
-}
-
-function buildDynamic(template_data, build_path) {
-  var dynamic_path = build_path;
-  var template_path = path.join(appDir, "/templates/default/", "dynamic.html");
-  var template_string = fs.readFileSync(template_path, 'utf8');
-  var dynamic_template = doT.template(template_string);
-  var dynamic = dynamic_template(template_data);
-  fs.writeFileSync(dynamic_path, dynamic);
-}
-
 function buildTemplateAssets(site) {
 	var template_assets = path.join(site, "/template_assets");
 
-	var stat_src = path.join(appDir, "/templates/default/static");
-	var stat_dest = path.join(template_assets, "/static");
+	var stat_src = path.join(appDir, "/templates/default");
+	var stat_dest = template_assets;
 	fs.copySync(stat_src, stat_dest);
-
-	if (config.target == "dynamic") {
-		var dynamic_src = path.join(appDir, "/templates/default/dynamic");
-		var dynamic_dest = path.join(template_assets, "/dynamic");
-		fs.copySync(dynamic_src, dynamic_dest);
-	}
 }
 
 function generateAssetPages(root) {

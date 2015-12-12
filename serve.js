@@ -20,7 +20,6 @@ var roots;
 var configs = [];
 
 function *modify() {
-	console.log(this.method)
 	if ('PUT' != this.method) return yield next;
 
 	var file_path, path_abs, config;
@@ -54,7 +53,8 @@ function *modify() {
 	    limit: '1000kb'
 	  });
 		fs.writeFileSync(file_path, data);
-		build.buildMarkupFile(path_abs, file_path, config.target);
+		//build.buildMarkupFile(path_abs, file_path, config.target, true);
+		build.buildMarkupFile(file_path, config, path_abs);
 		updated = true;
 	} catch (e) {
 		console.log(e)
@@ -73,30 +73,44 @@ function *pageNotFound(next){
 
 	if (404 != this.status) return;
 
-	var new_file;
-	if (roots.length > 1) {
-		var page = path.basename(this.path);
-		var wiki_url = this.path.split("/")[1];
-		for (var p in roots) {
-			var wiki = path.basename(roots[p]);
-			if (wiki_url == wiki) {
-				new_file = path.join(roots[p], page+".html");
-				break;
-			}
-		}
-	} else {
-		new_file = path.join(roots[0], this.path+".html");
+	var page = this.path.split("/");
+	page = page[page.length-1].split("?")[0];
+	page = page || "index";
+	var root = this.path;
+	if (this.path[this.path.length-1] != "/") {
+	  root = this.path.replace("/"+page, "/");
 	}
-	try {
-		var f = fs.statSync(new_file).isFile();
-		if (f) {
-			this.status = 200;
-			this.type = 'html';
-			this.body = fs.readFileSync(new_file);
+	var n = root.split("/").length;
+	if (roots.length == 1 && n == 2 || roots.length > 1 && n == 3) { // If the URL really is a page URL
+		var new_file;
+		if (roots.length > 1) {
+			var page = path.basename(this.path);
+			var wiki_url = this.path.split("/")[1];
+			for (var p in roots) {
+				var wiki = path.basename(roots[p]);
+				if (wiki_url == wiki) {
+					new_file = path.join(roots[p], page+".html");
+					break;
+				}
+			}
 		} else {
+			new_file = path.join(roots[0], this.path+".html");
+		}
+		try {
+			var f = fs.statSync(new_file).isFile();
+			if (f) {
+				this.status = 200;
+				this.type = 'html';
+				this.body = fs.readFileSync(new_file);
+			} else {
+				console.log("not a file")
+				this.status = 404;
+			}
+		} catch(e) {
 			this.status = 404;
 		}
-	} catch(e) {
+	} else {
+		console.log("not a page URL")
 		this.status = 404;
 	}
 }

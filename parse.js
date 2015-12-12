@@ -1,4 +1,5 @@
 var matter = require('gray-matter');
+var doT = require('dot');
 //var hljs = require('highlight.js') // https://highlightjs.org/
 //hljs.configure({classPrefix: ''});
 //hljs.initHighlightingOnLoad();
@@ -24,7 +25,7 @@ var md = require('markdown-it')({
 
 /* --- */
 
-function parse(data) {
+function fragment(data) {
 	var content = matter(data, { lang: 'toml', delims: ['+++', '+++']});
   console.log(content.data.title)
 	markData = content.content;
@@ -33,6 +34,29 @@ function parse(data) {
 	}
 	html = md.render(markData);
 	return { html: html, content: content.data };
+}
+
+function parse(markup, config, template, wiki) {
+	var data = fragment(markup); // .html .content.*
+
+	template_data = {
+		wiki: wiki,
+		html: data.html,
+		title: data.content.title,
+		local_js: data.content.js,
+		local_css: data.content.css,
+		global_js: config.js,
+		global_css: config.css
+	}
+
+	var output = data;
+	if (template != undefined) {
+		var temp = doT.template(template);
+		output = temp(template_data);
+	} else {
+		output = template_data.html;
+	}
+	return output;
 }
 
 exports.parse = parse;

@@ -5,7 +5,7 @@ module.exports = {
   },
   entry: './dynamic_src/index.js',
   output: {
-    filename: './templates/default/dynamic/js/ui.js'
+    filename: './templates/default/dynamic/assets/js/ui.js'
   },
   module: {
     //noParse: [/autoit.js/],
@@ -19,6 +19,6 @@ module.exports = {
     ]
   },
   plugins: [
-      new ExtractTextPlugin("./templates/default/dynamic/css/ui.css")
+      new ExtractTextPlugin("./templates/default/dynamic/assets/css/ui.css")
   ]
 };

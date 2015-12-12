@@ -8,6 +8,25 @@ require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 
+console.log("NEW");
+var config;
+var template;
+var ready = 2;
+$.get( "/config.toml", function( c ) {
+  config = c;
+  ready -= 1;
+  if (ready == 0) {
+    $("#controles").removeClass("disabled");
+  }
+});
+$.get( "/template_assets/dynamic/dynamic.dot.jst", function( t ) {
+  template = t;
+  ready -= 1;
+  if (ready == 0) {
+    $("#controles").removeClass("disabled");
+  }
+});
+
 // parse.parse(markup).html
 
 var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
@@ -26,7 +45,9 @@ function getMarkupText() {
   }});
 }
 $("#edit").click(function() {
-  edit();
+  if (ready == 0) {
+    edit();
+  }
 });
 //var editing = false;
 function edit() {
@@ -72,5 +93,6 @@ function save() {
         console.log(result)
       }
   });
-  $("#content").html(parse.parse(myCodeMirror.getValue()).html);
+  document.write(parse.parse(myCodeMirror.getValue(), config, template, wiki));
+  document.close();
 }
