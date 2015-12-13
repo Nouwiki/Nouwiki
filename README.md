@@ -43,13 +43,14 @@ Note that this is a very early prototype, but if you want to play with it:
 ## Host Wiki on GitHub
 
 - Create empty GitHub repo (don't initialize it with anything).
-- Create [a gh-pages branch](https://pages.github.com) (also don't initialize it with anything).
 - `nouwiki forge ./my_github_wiki`
 - `nouwiki build ./my_github_wiki`
 - `cd ./my_github_wiki`
 - `git remote add origin https://github.com/User/Repo.git`
 - `git push -u origin master`
-- `git push -f origin master:gh-pages` (see more ways to sync master and gh-pages [here](http://oli.jp/2011/github-pages-workflow/))
+- Create [a gh-pages branch](https://pages.github.com) (also don't initialize it with anything).
+- *make changes to wiki and commit (automatically committed if you edit through browser)*
+- `git push -u origin master && git push -f origin master:gh-pages` (see more ways to sync master and gh-pages [here](http://oli.jp/2011/github-pages-workflow/))
 
 ## ToDo
 
