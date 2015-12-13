@@ -7,19 +7,49 @@ Nouwiki's vision is of a wiki-network where humanity collaborates on documenting
 ## Features & Goals
 
 - [ ] Multiple collaboration models (solve Wikipedia's bureaucracy).
-- [ ] Edit anywhere (text editor, markup editor, nouwiki editor, in-browser editor, etc).
-- [ ] Serve anywhere (local filesystem (`file:///`), simple server (`http-server`, `python -m SimpleHTTPServer`, etc), localstorage, static web hosting, github, local nouwiki server, dedicated nouwiki server)
-- [x] View anywhere (text-browser, no-js, modern browser, mobile).
-- [ ] Use any language (markdown, asciidoc, mediawiki, etc).
+- [ ] Edit anywhere
+ 	- [x] text editor
+	- [x] markup editor
+	- [ ] nouwiki editor
+	- [x] in-browser nouwiki editor
+- [ ] Serve anywhere
+	- [ ] local filesystem (`file:///`)
+	- [ ] simple server (`http-server`, `python -m SimpleHTTPServer`, etc)
+	- [ ] localstorage
+	- [ ] static web hosting
+	- [x] github
+	- [x] local nouwiki server
+	- [ ] dedicated nouwiki server
+- [x] View anywhere
+	- [x] text-browser
+	- [x] no-js
+	- [x] modern browser
+	- [x] mobile
+- [ ] Use any language
+	- [x] markdown
+	- [ ] asciidoc
+	- [ ] mediawiki
 - [ ] Wikilink support in all markup languages.
-- [ ] Multiple build targets (fragments, static, md.html, standalone, full-standalone, dynamic).
+	- [x] markdown
+	- [ ] asciidoc
+	- [ ] mediawiki
+- [ ] Multiple build targets
+	- [ ] fragments
+	- [ ] static
+	- [ ] md.html
+	- [ ] standalone
+	- [ ] full-standalone
+	- [x] dynamic
 - [ ] Great text editor support (atom+sublime+vim+emacs plugins. custom nouwiki editor).
 - [ ] Theme/Template support.
 - [ ] Extendability (extend the markup parsers, nouwiki plugins, add your own js or css globally or locally on a page, etc).
 - [ ] Scales (from a personal notebook to the size of wikipedia).
 - [ ] Federated (cross node wikilinks, fork, push, pull).
 - [ ] Universal Asset Manager (audio, font, img, js, style, text, video, etc)
-- [ ] YAML, TOML, JSON front-matter
+- [ ] Front-Matter
+	- [ ] YAML
+	- [x] TOML
+	- [ ] JSON
 - [ ] Can easily function as a sub-app of your own app (an integrated wiki for your app)
 - [ ] Designed with learning in mind (spaced repetition, quizzes, annotations, discussion, etc)
 - [ ] Flexible (see above).
