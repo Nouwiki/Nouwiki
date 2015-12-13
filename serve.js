@@ -189,7 +189,7 @@ function *pageNotFound(next){
 	}
 	var n = root.split("/").length;
 	if (roots.length == 1 && n == 2 || roots.length > 1 && n == 3) { // If the URL really is a page URL
-		var new_file;
+		var new_file1, new_file2;
 		if (roots.length > 1) {
 			var page = path.basename(this.path);
 			var wiki_url = this.path.split("/")[1];
@@ -198,33 +198,47 @@ function *pageNotFound(next){
 				if (wiki_url == wiki) {
 					path_abs = roots[p];
 					config = configs[p];
-					new_file = path.join(roots[p], page+".html");
+					new_file1 = path.join(roots[p], decodeURI(page));
+					new_file2 = path.join(roots[p], decodeURI(page)+".html");
 					break;
 				}
 			}
 		} else {
 			path_abs = roots[0];
 			config = configs[0];
-			new_file = path.join(roots[0], this.path+".html");
+			new_file1 = path.join(roots[0], decodeURI(this.path));
+			new_file2 = path.join(roots[0], decodeURI(this.path)+".html");
 		}
 		try {
-			var f = fs.statSync(new_file).isFile();
+			var f = fs.statSync(new_file1).isFile();
 			if (f) {
 				this.status = 200;
 				this.type = 'html';
-				this.body = fs.readFileSync(new_file);
+				this.body = fs.readFileSync(new_file1);
 			} else {
 				console.log("not a file")
 				this.status = 404;
 			}
 		} catch(e) {
-			var template;
-			var template_path = path.join(appDir, "/templates/default/dynamic/", "create.dot.jst");
-			template = fs.readFileSync(template_path, 'utf8');
+			try {
+				var f = fs.statSync(new_file2).isFile();
+				if (f) {
+					this.status = 200;
+					this.type = 'html';
+					this.body = fs.readFileSync(new_file2);
+				} else {
+					console.log("not a file")
+					this.status = 404;
+				}
+			} catch(e) {
+				var template;
+				var template_path = path.join(appDir, "/templates/default/dynamic/", "create.dot.jst");
+				template = fs.readFileSync(template_path, 'utf8');
 
-			this.status = 200;
-			this.type = 'html';
-			this.body = parse.parse("+++\ntitle = \""+page+"\"\n+++\n\nThis page has not been created yet.\n", config, template);
+				this.status = 200;
+				this.type = 'html';
+				this.body = parse.parse("+++\ntitle = \""+page+"\"\n+++\n\nThis page has not been created yet.\n", config, template);
+			}
 		}
 	} else {
 		console.log("not a page URL")
