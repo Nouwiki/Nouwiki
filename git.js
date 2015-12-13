@@ -5,6 +5,15 @@ var nodegit = require("nodegit");
 
 fs.ensureDir = promisify(fs.ensureDir);
 
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 function initRepo(root) {
   var isBare = 0;
   var repository;
@@ -103,6 +112,8 @@ function addAndCommitAll(root, message) {
   });
 }
 
+var finished = true;
+
 function addAndCommitPage(root, page, message) {
   var repo;
   var index;
@@ -113,106 +124,123 @@ function addAndCommitPage(root, page, message) {
   var md = path.join(root, "markup", page+".md");
   var html = path.join(root, page+".html");
 
-  nodegit.Repository.open(dotgit)
-  .then(function(repoResult) {
-    repo = repoResult;
-    console.log(repo.getStatus())
-    console.log("1")
-    return fs.ensureDir(repo.workdir());
-  })
-  .then(function() {
-    console.log("2")
-    return repo.openIndex();
-  })
-  .then(function(indexResult) {
-    console.log("3")
-    index = indexResult;
-    return index.read(1);
-  })
-  .then(function() {
-    console.log("4")
-    return index.addByPath("markup/"+page+".md");
-  })
-  .then(function() {
-    console.log("5")
-    return index.write();
-  })
-  .then(function() {
-    console.log("6")
-    return index.writeTree();
-  })
-  .then(function(oidResult) {
-    console.log("7")
-    oid = oidResult;
-    return nodegit.Reference.nameToId(repo, "HEAD");
-  })
-  .then(function(head) {
-    console.log("8")
-    return repo.getCommit(head);
-  })
-  .then(function(parent) {
-    console.log("9")
-    var author = nodegit.Signature.create("Anonymous",
-      "anonymous@anonymous.com", 123456789, 60);
-    var committer = nodegit.Signature.create("Anonymous",
-      "anonymous@anonymous.com", 987654321, 90);
+  if (finished) {
+    finished = false;
+    i = 0;
+    console.log("start", i)
+    nodegit.Repository.open(dotgit)
+    .then(function(repoResult) {
+      repo = repoResult;
+      console.log(repo.getStatus())
+      console.log("1")
+      return fs.ensureDir(repo.workdir());
+    })
+    .then(function() {
+      console.log("2")
+      return repo.openIndex();
+    })
+    .then(function(indexResult) {
+      console.log("3")
+      index = indexResult;
+      return index.read(1);
+    })
+    .then(function() {
+      console.log("4")
+      return index.addByPath("markup/"+page+".md");
+    })
+    .then(function() {
+      console.log("5")
+      return index.write();
+    })
+    .then(function() {
+      console.log("6")
+      return index.writeTree();
+    })
+    .then(function(oidResult) {
+      console.log("7")
+      oid = oidResult;
+      return nodegit.Reference.nameToId(repo, "HEAD");
+    })
+    .then(function(head) {
+      console.log("8")
+      return repo.getCommit(head);
+    })
+    .then(function(parent) {
+      console.log("9")
+      var author = nodegit.Signature.create("Anonymous",
+        "anonymous@anonymous.com", 123456789, 60);
+      var committer = nodegit.Signature.create("Anonymous",
+        "anonymous@anonymous.com", 987654321, 90);
 
-    return repo.createCommit("HEAD", author, committer, message, oid, [parent]);
-  })
-  .done(function(commitId) {
-    console.log("10")
-    console.log("New Commit: ", commitId);
-  });
+      return repo.createCommit("HEAD", author, committer, message, oid, [parent]);
+    })
+    .done(function(commitId) {
+      console.log("10")
+      console.log("New Commit: ", commitId);
 
-  nodegit.Repository.open(dotgit)
-  .then(function(repoResult) {
-    repo = repoResult;
-    console.log("1")
-    return fs.ensureDir(repo.workdir());
-  })
-  .then(function() {
-    console.log("2")
-    return repo.openIndex();
-  })
-  .then(function(indexResult) {
-    console.log("3")
-    index = indexResult;
-    return index.read(1);
-  })
-  .then(function() {
-    console.log("4")
-    return index.addByPath(page+".html");
-  })
-  .then(function() {
-    console.log("5")
-    return index.write();
-  })
-  .then(function() {
-    console.log("6")
-    return index.writeTree();
-  })
-  .then(function(oidResult) {
-    console.log("7")
-    oid = oidResult;
-    return nodegit.Reference.nameToId(repo, "HEAD");
-  })
-  .then(function(head) {
-    console.log("8")
-    return repo.getCommit(head);
-  })
-  .then(function(parent) {
-    console.log("9")
-    var author = nodegit.Signature.create("Anonymous",
-      "anonymous@anonymous.com", 123456789, 60);
-    var committer = nodegit.Signature.create("Anonymous",
-      "anonymous@anonymous.com", 987654321, 90);
 
-    return repo.createCommit("HEAD", author, committer, message, oid, [parent]);
-  })
-  .done(function(commitId) {
-    console.log("10")
-    console.log("New Commit: ", commitId);
-  });
+      nodegit.Repository.open(dotgit)
+      .then(function(repoResult) {
+        repo = repoResult;
+        console.log("1")
+        return fs.ensureDir(repo.workdir());
+      })
+      .then(function() {
+        console.log("2")
+        return repo.openIndex();
+      })
+      .then(function(indexResult) {
+        console.log("3")
+        index = indexResult;
+        return index.read(1);
+      })
+      .then(function() {
+        console.log("4")
+        return index.addByPath(page+".html");
+      })
+      .then(function() {
+        console.log("5")
+        return index.write();
+      })
+      .then(function() {
+        console.log("6")
+        return index.writeTree();
+      })
+      .then(function(oidResult) {
+        console.log("7")
+        oid = oidResult;
+        return nodegit.Reference.nameToId(repo, "HEAD");
+      })
+      .then(function(head) {
+        console.log("8")
+        return repo.getCommit(head);
+      })
+      .then(function(parent) {
+        console.log("9")
+        var author = nodegit.Signature.create("Anonymous",
+          "anonymous@anonymous.com", 123456789, 60);
+        var committer = nodegit.Signature.create("Anonymous",
+          "anonymous@anonymous.com", 987654321, 90);
+
+        return repo.createCommit("HEAD", author, committer, message, oid, [parent]);
+      })
+      .done(function(commitId) {
+        console.log("10")
+        console.log("New Commit: ", commitId)
+        finished = true;
+      });
+
+
+    });
+    console.log("middle", i)
+
+    console.log("end", i)
+  } else {
+    console.log("else")
+    setTimeout(function() {
+      addAndCommitPage(root, page, message)
+    }, 100)
+  }
 }
 
 
