@@ -5,6 +5,7 @@ var dirTree = require('directory-tree');
 var toml = require('toml');
 
 var parse = require('./parse');
+var git = require('./git');
 
 var appDir = path.dirname(require.main.filename);
 
@@ -23,6 +24,7 @@ function buildWiki(wiki_abs_dir, assets) {
 	for (var x = 0; x < markup_files.length; x++) {
 		var markup_file = path.join(markup_dir, markup_files[x]);
 		buildMarkupFile(markup_file, config, wiki_abs_dir);
+		git.addAndCommitPage(wiki_abs_dir, path.basename(markup_files[x], ".md"), "page build");
 	}
 
 	buildTemplateAssets(site);
@@ -33,17 +35,16 @@ function buildWiki(wiki_abs_dir, assets) {
 }
 
 function buildMarkupFile(markup_file, config, wiki_abs_dir) {
-	var wiki = path.basename(wiki_abs_dir);
 	var markup = fs.readFileSync(markup_file, 'utf8');
 	var template;
 	if (config.target == "static") {
-		var template_path = path.join(appDir, "/templates/default/static/", "static.dot.jst");
+		var template_path = path.join(appDir, "/templates/default/static/", "page.dot.jst");
 		template = fs.readFileSync(template_path, 'utf8');
 	} else if (config.target == "dynamic") {
-		var template_path = path.join(appDir, "/templates/default/dynamic/", "dynamic.dot.jst");
+		var template_path = path.join(appDir, "/templates/default/dynamic/", "page.dot.jst");
 		template = fs.readFileSync(template_path, 'utf8');
 	}
-	var html = parse.parse(markup, config, template, wiki);
+	var html = parse.parse(markup, config, template);
 	var file_name = path.basename(markup_file, '.md') + ".html";
 	var build_path = path.join(wiki_abs_dir, file_name);
 	fs.writeFileSync(build_path, html);
@@ -60,6 +61,7 @@ function buildTemplateAssets(site) {
 	var stat_src = path.join(appDir, "/templates/default");
 	var stat_dest = template_assets;
 	fs.copySync(stat_src, stat_dest);
+	git.addAndCommitFile(site, "template_assets", "template assets update");
 }
 
 function generateAssetPages(root) {

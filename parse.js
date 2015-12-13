@@ -36,20 +36,20 @@ function fragment(data) {
 	return { html: html, content: content.data };
 }
 
-function parse(markup, config, template, wiki) {
+function parse(markup, config, template) {
 	var data = fragment(markup); // .html .content.*
 
 	template_data = {
-		wiki: wiki,
 		html: data.html,
 		title: data.content.title,
 		local_js: data.content.js,
 		local_css: data.content.css,
-		global_js: config.js,
+		title: config.title,
+    global_js: config.js,
 		global_css: config.css
 	}
 
-	var output = data;
+	var output;
 	if (template != undefined) {
 		var temp = doT.template(template);
 		output = temp(template_data);

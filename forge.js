@@ -1,6 +1,8 @@
 var path = require('path');
 var fs = require('fs-extra');
 
+var git = require('./git');
+
 var appDir = path.dirname(require.main.filename);
 
 function createWiki(p) {
@@ -13,6 +15,9 @@ function createWiki(p) {
 	fs.writeFileSync(index_path, index_markup);
 	//buildWiki(wiki_abs_dir);
 	createConfigFile(wiki_abs_dir, wiki_name);
+	git.initRepo(wiki_abs_dir);
+	console.log("init2");
+	//git.addAndCommitAll(wiki_abs_dir, "initial commit");
 }
 
 function createNewWikiDirStructure(wiki_abs_dir) {

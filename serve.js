@@ -6,6 +6,9 @@ var dirTree = require('directory-tree');
 var toml = require('toml');
 var build = require('./build');
 
+var parse = require('./parse');
+var git = require('./git');
+
 var appDir = path.dirname(require.main.filename);
 
 var koa = require('koa');
@@ -64,6 +67,7 @@ function *modify() {
 	if (!updated) {
     this.throw(405, "Unable to update.");
   } else {
+		git.addAndCommitPage(path_abs, page, "page update");
     this.body = "Done";
   }
 };
@@ -108,6 +112,8 @@ function *pageNotFound(next){
 			}
 		} catch(e) {
 			this.status = 404;
+			//this.type = 'html';
+			//this.body = parse.parse(markup, config, template);
 		}
 	} else {
 		console.log("not a page URL")

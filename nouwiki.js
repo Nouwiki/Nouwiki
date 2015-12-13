@@ -3,7 +3,7 @@
 var path = require('path');
 var program = require('commander');
 
-var create = require('./create');
+var forge = require('./forge');
 var build = require('./build');
 var serve = require('./serve');
 
@@ -14,7 +14,7 @@ program
   .command('forge [paths...]')
   .action(function (paths) {
   	for (var x = 0; x < paths.length; x++) {
-  		create.createWiki(paths[x])
+  		forge.createWiki(paths[x])
   	}
   });
 

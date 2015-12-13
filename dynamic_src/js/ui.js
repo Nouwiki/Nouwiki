@@ -19,7 +19,7 @@ $.get( "/config.toml", function( c ) {
     $("#controles").removeClass("disabled");
   }
 });
-$.get( "/template_assets/dynamic/dynamic.dot.jst", function( t ) {
+$.get( "/template_assets/dynamic/page.dot.jst", function( t ) {
   template = t;
   ready -= 1;
   if (ready == 0) {
@@ -84,15 +84,16 @@ function save() {
 
   $("#editor").hide();
   $("#content").show();
+  var markup = myCodeMirror.getValue();
   $.ajax({
       url: '/api/modify',
       type: 'PUT',
-      data: myCodeMirror.getValue(),
+      data: markup,
       contentType: "text/plain",
       success: function(result) {
         console.log(result)
       }
   });
-  document.write(parse.parse(myCodeMirror.getValue(), config, template, wiki));
+  document.write(parse.parse(markup, config, template, wiki));
   document.close();
 }
