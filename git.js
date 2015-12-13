@@ -124,6 +124,8 @@ function addAndCommitPage(root, page, message) {
   var md = path.join(root, "markup", page+".md");
   var html = path.join(root, page+".html");
 
+  console.log(page)
+
   if (finished) {
     finished = false;
     i = 0;
