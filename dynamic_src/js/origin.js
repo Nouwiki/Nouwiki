@@ -23,3 +23,4 @@ var markup_page = page
 var markup_loc = root + "markup/" + markup_page + ".md";
 
 exports.markup_loc = markup_loc;
+exports.page = page;

@@ -12,14 +12,14 @@ console.log("NEW");
 var config;
 var template;
 var ready = 2;
-$.get( "/config.toml", function( c ) {
+$.get( "config.toml", function( c ) {
   config = c;
   ready -= 1;
   if (ready == 0) {
     $("#controles").removeClass("disabled");
   }
 });
-$.get( "/template_assets/dynamic/page.dot.jst", function( t ) {
+$.get( "template_assets/dynamic/page.dot.jst", function( t ) {
   template = t;
   ready -= 1;
   if (ready == 0) {
@@ -96,4 +96,28 @@ function save() {
   });
   document.write(parse.parse(markup, config, template, wiki));
   document.close();
+}
+
+$("#create").click(function() {
+  create();
+});
+function create() {
+  $.ajax({
+      url: '/api/create',
+      type: 'POST',
+      data: origin.page,
+      contentType: "text/plain",
+      success: function(result) {
+        $.ajax({
+            url: '/api/get_page',
+            type: 'POST',
+            data: origin.page,
+            contentType: "text/plain",
+            success: function(html) {
+              document.write(html);
+              document.close();
+            }
+        });
+      }
+  });
 }
