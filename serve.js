@@ -227,13 +227,14 @@ function serve(paths, port) {
 }
 
 function getPage(url) {
-	var page = url.split("/");
+	var page = decodeURI(url).split("/");
 	page = page[page.length-1].split("?")[0];
 	page = page || "index";
 	return page;
 }
 
 function getWikiIndex(wiki_url) {
+	wiki_url = decodeURI(wiki_url);
 	for (var i in roots) {
 		var wiki = path.basename(roots[i]);
 		if (wiki_url == wiki) {
