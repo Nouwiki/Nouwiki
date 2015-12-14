@@ -1,14 +1,15 @@
 var matter = require('gray-matter');
 var doT = require('dot');
-//var hljs = require('highlight.js') // https://highlightjs.org/
-//hljs.configure({classPrefix: ''});
-//hljs.initHighlightingOnLoad();
+/*var hljs = require('highlight.js') // https://highlightjs.org/
+hljs.configure({classPrefix: ''});
+hljs.initHighlightingOnLoad();*/
 
+// Initialize markdown-it
 var md = require('markdown-it')({
   html: true,
   linkify: true,
-  typographer: true/*,
-  highlight: function (str, lang) {
+  typographer: true,
+  /*highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(lang, str).value;
@@ -22,8 +23,6 @@ var md = require('markdown-it')({
     return ''; // use external default escaping
   }*/
 }).use(require('markdown-it-wikilink'))//.use(require('markdown-it-attrs'));
-
-/* --- */
 
 function fragment(data) {
 	var content = matter(data, { lang: 'toml', delims: ['+++', '+++']});

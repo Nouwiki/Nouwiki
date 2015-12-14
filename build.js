@@ -24,8 +24,13 @@ function buildWiki(wiki_abs_dir, assets) {
 	for (var x = 0; x < markup_files.length; x++) {
 		var markup_file = path.join(markup_dir, markup_files[x]);
 		buildMarkupFile(markup_file, config, wiki_abs_dir);
-		git.addAndCommitPage(wiki_abs_dir, path.basename(markup_files[x], ".md"), "page build");
+		//git.addAndCommitPage(wiki_abs_dir, path.basename(markup_files[x], ".md"), "page build");
 	}
+	var pages = [];
+	for (var x in markup_files) {
+		pages.push(path.basename(markup_files[x], ".md"))
+	}
+	git.addAndCommitPages(wiki_abs_dir, pages, "pages build");
 
 	buildTemplateAssets(site);
 

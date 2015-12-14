@@ -16,7 +16,6 @@ function createWiki(p) {
 	//buildWiki(wiki_abs_dir);
 	createConfigFile(wiki_abs_dir, wiki_name);
 	git.initRepo(wiki_abs_dir);
-	console.log("init2");
 	//git.addAndCommitAll(wiki_abs_dir, "initial commit");
 }
 

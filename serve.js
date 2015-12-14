@@ -26,49 +26,34 @@ function *modify() {
 
 	var file_path, path_abs, config;
 
-	var page = this.request.header.referer.split("/");
-	page = page[page.length-1].split("?")[0];
-	page = page || "index";
-
-	var md = page+".md";
-	var wiki = this.request.header.referer.split("/")
-	wiki_url = wiki[wiki.length-2];
-	if (roots.length > 1) {
-		for (var p in roots) {
-			var wiki = path.basename(roots[p]);
-			if (wiki_url == wiki) {
-				path_abs = roots[p];
-				config = configs[p];
-				file_path = path.join(roots[p], md);
-				break;
-			}
-		}
-	} else {
-		path_abs = roots[0];
-		config = configs[0];
-		file_path = path.join(roots[0], "markup", md);
-	}
-
-	var updated = false;
 	try {
 		var data = yield cobody.text(this, {
-	    limit: '1000kb'
-	  });
-		fs.writeFileSync(file_path, data);
-		//build.buildMarkupFile(path_abs, file_path, config.target, true);
-		build.buildMarkupFile(file_path, config, path_abs);
-		updated = true;
-	} catch (e) {
-		console.log(e)
-	}
+			limit: '1000kb'
+		});
 
-	console.log(updated)
-	if (!updated) {
-    this.throw(405, "Unable to update.");
-  } else {
+		var page = getPage(this.request.header.referer);
+		var md = page+".md";
+		if (roots.length > 1) {
+			var wiki = this.request.header.referer.split("/")
+			wiki_url = wiki[wiki.length-2];
+			var i = getWikiIndex(wiki_url);
+			path_abs = roots[i];
+			config = configs[i];
+			file_path = path.join(roots[i], md);
+		} else {
+			path_abs = roots[0];
+			config = configs[0];
+			file_path = path.join(roots[0], "markup", md);
+		}
+
+		fs.writeFileSync(file_path, data);
+		build.buildMarkupFile(file_path, config, path_abs);
+
 		git.addAndCommitPage(path_abs, page, "page update");
-    this.body = "Done";
-  }
+		this.body = "Done";
+	} catch(e) {
+		this.throw(405, "Unable to update.");
+	}
 };
 
 function *create() {
@@ -76,51 +61,33 @@ function *create() {
 
 	var file_path, path_abs, config;
 
-	var page = this.request.header.referer.split("/");
-	page = page[page.length-1].split("?")[0];
-	page = page || "index";
-
-	var md = page+".md";
-	var wiki = this.request.header.referer.split("/")
-	wiki_url = wiki[wiki.length-2];
-	if (roots.length > 1) {
-		for (var p in roots) {
-			var wiki = path.basename(roots[p]);
-			if (wiki_url == wiki) {
-				path_abs = roots[p];
-				config = configs[p];
-				file_path = path.join(roots[p], md);
-				break;
-			}
-		}
-	} else {
-		path_abs = roots[0];
-		config = configs[0];
-		file_path = path.join(roots[0], "markup", md);
-	}
-
-	var created = false;
-	var data;
 	try {
-		data = yield cobody.text(this, {
-	    limit: '500kb'
-	  });
-		file_path = path.join(path_abs, "markup", data+".md");
-		fs.writeFileSync(file_path, "+++\ntitle = \""+data+"\"\n+++\n\nEmpty page.\n");
-		//build.buildMarkupFile(path_abs, file_path, config.target, true);
-		build.buildMarkupFile(file_path, config, path_abs);
-		created = true;
-	} catch (e) {
-		console.log(e)
-	}
+		var page = yield cobody.text(this, {
+			limit: '500kb'
+		});
+		var md = page+".md";
+		if (roots.length > 1) {
+			var wiki = this.request.header.referer.split("/");
+			var wiki_url = wiki[wiki.length-2];
+			var i = getWikiIndex(wiki_url);
+			path_abs = roots[i];
+			config = configs[i];
+			file_path = path.join(roots[i], md);
+		} else {
+			path_abs = roots[0];
+			config = configs[0];
+			file_path = path.join(roots[0], "markup", md);
+		}
 
-	console.log(created)
-	if (!created) {
-    this.throw(405, "Unable to create page.");
-  } else {
-		git.addAndCommitPage(path_abs, data, "page created");
+		file_path = path.join(path_abs, "markup", page+".md");
+		fs.writeFileSync(file_path, "+++\ntitle = \""+page+"\"\n+++\n\nEmpty page.\n");
+		build.buildMarkupFile(file_path, config, path_abs);
+
+		git.addAndCommitPage(path_abs, page, "page created");
     this.body = "Done";
-  }
+	} catch(e) {
+		this.throw(405, "Unable to create page.");
+	}
 };
 
 
@@ -128,48 +95,30 @@ function *get_page() {
 	if ('POST' != this.method) return yield next;
 
 	var file_path, path_abs, config;
-
-	var page = this.request.header.referer.split("/");
-	page = page[page.length-1].split("?")[0];
-	page = page || "index";
-
-	var md = page+".md";
-	var wiki = this.request.header.referer.split("/")
-	wiki_url = wiki[wiki.length-2];
-	if (roots.length > 1) {
-		for (var p in roots) {
-			var wiki = path.basename(roots[p]);
-			if (wiki_url == wiki) {
-				path_abs = roots[p];
-				config = configs[p];
-				file_path = path.join(roots[p], md);
-				break;
-			}
-		}
-	} else {
-		path_abs = roots[0];
-		config = configs[0];
-		file_path = path.join(roots[0], "markup", md);
-	}
-
-	var gotten = false;
-	var data, html;
 	try {
-		data = yield cobody.text(this, {
+		var page = yield cobody.text(this, {
 	    limit: '500kb'
 	  });
-		html = fs.readFileSync(path.join(path_abs, data+".html"), 'utf8');
-		gotten = true;
-	} catch (e) {
-		console.log(e)
-	}
 
-	console.log(gotten)
-	if (!gotten) {
-    this.throw(405, "Unable to get page.");
-  } else {
-    this.body = html;
-  }
+		var md = page+".md";
+		if (roots.length > 1) {
+			var wiki = this.request.header.referer.split("/")
+			var wiki_url = wiki[wiki.length-2];
+			var i = getWikiIndex(wiki_url);
+			path_abs = roots[i];
+			config = configs[i];
+			file_path = path.join(roots[i], md);
+		} else {
+			path_abs = roots[0];
+			config = configs[0];
+			file_path = path.join(roots[0], "markup", md);
+		}
+
+		var html = fs.readFileSync(path.join(path_abs, data+".html"), 'utf8');
+		this.body = html;
+	} catch(e) {
+		this.throw(405, "Unable to get page.");
+	}
 };
 
 
@@ -180,65 +129,53 @@ function *pageNotFound(next){
 
 	var path_abs, config;
 
-	var page = this.path.split("/");
-	page = page[page.length-1].split("?")[0];
-	page = page || "index";
+	var page = getPage(this.path);
 	var root = this.path;
 	if (this.path[this.path.length-1] != "/") {
 	  root = this.path.replace("/"+page, "/");
 	}
 	var n = root.split("/").length;
-	if (roots.length == 1 && n == 2 || roots.length > 1 && n == 3) { // If the URL really is a page URL
+	if (roots.length == 1 && n == 2 || roots.length > 1 && n == 3) { // If the URL really is a page URL: if we're serving 1 wiki thr / split should be 2, else 3.
 		var new_file1, new_file2;
 		if (roots.length > 1) {
-			var page = path.basename(this.path);
 			var wiki_url = this.path.split("/")[1];
-			for (var p in roots) {
-				var wiki = path.basename(roots[p]);
-				if (wiki_url == wiki) {
-					path_abs = roots[p];
-					config = configs[p];
-					new_file1 = path.join(roots[p], decodeURI(page));
-					new_file2 = path.join(roots[p], decodeURI(page)+".html");
-					break;
-				}
-			}
+			var i = getWikiIndex(wiki_url);
+			path_abs = roots[i];
+			config = configs[i];
+			new_file1 = path.join(roots[i], decodeURI(page));
+			new_file2 = path.join(roots[i], decodeURI(page)+".html");
 		} else {
 			path_abs = roots[0];
 			config = configs[0];
 			new_file1 = path.join(roots[0], decodeURI(this.path));
 			new_file2 = path.join(roots[0], decodeURI(this.path)+".html");
 		}
+
+		var f, file;
 		try {
-			var f = fs.statSync(new_file1).isFile();
-			if (f) {
-				this.status = 200;
-				this.type = 'html';
-				this.body = fs.readFileSync(new_file1);
-			} else {
-				console.log("not a file")
-				this.status = 404;
-			}
+			f = fs.statSync(new_file1).isFile();
+			file = new_file1;
 		} catch(e) {
 			try {
-				var f = fs.statSync(new_file2).isFile();
-				if (f) {
-					this.status = 200;
-					this.type = 'html';
-					this.body = fs.readFileSync(new_file2);
-				} else {
-					console.log("not a file")
-					this.status = 404;
-				}
+				f = fs.statSync(new_file2).isFile();
+				file = new_file2;
 			} catch(e) {
-				var template;
-				var template_path = path.join(appDir, "/templates/default/dynamic/", "create.dot.jst");
-				template = fs.readFileSync(template_path, 'utf8');
-
-				this.status = 200;
-				this.type = 'html';
-				this.body = parse.parse("+++\ntitle = \""+page+"\"\n+++\n\nThis page has not been created yet.\n", config, template);
+				f = false;
 			}
+		}
+
+		if (f) {
+			this.status = 200;
+			this.type = 'html';
+			this.body = fs.readFileSync(file);
+		} else {
+			var template;
+			var template_path = path.join(appDir, "/templates/default/dynamic/", "create.dot.jst");
+			template = fs.readFileSync(template_path, 'utf8');
+
+			this.status = 200;
+			this.type = 'html';
+			this.body = parse.parse("+++\ntitle = \""+page+"\"\n+++\n\nThis page has not been created yet.\n", config, template);
 		}
 	} else {
 		console.log("not a page URL")
@@ -254,6 +191,7 @@ function serve(paths, port) {
 		configs.push(toml.parse(config_src_string));
 	}
 
+	// API
 	router.put('/api/modify', modify);
 	router.post('/api/create', create);
 	router.post('/api/get_page', get_page);
@@ -264,6 +202,7 @@ function serve(paths, port) {
 			var p = paths[pa];
 			var wiki = path.basename(p);
 			app.use(mount("/"+wiki+"/", serveStatic(p)));
+			// If you enter the wiki without a trailing slash, add the slash and redirect
 			router.get('/'+wiki, function *(next) {
 				this.redirect(this.request.url+'/');
 			  this.status = 301;
@@ -285,6 +224,23 @@ function serve(paths, port) {
 	  .use(router.routes())
 	  .use(router.allowedMethods());
 	app.listen(port);
+}
+
+function getPage(url) {
+	var page = url.split("/");
+	page = page[page.length-1].split("?")[0];
+	page = page || "index";
+	return page;
+}
+
+function getWikiIndex(wiki_url) {
+	for (var i in roots) {
+		var wiki = path.basename(roots[i]);
+		if (wiki_url == wiki) {
+			return i;
+		}
+	}
+	return -1;
 }
 
 exports.serve = serve;

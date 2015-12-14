@@ -61,6 +61,21 @@ In more abstract terms we want it to be:
 - [ ] Good enough for the academic.
 - [ ] Beautiful enough for the designer.
 
+## UI+Backend Features
+
+- [ ] Search
+- [ ] Per tab Travel History
+- [ ] Asset Management
+- [ ] Wiki
+	- [ ] Create
+	- [ ] Remove
+	- [ ] Rename
+- [ ] Page
+	- [x] Create
+	- [ ] Remove
+	- [ ] Rename
+- [ ] User Account Singup/Login/Manage
+
 ## Install & Run
 
 Note that this is a very early prototype, but if you want to play with it:
