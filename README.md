@@ -2,7 +2,28 @@
 
 Flexible Wiki Software, early prototype. Applies [Universal App](https://github.com/01AutoMonkey/Universal-App) principles.
 
-Nouwiki's vision is of a wiki-network where humanity collaborates on documenting the world, with seamless and automatic handling of bureaucratic friction, that is you wakeup, have some coffee, sit in front of your computer, and start contributing, without having to worry about if your days work will "disgruntle the admins" or get deleted, and get that effect without having to isolate your work.
+Nouwiki's vision is of a wiki-network where in the abstract there are no admins and everyone can edit, but with self-organized quality control. This is attained through "inter-wiki-links" and collaboration between classically administered nodes which together make up a single whole.
+
+## Install & Run
+
+Note that this is a very early prototype, but if you want to play with it:
+
+- `npm i -g git+https://github.com/01AutoMonkey/nouwiki.git`
+- `nouwiki forge ./wiki_directory`
+- `nouwiki build ./wiki_directory`
+- `nouwiki serve ./wiki_directory -p 8080`
+
+## Host Wiki on GitHub
+
+- Create empty GitHub repo (don't initialize it with anything).
+- `nouwiki forge ./my_github_wiki`
+- `nouwiki build ./my_github_wiki`
+- `cd ./my_github_wiki`
+- `git remote add origin https://github.com/User/Repo.git`
+- `git push -u origin master`
+- Create [a gh-pages branch](https://pages.github.com) (also don't initialize it with anything).
+- *make changes to wiki and commit (automatically committed if you edit through browser)*
+- `git push -u origin master && git push -f origin master:gh-pages` (see more ways to sync master and gh-pages [here](http://oli.jp/2011/github-pages-workflow/))
 
 ## Features & Goals
 
@@ -75,27 +96,6 @@ In more abstract terms we want it to be:
 	- [ ] Remove
 	- [ ] Rename
 - [ ] User Account Singup/Login/Manage
-
-## Install & Run
-
-Note that this is a very early prototype, but if you want to play with it:
-
-- `npm i -g git+https://github.com/01AutoMonkey/nouwiki.git`
-- `nouwiki forge ./wiki_directory`
-- `nouwiki build ./wiki_directory`
-- `nouwiki serve ./wiki_directory -p 8080`
-
-## Host Wiki on GitHub
-
-- Create empty GitHub repo (don't initialize it with anything).
-- `nouwiki forge ./my_github_wiki`
-- `nouwiki build ./my_github_wiki`
-- `cd ./my_github_wiki`
-- `git remote add origin https://github.com/User/Repo.git`
-- `git push -u origin master`
-- Create [a gh-pages branch](https://pages.github.com) (also don't initialize it with anything).
-- *make changes to wiki and commit (automatically committed if you edit through browser)*
-- `git push -u origin master && git push -f origin master:gh-pages` (see more ways to sync master and gh-pages [here](http://oli.jp/2011/github-pages-workflow/))
 
 ## ToDo
 
