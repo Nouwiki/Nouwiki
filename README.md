@@ -27,6 +27,15 @@ Note that this is a very early prototype, but if you want to play with it:
 
 ## Features & Goals
 
+In the abstract we want it to be:
+
+- [ ] Easy enough for the layman.
+- [ ] Powerful enough for the developer.
+- [ ] Good enough for the academic.
+- [ ] Beautiful enough for the designer.
+
+In more concrete terms:
+
 - [ ] Multiple collaboration models (solve Wikipedia's bureaucracy).
 - [ ] Edit anywhere
  	- [x] text editor
@@ -74,13 +83,6 @@ Note that this is a very early prototype, but if you want to play with it:
 - [ ] Can easily function as a sub-app of your own app (an integrated wiki for your app)
 - [ ] Designed with learning in mind (spaced repetition, quizzes, annotations, discussion, etc)
 - [ ] Flexible (see above).
-
-In more abstract terms we want it to be:
-
-- [ ] Easy enough for the layman.
-- [ ] Powerful enough for the developer.
-- [ ] Good enough for the academic.
-- [ ] Beautiful enough for the designer.
 
 ## UI+Backend Features
 
