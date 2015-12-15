@@ -65,6 +65,7 @@ function *create() {
 		var page = yield cobody.text(this, {
 			limit: '500kb'
 		});
+		page = decodeURI(page);
 		var md = page+".md";
 		if (roots.length > 1) {
 			var wiki = this.request.header.referer.split("/");
@@ -100,7 +101,7 @@ function *get_page() {
 	    limit: '500kb'
 	  });
 
-		var md = page+".md";
+		var md = decodeURI(page+".md");
 		if (roots.length > 1) {
 			var wiki = this.request.header.referer.split("/")
 			var wiki_url = wiki[wiki.length-2];
