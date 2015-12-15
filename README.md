@@ -2,7 +2,7 @@
 
 Flexible Wiki Software, early prototype. Applies [Universal App](https://github.com/01AutoMonkey/Universal-App) principles.
 
-Nouwiki's vision is of a wiki-network where in the abstract there are no admins and everyone can edit, but with self-organized quality control. This is attained through "inter-wiki-links" and collaboration between classically administered nodes which together make up a single whole.
+Nouwiki's vision is of a wiki-network where in the abstract there are no admins and everyone can edit, but has self-organizing quality control. This is attained through the use of "inter-wiki-links" and ease of collaboration between administered nodes which together make up a single whole.
 
 ## Install & Run
 
