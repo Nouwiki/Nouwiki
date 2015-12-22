@@ -1,5 +1,5 @@
 var origin = require("./origin.js");
-
+var toml = require('toml');
 var parse = require("../../parse.js");
 var $ = require("jquery");
 require('codemirror/lib/codemirror.css');
@@ -13,7 +13,7 @@ var config;
 var template;
 var ready = 2;
 $.get( "config.toml", function( c ) {
-  config = c;
+  config = toml.parse(c);
   ready -= 1;
   if (ready == 0) {
     $("#controles").removeClass("disabled");

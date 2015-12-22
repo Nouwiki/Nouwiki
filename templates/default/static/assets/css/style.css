@@ -12,6 +12,10 @@ body {
   height: calc(100% - 40px);
 }
 
+.markdown-body {
+  font-size: 1.1em;
+}
+
 html {
   height: 100%;
 }
