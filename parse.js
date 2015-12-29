@@ -35,7 +35,7 @@ function fragment(data) {
 	return { html: html, content: content.data };
 }
 
-function parse(markup, config, template) {
+function parse(markup, config, template_markup) {
 	var data = fragment(markup); // .html .content.*
 
 	template_data = {
@@ -43,14 +43,14 @@ function parse(markup, config, template) {
 		title: data.content.title,
 		local_js: data.content.js,
 		local_css: data.content.css,
-		title: config.title,
+		wiki: config.wiki,
     global_js: config.js,
 		global_css: config.css
 	}
 
 	var output;
-	if (template != undefined) {
-		var temp = doT.template(template);
+	if (template_markup != undefined) {
+		var temp = doT.template(template_markup);
 		output = temp(template_data);
 	} else {
 		output = template_data.html;

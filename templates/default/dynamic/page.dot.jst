@@ -7,12 +7,14 @@
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <link rel="stylesheet" href="template_assets/static/assets/css/normalize.css">
-  <link rel="stylesheet" href="template_assets/static/assets/css/style.css">
-  <link rel="stylesheet" href="template_assets/static/assets/css/content.css">
+  <link rel="stylesheet" href="templates/current/static/assets/css/normalize.css">
+  <link rel="stylesheet" href="templates/current/static/assets/css/style.css">
+  <link rel="stylesheet" href="templates/current/static/assets/css/content.css">
 
   <!-- Dynamic -->
-  <link rel="stylesheet" href="template_assets/dynamic/assets/css/ui.css">
+  <link rel="stylesheet" href="templates/nouwiki_ui.css">
+  <link rel="stylesheet" href="templates/current/dynamic/assets/css/prose-bright.css">
+  <link rel="stylesheet" href="templates/current/dynamic/assets/css/ui.css">
 
   <!-- Global User CSS -->
   {{ for(var i in it.global_css) { }}
@@ -41,7 +43,7 @@
   </div>
 
   <!-- Dynamic -->
-  <script src="template_assets/dynamic/assets/js/ui.js"></script>
+  <script src="templates/nouwiki_ui.js"></script>
 
   <!-- Global User JS -->
   {{ for(var i in it.global_js) { }}

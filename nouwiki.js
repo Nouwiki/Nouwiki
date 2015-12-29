@@ -22,6 +22,7 @@ var targets = ["all", "fragment", "static", "dynamic"];
 
 program
   .option('-a, --assets', 'Generate pages for user assets')
+  .option('-t, --template', 'Build template as well (in case it has been updated or changed)')
   .command('build [paths...]')
   .action(function (paths) {
     var wiki_abs_dir;

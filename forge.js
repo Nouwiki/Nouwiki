@@ -15,6 +15,8 @@ function createWiki(p) {
 	fs.writeFileSync(index_path, index_markup);
 	//buildWiki(wiki_abs_dir);
 	createConfigFile(wiki_abs_dir, wiki_name);
+	copyDefaultTemplate(wiki_abs_dir);
+	copyUiFiles(wiki_abs_dir);
 	git.initRepo(wiki_abs_dir);
 	//git.addAndCommitAll(wiki_abs_dir, "initial commit");
 }
@@ -55,8 +57,26 @@ function createEmptyDirs(wiki_abs_dir) {
 
 function createConfigFile(wiki_abs_dir, wiki_name) {
 	var config_dest = path.join(wiki_abs_dir, "/config.toml");
-	var config_string = 'title = "'+wiki_name+'"\njs = []\ncss = []\ntarget = "dynamic"';
+	var config_string = 'wiki = "'+wiki_name+'"\njs = []\ncss = []\ntarget = "dynamic"\ntemplate="default"';
 	fs.writeFileSync(config_dest, config_string);
+}
+
+function copyDefaultTemplate(wiki_abs_dir) {
+	var temp_src = path.join(appDir, "/templates/default");
+	var temp_dest = path.join(wiki_abs_dir, "/templates/default");
+	fs.copySync(temp_src, temp_dest);
+}
+
+function copyUiFiles(wiki_abs_dir) {
+	var temp = path.join(wiki_abs_dir, "/templates");
+
+	var nouwiki_ui_css_src = path.join(appDir, "/ui/build/css/nouwiki_ui.css");
+	var nouwiki_ui_css_dest = path.join(temp, "/nouwiki_ui.css");
+	fs.copySync(nouwiki_ui_css_src, nouwiki_ui_css_dest);
+
+	var nouwiki_ui_js_src = path.join(appDir, "/ui/build/js/nouwiki_ui.js");
+	var nouwiki_ui_js_dest = path.join(temp, "/nouwiki_ui.js");
+	fs.copySync(nouwiki_ui_js_src, nouwiki_ui_js_dest);
 }
 
 exports.createWiki = createWiki;

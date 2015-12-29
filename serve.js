@@ -115,7 +115,7 @@ function *get_page() {
 			file_path = path.join(roots[0], "markup", md);
 		}
 
-		var html = fs.readFileSync(path.join(path_abs, data+".html"), 'utf8');
+		var html = fs.readFileSync(path.join(path_abs, page+".html"), 'utf8');
 		this.body = html;
 	} catch(e) {
 		this.throw(405, "Unable to get page.");

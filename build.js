@@ -4,7 +4,6 @@ var parse = require('./parse');
 var dirTree = require('directory-tree');
 var toml = require('toml');
 
-var parse = require('./parse');
 var git = require('./git');
 
 var appDir = path.dirname(require.main.filename);
@@ -32,7 +31,7 @@ function buildWiki(wiki_abs_dir, assets) {
 	}
 	git.addAndCommitPages(wiki_abs_dir, pages, "pages build");
 
-	buildTemplateAssets(site);
+	readyTemplate(site);
 
 	if (assets) {
 		generateAssetPages(wiki_abs_dir);
@@ -41,15 +40,15 @@ function buildWiki(wiki_abs_dir, assets) {
 
 function buildMarkupFile(markup_file, config, wiki_abs_dir) {
 	var markup = fs.readFileSync(markup_file, 'utf8');
-	var template;
+	var template_markup;
 	if (config.target == "static") {
 		var template_path = path.join(appDir, "/templates/default/static/", "page.dot.jst");
-		template = fs.readFileSync(template_path, 'utf8');
+		template_markup = fs.readFileSync(template_path, 'utf8');
 	} else if (config.target == "dynamic") {
 		var template_path = path.join(appDir, "/templates/default/dynamic/", "page.dot.jst");
-		template = fs.readFileSync(template_path, 'utf8');
+		template_markup = fs.readFileSync(template_path, 'utf8');
 	}
-	var html = parse.parse(markup, config, template);
+	var html = parse.parse(markup, config, template_markup);
 	var file_name = path.basename(markup_file, '.md') + ".html";
 	var build_path = path.join(wiki_abs_dir, file_name);
 	fs.writeFileSync(build_path, html);
@@ -60,15 +59,6 @@ function removeAndCreateSiteDir(site) {
 	fs.removeSync(template_assets);
 }
 
-function buildTemplateAssets(site) {
-	var template_assets = path.join(site, "/template_assets");
-
-	var stat_src = path.join(appDir, "/templates/default");
-	var stat_dest = template_assets;
-	fs.copySync(stat_src, stat_dest);
-	git.addAndCommitFile(site, "template_assets", "template assets update");
-}
-
 function generateAssetPages(root) {
 	var assets_abs = path.join(root, "/assets");
 	var tree = dirTree.directoryTree(assets_abs);
@@ -77,6 +67,25 @@ function generateAssetPages(root) {
 		data = '+++\ntitle = "User Assets"\n+++\n\n'+markup
 		parseAndWriteMarkup(root, data, "__assets.html", config.target);
 	}
+}
+
+function readyTemplate(site) {
+	var temp = path.join(site, "/templates/"+config.template);
+	var current = path.join(site, "/templates/current");
+
+	/* Check if current already exists and is a symalink */
+	try {
+		var stats = fs.lstatSync(current);
+		if (stats.isSymbolicLink()) {
+			fs.unlinkSync(current);
+		}
+	} catch(e) {
+		console.log(e);
+	}
+
+	var temps = path.join(site, "/templates/");
+	var relativePath = path.relative(temps, temp);
+	fs.symlinkSync(relativePath, current);
 }
 
 function addMarkup(markup, a, tab, level) {

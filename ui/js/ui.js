@@ -8,9 +8,8 @@ require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 
-console.log("NEW");
 var config;
-var template;
+var template_markup;
 var ready = 2;
 $.get( "config.toml", function( c ) {
   config = toml.parse(c);
@@ -19,8 +18,8 @@ $.get( "config.toml", function( c ) {
     $("#controles").removeClass("disabled");
   }
 });
-$.get( "template_assets/dynamic/page.dot.jst", function( t ) {
-  template = t;
+$.get( "templates/current/dynamic/page.dot.jst", function( t ) {
+  template_markup = t;
   ready -= 1;
   if (ready == 0) {
     $("#controles").removeClass("disabled");
@@ -94,7 +93,7 @@ function save() {
         console.log(result)
       }
   });
-  document.write(parse.parse(markup, config, template, wiki));
+  document.write(parse.parse(markup, config, template_markup));
   document.close();
 }
 
