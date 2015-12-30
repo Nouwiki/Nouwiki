@@ -31,6 +31,8 @@ function buildWiki(wiki_abs_dir, assets) {
 	}
 	git.addAndCommitPages(wiki_abs_dir, pages, "pages build");
 
+	updateDefaultTemplate(site);
+	updateUiFiles(site);
 	readyTemplate(site);
 
 	if (assets) {
@@ -69,6 +71,22 @@ function generateAssetPages(root) {
 	}
 }
 
+function updateDefaultTemplate(site) {
+	var temp_src = path.join(appDir, "/templates/default");
+	var temp_dest = path.join(site, "/templates/default");
+
+	try {
+		var stats = fs.lstatSync(temp_dest);
+		if (stats.isDirectory()) {
+			fs.removeSync(temp_dest)
+		}
+	} catch(e) {
+		console.log(e);
+	}
+
+	fs.copySync(temp_src, temp_dest);
+}
+
 function readyTemplate(site) {
 	var temp = path.join(site, "/templates/"+config.template);
 	var current = path.join(site, "/templates/current");
@@ -86,6 +104,18 @@ function readyTemplate(site) {
 	var temps = path.join(site, "/templates/");
 	var relativePath = path.relative(temps, temp);
 	fs.symlinkSync(relativePath, current);
+}
+
+function updateUiFiles(site) {
+	var temp = path.join(site, "/templates");
+
+	var nouwiki_ui_css_src = path.join(appDir, "/ui/build/css/nouwiki_ui.css");
+	var nouwiki_ui_css_dest = path.join(temp, "/nouwiki_ui.css");
+	fs.copySync(nouwiki_ui_css_src, nouwiki_ui_css_dest);
+
+	var nouwiki_ui_js_src = path.join(appDir, "/ui/build/js/nouwiki_ui.js");
+	var nouwiki_ui_js_dest = path.join(temp, "/nouwiki_ui.js");
+	fs.copySync(nouwiki_ui_js_src, nouwiki_ui_js_dest);
 }
 
 function addMarkup(markup, a, tab, level) {

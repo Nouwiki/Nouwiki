@@ -8,6 +8,30 @@ require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 
+var markupText = "";
+var confirmOnPageExit = function (e)
+{
+  if (markupText != myCodeMirror.getValue()) {
+    // If we haven't been passed the event get the window.event
+    e = e || window.event;
+
+    var message = 'Document has not been saved';
+
+    // For IE6-8 and Firefox prior to version 4
+    if (e)
+    {
+        e.returnValue = message;
+    }
+
+    // For Chrome, Safari, IE8+ and Opera 12+
+    return message;
+  }
+};
+// Turn it on - assign the function that returns the string
+window.onbeforeunload = confirmOnPageExit;
+// Turn it off - remove the function entirely
+//window.onbeforeunload = null;
+
 var config;
 var template_markup;
 var ready = 2;
@@ -40,7 +64,9 @@ function getMarkupText() {
     type : 'GET',
     cache: false,
     success: function(text) {
-      myCodeMirror.setValue(text)
+      markupText = text;
+      myCodeMirror.setValue(text);
+      myCodeMirror.clearHistory();
   }});
 }
 $("#edit").click(function() {
@@ -62,7 +88,17 @@ function edit() {
 }
 
 $("#discard").click(function() {
-  discard();
+  var result = true;
+  if (markupText != myCodeMirror.getValue()) {
+    result = confirm("Are you sure you want to discard?");
+  }
+  if (result) {
+    var empty = "";
+    markupText = empty;
+    myCodeMirror.setValue(empty)
+    myCodeMirror.clearHistory();
+    discard();
+  }
 });
 function discard() {
   $("#edit").show();
@@ -90,11 +126,11 @@ function save() {
       data: markup,
       contentType: "text/plain",
       success: function(result) {
-        console.log(result)
+        document.location.reload(true);
       }
   });
-  document.write(parse.parse(markup, config, template_markup));
-  document.close();
+  /*document.write(parse.parse(markup, config, template_markup));
+  document.close();*/
 }
 
 $("#create").click(function() {
@@ -107,7 +143,8 @@ function create() {
       data: origin.page,
       contentType: "text/plain",
       success: function(result) {
-        $.ajax({
+        document.location.reload(true);
+        /*$.ajax({
             url: '/api/get_page',
             type: 'POST',
             data: origin.page,
@@ -116,7 +153,7 @@ function create() {
               document.write(html);
               document.close();
             }
-        });
+        });*/
       }
   });
 }

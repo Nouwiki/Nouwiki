@@ -101,4 +101,5 @@ In more concrete terms:
 
 ## ToDo
 
-- ...
+- How should you remove a page?
+- How should you rename a page?
