@@ -3,9 +3,9 @@
 var path = require('path');
 var program = require('commander');
 
-var forge = require('./forge');
-var build = require('./build');
-var serve = require('./serve');
+var forge = require('./client/forge');
+var build = require('./client/build');
+var serve = require('./client/serve');
 
 program
   .version('0.0.1')

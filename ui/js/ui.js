@@ -1,6 +1,6 @@
 var origin = require("./origin.js");
 var toml = require('toml');
-var parse = require("../../parse.js");
+var parse = require("../../client/parse.js");
 var $ = require("jquery");
 require('codemirror/lib/codemirror.css');
 var CodeMirror = require("codemirror");
@@ -120,6 +120,7 @@ function save() {
   $("#editor").hide();
   $("#content").show();
   var markup = myCodeMirror.getValue();
+  markupText = markup;
   $.ajax({
       url: '/api/modify',
       type: 'PUT',
