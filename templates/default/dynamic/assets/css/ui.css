@@ -33,8 +33,16 @@
   height: 100%;
 }
 
+#preview {
+  height: 100%;
+  width: 50%;
+  float: left;
+}
+
 #editor div.CodeMirror {
   height: 100%;
+  width: 50%;
+  float: left;
 }
 
 #edit {

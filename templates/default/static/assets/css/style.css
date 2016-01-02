@@ -12,7 +12,7 @@ body {
   height: calc(100% - 40px);
 }
 
-#content.markdown-body {
+#content.markdown-body, #preview.markdown-body {
   font-size: 1.1em;
 }
 

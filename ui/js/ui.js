@@ -57,6 +57,11 @@ var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
   theme: 'prose-bright',
   mode: "markdown"
 });
+var html;
+myCodeMirror.on("change", function(cm, change) {
+  html = parse.parse(myCodeMirror.getValue(), config);
+  $("#preview").html(html);
+});
 
 function getMarkupText() {
   $.ajax(origin.markup_loc, {
@@ -90,7 +95,7 @@ function edit() {
 $("#discard").click(function() {
   var result = true;
   if (markupText != myCodeMirror.getValue()) {
-    result = confirm("Are you sure you want to discard?");
+    result = confirm("Are you sure you want to discard your edit?");
   }
   if (result) {
     var empty = "";
