@@ -1,15 +1,15 @@
 body {
   margin: 0px;//40px auto;
   max-width: 100%; //650px;
-  line-height:1.6;
-  font-size:18px;
-  color:#444;
+  line-height: 1.6;
+  font-size: 18px;
+  color: #444;
   padding: 0px;//0 10px;
   font-family: "Helvetica Neue", Helvetica, arial, freesans, clean, sans-serif;
 }
 
 body {
-  height: calc(100% - 40px);
+  height: calc(100% - 35px);
 }
 
 #content.markdown-body, #preview.markdown-body {

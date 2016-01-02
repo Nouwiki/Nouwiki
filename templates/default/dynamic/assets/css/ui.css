@@ -2,7 +2,8 @@
   position: absolute;
   left: 0;
   top: 0;
-  border-bottom: 0px solid #eee;
+  border-bottom: 0px solid #444;
+  background-color: #FCFCFC;
   width: 100%;
 }
 
@@ -23,20 +24,24 @@
 #controles button {
   float: left;
   background-color: #FCFCFC;
-  border: 1px solid #DDD;
+  border: 0px;
+  border-right: 2px solid #FFF;
   padding: 10px;
 }
 
 #editor {
   display: none;
-  margin-top: 37px;
+  margin-top: 35px;
   height: 100%;
+  overflow: auto;
 }
 
 #preview {
-  height: 100%;
-  width: 50%;
+  height: calc(100% - 40px);
+  width: calc(50% - 40px);
   float: left;
+  overflow-y: scroll;
+  padding: 20px;
 }
 
 #editor div.CodeMirror {
