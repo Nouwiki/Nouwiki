@@ -24,7 +24,7 @@ var configs = [];
 function *modify() {
 	if ('PUT' != this.method) return yield next;
 
-	var file_path, path_abs, config;
+	var file_path, html_path, path_abs, config;
 
 	try {
 		var data = yield cobody.text(this, {
@@ -39,17 +39,19 @@ function *modify() {
 			var i = getWikiIndex(wiki_url);
 			path_abs = roots[i];
 			config = configs[i];
-			file_path = path.join(roots[i], md);
+			file_path = path.join(roots[i], "markup", md);
+			html_path = path.join(roots[i], page+".html");
 		} else {
 			path_abs = roots[0];
 			config = configs[0];
 			file_path = path.join(roots[0], "markup", md);
+			html_path = path.join(roots[0], page+".html");
 		}
 
 		fs.writeFileSync(file_path, data);
 		build.buildMarkupFile(file_path, config, path_abs);
 
-		git.addAndCommitPage(path_abs, page, "page update");
+		git.addAndCommitFiles(path_abs, [file_path, html_path], "page update");
 		this.body = "Done";
 	} catch(e) {
 		this.throw(405, "Unable to update.");
@@ -59,7 +61,7 @@ function *modify() {
 function *create() {
 	if ('POST' != this.method) return yield next;
 
-	var file_path, path_abs, config;
+	var file_path, html_path, path_abs, config;
 
 	try {
 		var page = yield cobody.text(this, {
@@ -73,18 +75,20 @@ function *create() {
 			var i = getWikiIndex(wiki_url);
 			path_abs = roots[i];
 			config = configs[i];
-			file_path = path.join(roots[i], md);
+			file_path = path.join(roots[i], "markup", md);
+			html_path = path.join(roots[i], page+".html");
 		} else {
 			path_abs = roots[0];
 			config = configs[0];
 			file_path = path.join(roots[0], "markup", md);
+			html_path = path.join(roots[0], page+".html");
 		}
 
 		file_path = path.join(path_abs, "markup", page+".md");
 		fs.writeFileSync(file_path, "+++\ntitle = \""+page+"\"\n+++\n\nEmpty page.\n");
 		build.buildMarkupFile(file_path, config, path_abs);
 
-		git.addAndCommitPage(path_abs, page, "page created");
+		git.addAndCommitFiles(path_abs, [file_path, html_path], "page created");
     this.body = "Done";
 	} catch(e) {
 		this.throw(405, "Unable to create page.");
@@ -122,6 +126,40 @@ function *get_page() {
 	}
 };
 
+function *remove() {
+	if ('POST' != this.method) return yield next;
+
+	var file_path, html_path, path_abs, config;
+
+	try {
+		var page = yield cobody.text(this, {
+			limit: '500kb'
+		});
+		page = decodeURI(page);
+		var md = page+".md";
+		if (roots.length > 1) {
+			var wiki = this.request.header.referer.split("/");
+			var wiki_url = wiki[wiki.length-2];
+			var i = getWikiIndex(wiki_url);
+			path_abs = roots[i];
+			config = configs[i];
+			file_path = path.join(roots[i], "markup", md);
+			html_path = path.join(roots[i], page+".html");
+		} else {
+			path_abs = roots[0];
+			config = configs[0];
+			file_path = path.join(roots[0], "markup", md);
+			html_path = path.join(roots[0], page+".html");
+		}
+
+		git.removeAndCommitFiles(path_abs, [file_path, html_path], "page removed");
+		fs.removeSync(file_path);
+		fs.removeSync(html_path);
+    this.body = "Done";
+	} catch(e) {
+		this.throw(405, "Unable to remove page.");
+	}
+};
 
 function *pageNotFound(next){
 	yield next;
@@ -196,6 +234,7 @@ function serve(paths, port) {
 	router.put('/api/modify', modify);
 	router.post('/api/create', create);
 	router.post('/api/get_page', get_page);
+	router.post('/api/delete', remove);
 
 	// Serve wiki folder
 	if (paths.length > 1) {

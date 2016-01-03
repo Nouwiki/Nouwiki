@@ -82,8 +82,7 @@ $("#edit").click(function() {
 //var editing = false;
 function edit() {
   $("#edit").hide();
-  $("#discard").show();
-  $("#save").show();
+  $(".edit").show();
 
   $("#editor").show();
   $("#content").hide();
@@ -107,8 +106,7 @@ $("#discard").click(function() {
 });
 function discard() {
   $("#edit").show();
-  $("#discard").hide();
-  $("#save").hide();
+  $(".edit").hide();
 
   $("#editor").hide();
   $("#content").show();
@@ -119,8 +117,7 @@ $("#save").click(function() {
 });
 function save() {
   $("#edit").show();
-  $("#discard").hide();
-  $("#save").hide();
+  $(".edit").hide();
 
   $("#editor").hide();
   $("#content").show();
@@ -162,4 +159,22 @@ function create() {
         });*/
       }
   });
+}
+
+$("#delete").click(function() {
+  remove();
+});
+function remove() {
+  var result = confirm("Are you sure you want to delete this page?");
+  if (result) {
+    $.ajax({
+        url: '/api/delete',
+        type: 'POST',
+        data: origin.page,
+        contentType: "text/plain",
+        success: function(result) {
+          document.location.reload(true);
+        }
+    });
+  }
 }

@@ -43,61 +43,12 @@ function initRepo(root) {
   });
 }
 
-function addAndCommitPage(root, page, message) {
+function addAndCommitFiles(root, file_paths, message) {
   var dotgit = path.join(root, ".git");
 
   var repository;
   var index;
   var oid;
-
-  console.log(page)
-
-  nodegit.Repository.open(dotgit)
-  .then(function(repo) {
-    repository = repo;
-    return fs.ensureDir(repository.workdir());
-  })
-  .then(function() {
-    return repository.openIndex();
-  })
-  .then(function(indexResult) {
-    index = indexResult;
-    return index.read(1);
-  })
-  .then(function() {
-    index.addByPath("markup/"+page+".md");
-    index.addByPath(page+".html");
-    return index;
-  })
-  .then(function() {
-    return index.write();
-  })
-  .then(function() {
-    return index.writeTree();
-  })
-  .then(function(oidResult) {
-    oid = oidResult;
-    return nodegit.Reference.nameToId(repository, "HEAD");
-  })
-  .then(function(head) {
-    return repository.getCommit(head);
-  })
-  .then(function(parent) {
-    return repository.createCommit("HEAD", author, committer, message, oid, [parent]);
-  })
-  .done(function(commitId) {
-    console.log("New Commit: ", commitId);
-  });
-}
-
-function addAndCommitPages(root, pages, message) {
-  var dotgit = path.join(root, ".git");
-
-  var repository;
-  var index;
-  var oid;
-
-  console.log(pages)
 
   nodegit.Repository.open(dotgit)
   .then(function(repo) {
@@ -113,9 +64,8 @@ function addAndCommitPages(root, pages, message) {
   })
   .then(function() {
     var i;
-    for (var p in pages) {
-      index.addByPath("markup/"+pages[p]+".md");
-      i = index.addByPath(pages[p]+".html");
+    for (var fp in file_paths) {
+      i = index.addByPath(file_paths[fp]);
     }
     return i;
   })
@@ -140,51 +90,7 @@ function addAndCommitPages(root, pages, message) {
   });
 }
 
-
-function addAndCommitFile(root, file_path, message) {
-  var dotgit = path.join(root, ".git");
-
-  var repository;
-  var index;
-  var oid;
-
-  nodegit.Repository.open(dotgit)
-  .then(function(repo) {
-    repository = repo;
-    return fs.ensureDir(repository.workdir());
-  })
-  .then(function() {
-    return repository.openIndex();
-  })
-  .then(function(indexResult) {
-    index = indexResult;
-    return index.read(1);
-  })
-  .then(function() {
-    return index.addAll(file_path);
-  })
-  .then(function() {
-    return index.write();
-  })
-  .then(function() {
-    return index.writeTree();
-  })
-  .then(function(oidResult) {
-    oid = oidResult;
-    return nodegit.Reference.nameToId(repository, "HEAD");
-  })
-  .then(function(head) {
-    return repository.getCommit(head);
-  })
-  .then(function(parent) {
-    return repository.createCommit("HEAD", author, committer, message, oid, [parent]);
-  })
-  .done(function(commitId) {
-    console.log("New Commit: ", commitId);
-  });
-}
-
-function addAndCommitFiles(root, file_paths, message) {
+function removeAndCommitFiles(root, file_paths, message) {
   var dotgit = path.join(root, ".git");
 
   var repository;
@@ -206,7 +112,7 @@ function addAndCommitFiles(root, file_paths, message) {
   .then(function() {
     var i;
     for (var fp in file_paths) {
-      i = index.addAll(file_paths[fp]);
+      i = index.removeByPath(file_paths[fp]);
     }
     return i;
   })
@@ -233,7 +139,5 @@ function addAndCommitFiles(root, file_paths, message) {
 
 
 exports.initRepo = initRepo;
-exports.addAndCommitPage = addAndCommitPage;
-exports.addAndCommitPages = addAndCommitPages;
-exports.addAndCommitFile = addAndCommitFile;
 exports.addAndCommitFiles = addAndCommitFiles;
+exports.removeAndCommitFiles = removeAndCommitFiles;
