@@ -97,19 +97,16 @@ function readyTemplate(site) {
 	var temp = path.join(site, "/templates/"+config.template);
 	var current = path.join(site, "/templates/current");
 
-	/* Check if current already exists and is a symalink */
 	try {
 		var stats = fs.lstatSync(current);
-		if (stats.isSymbolicLink()) {
-			fs.unlinkSync(current);
+		if (stats.isDirectory()) {
+			fs.removeSync(current);
 		}
 	} catch(e) {
 		console.log(e);
 	}
 
-	var temps = path.join(site, "/templates/");
-	var relativePath = path.relative(temps, temp);
-	fs.symlinkSync(relativePath, current);
+	fs.copySync(temp, current);
 }
 
 function updateUiFiles(site) {

@@ -97,6 +97,7 @@ In more concrete terms:
 	- [x] Create
 	- [x] Remove
 	- [ ] Rename
+	- [ ] View & Restore old version of page + see diff
 - [ ] User Account Singup/Login/Manage
 
 ## ToDo
@@ -105,4 +106,3 @@ In more concrete terms:
 - How should you rename a page?
 - Shouldn't the js and css files of a dynamic build that are not part of a template be in another location? (currently they are in the root of the ./templates folder)
 - The `build` command, apart from building the html files, also updates the default template and ui css and js files, shouldn't that be seperate commands?
--
