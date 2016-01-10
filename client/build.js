@@ -10,10 +10,11 @@ var appDir = path.dirname(require.main.filename);
 
 var config;
 
-function buildWiki(wiki_abs_dir, assets) {
+function buildWiki(wiki_abs_dir, assets, target) {
 	var config_src = path.join(wiki_abs_dir, "/config.toml");
 	var config_src_string = fs.readFileSync(config_src, 'utf8');
 	config = toml.parse(config_src_string);
+	var t = target || config.target;
 
 	var site = path.join(wiki_abs_dir, "/"); // /site
 	removeAndCreateSiteDir(site);
@@ -22,7 +23,7 @@ function buildWiki(wiki_abs_dir, assets) {
 	var markup_files = fs.readdirSync(markup_dir);
 	for (var x = 0; x < markup_files.length; x++) {
 		var markup_file = path.join(markup_dir, markup_files[x]);
-		buildMarkupFile(markup_file, config, wiki_abs_dir);
+		buildMarkupFile(markup_file, config, wiki_abs_dir, t);
 		//git.addAndCommitPage(wiki_abs_dir, path.basename(markup_files[x], ".md"), "page build");
 	}
 	var pages = [];
@@ -46,13 +47,16 @@ function buildWiki(wiki_abs_dir, assets) {
 	}
 }
 
-function buildMarkupFile(markup_file, config, wiki_abs_dir) {
+function buildMarkupFile(markup_file, config, wiki_abs_dir, target) {
 	var markup = fs.readFileSync(markup_file, 'utf8');
 	var template_markup;
-	if (config.target == "static") {
+	if (target == "static") {
 		var template_path = path.join(appDir, "/templates/default/static/", "page.dot.jst");
 		template_markup = fs.readFileSync(template_path, 'utf8');
-	} else if (config.target == "dynamic") {
+	} else if (target == "dynamic") {
+		var template_path = path.join(appDir, "/templates/default/dynamic/", "page.dot.jst");
+		template_markup = fs.readFileSync(template_path, 'utf8');
+	} else { // Default to dynamic if no target is specified
 		var template_path = path.join(appDir, "/templates/default/dynamic/", "page.dot.jst");
 		template_markup = fs.readFileSync(template_path, 'utf8');
 	}
