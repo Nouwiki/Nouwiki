@@ -305,12 +305,12 @@ function serve(paths, port) {
 		portfinder.basePort = 8080;
 		portfinder.getPort(function (err, pf) {
 			if (err) { throw err; }
-			console.log("Nouwiki is serving on port: "+pf);
-			app.listen(pf);
+			console.log("Nouwiki is serving on port: "+process.env.PORT || pf);
+			app.listen(process.env.PORT || pf);
 		});
 	} else {
-		console.log("Nouwiki is serving on port: "+port);
-		app.listen(port);
+		console.log("Nouwiki is serving on port: "+process.env.PORT || port);
+		app.listen(process.env.PORT || port);
 	}
 }
 

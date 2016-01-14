@@ -104,8 +104,8 @@ In more concrete terms:
 
 ## ToDo
 
-- How should you remove a page?
-- How should you rename a page?
+- Rename page button.
 - Shouldn't the js and css files of a dynamic build that are not part of a template be in another location? (currently they are in the root of the ./templates folder)
 - The `build` command, apart from building the html files, also updates the default template and ui css and js files, shouldn't that be seperate commands?
 - Nouwiki should track what wikis you create so you can easilly do a `nouwiki serve --all` to gain access to them all in the browser.
+- Adjust the wiki forging process so it works better for Heroku and create a Heroku deployment guide.
