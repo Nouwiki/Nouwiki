@@ -4,6 +4,7 @@ var fs = require('fs-extra');
 var dirTree = require('directory-tree');
 var toml = require('toml');
 var build = require('./build');
+var portfinder = require('portfinder');
 
 var parse = require('./parse');
 var git = require('./git');
@@ -256,14 +257,19 @@ function serve(paths, port) {
 	// Support viewing .html files without writing the .html extension in the browser
 	app.use(pageNotFound);
 
-	if (port == undefined) {
-		port = 8080;
-	}
 
 	app
-	  .use(router.routes())
-	  .use(router.allowedMethods());
-	app.listen(port);
+		.use(router.routes())
+		.use(router.allowedMethods());
+	if (port == undefined) {
+		portfinder.basePort = 8080;
+		portfinder.getPort(function (err, pf) {
+			if (err) { throw err; }
+			app.listen(pf);
+		});
+	} else {
+		app.listen(port);
+	}
 }
 
 function getPage(url) {
