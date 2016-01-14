@@ -59,7 +59,7 @@ var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
 });
 var html;
 myCodeMirror.on("change", function(cm, change) {
-  html = parse.parse(myCodeMirror.getValue(), config);
+  html = parse.parse(origin.page, myCodeMirror.getValue(), config);
   $("#preview").html(html);
 });
 

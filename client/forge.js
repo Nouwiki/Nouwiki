@@ -11,7 +11,7 @@ function createWiki(p) {
 	createNewWikiDirStructure(wiki_abs_dir);
 	var markup_path = path.join(wiki_abs_dir, "/markup");
 	var index_path = path.join(markup_path, "/index.md");
-	var index_markup = "+++\ntitle = \""+wiki_name+"\"\n+++\n\nWelcome to your new wiki!";
+	var index_markup = "+++\ncss = []\njs = []\n+++\n\n# "+wiki_name+"\n\nWelcome to your new wiki!";
 	fs.writeFileSync(index_path, index_markup);
 	//buildWiki(wiki_abs_dir);
 	createConfigFile(wiki_abs_dir, wiki_name);

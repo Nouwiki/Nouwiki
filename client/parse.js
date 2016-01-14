@@ -26,21 +26,18 @@ var md = require('markdown-it')({
 
 function fragment(data) {
 	var content = matter(data, { lang: 'toml', delims: ['+++', '+++']});
-  console.log(content.data.title)
 	markData = content.content;
-	if (content.data.title != undefined) {
-		markData = "# "+content.data.title+"\n\n"+markData
-	}
 	html = md.render(markData);
 	return { html: html, content: content.data };
 }
 
-function parse(markup, config, template_markup) {
+function parse(title, markup, config, template_markup) {
+  console.log(title);
 	var data = fragment(markup); // .html .content.*
 
 	template_data = {
 		html: data.html,
-		title: data.content.title,
+		title: title,
 		local_js: data.content.js,
 		local_css: data.content.css,
 		wiki: config.wiki,

@@ -60,7 +60,7 @@ function buildMarkupFile(markup_file, config, wiki_abs_dir, target) {
 		var template_path = path.join(appDir, "/templates/default/dynamic/", "page.dot.jst");
 		template_markup = fs.readFileSync(template_path, 'utf8');
 	}
-	var html = parse.parse(markup, config, template_markup);
+	var html = parse.parse(path.basename(markup_file, '.md'), markup, config, template_markup);
 	var file_name = path.basename(markup_file, '.md') + ".html";
 	var build_path = path.join(wiki_abs_dir, file_name);
 	fs.writeFileSync(build_path, html);

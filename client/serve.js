@@ -86,7 +86,7 @@ function *create() {
 		}
 
 		file_path = path.join(path_abs, "markup", page+".md");
-		fs.writeFileSync(file_path, "+++\ntitle = \""+page+"\"\n+++\n\nEmpty page.\n");
+		fs.writeFileSync(file_path, "+++\ncss = []\njs = []\n+++\n\n# "+page+"\n\nEmpty page.\n");
 		build.buildMarkupFile(file_path, config, path_abs);
 
 		git.addAndCommitFiles(path_abs, [file_path, html_path], "page created");
@@ -215,7 +215,7 @@ function *pageNotFound(next){
 
 			this.status = 200;
 			this.type = 'html';
-			this.body = parse.parse("+++\ntitle = \""+page+"\"\n+++\n\nThis page has not been created yet.\n", config, template);
+			this.body = parse.parse(page, "+++\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", config, template);
 		}
 	} else {
 		console.log("not a page URL")
