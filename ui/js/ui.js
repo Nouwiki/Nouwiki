@@ -178,3 +178,34 @@ function remove() {
     });
   }
 }
+
+$("#grep_pages").keyup(function() {
+  var val = $(this).val();
+  if (val != "" && val != undefined && val != null) {
+    $.ajax({
+        url: '/api/grep_pages',
+        type: 'POST',
+        data: val,
+        contentType: "text/plain",
+        success: function(result) {
+          var matches = result.matches;
+          var lis = "";
+          for (var p in matches) {
+            var matchLower = matches[p].toLowerCase();
+            var valLower = val.toLowerCase();
+            var i = matchLower.indexOf(valLower);
+            var ie = i+val.length;
+            var s = "";
+            if (i > 0) {
+              s = matches[p].substring(0, i);
+            }
+            var m = matches[p].substring(i, ie);
+            var e = matches[p].substring(ie);
+            var bold = s+"<b>"+m+"</b>"+e;
+            lis += "<li><a href='/"+matches[p]+"'>"+bold+"</a></li>";
+          }
+          $("#matches").html(lis);
+        }
+    });
+  }
+});

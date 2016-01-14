@@ -26,3 +26,31 @@
 .edit {
   display: none;
 }
+
+#right_controles {
+  float: right;
+}
+
+#right_controles input {
+  padding: 10px;
+  border: 0;
+}
+
+#right_controles ul#matches {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  list-style-type: none;
+  padding-left: 0;
+  width: 170px;
+}
+
+#right_controles ul#matches li {
+  background-color: #FFF;
+  padding-left: 10px;
+}
+
+#right_controles ul#matches li a {
+  text-decoration: none;
+  color: #333;
+}

@@ -223,6 +223,45 @@ function *pageNotFound(next){
 	}
 }
 
+function *grep_pages() {
+	if ('POST' != this.method) return yield next;
+
+	var result = [];
+	try {
+		var text = yield cobody.text(this, {
+			limit: '500kb'
+		});
+		text = text.toLowerCase();
+		var markup = path.join(roots[0], "markup");
+		var pages = fs.readdirSync(markup);
+		for (var p in pages) { // Remove extension
+			pages[p] = pages[p].replace(/\.[^/.]+$/, "");
+		}
+		for (var p in pages) { // Matches beginning of string
+			if (pages[p].substring(0, text.length).toLowerCase() == text) {
+				if (pages[p] != "index") {
+					result.push(pages[p]);
+				}
+			}
+		}
+		for (var p in pages) { // Matches anywhere in the string
+			if (pages[p].indexOf(text) > -1 && result.indexOf(pages[p]) == -1) {
+				if (pages[p] != "index") {
+					result.push(pages[p]);
+				}
+			}
+		}
+
+		this.status = 200;
+		this.type = 'json';
+		this.body = {"matches": result};
+	} catch(e) {
+		console.log("something went wrong")
+		this.status = 500;
+	}
+};
+
+
 function serve(paths, port) {
 	roots = paths;
 	for (var p in roots) {
@@ -236,6 +275,7 @@ function serve(paths, port) {
 	router.post('/api/create', create);
 	router.post('/api/get_page', get_page);
 	router.post('/api/delete', remove);
+	router.post('/api/grep_pages', grep_pages);
 
 	// Serve wiki folder
 	if (paths.length > 1) {
@@ -265,9 +305,11 @@ function serve(paths, port) {
 		portfinder.basePort = 8080;
 		portfinder.getPort(function (err, pf) {
 			if (err) { throw err; }
+			console.log("Nouwiki is serving on port: "+pf);
 			app.listen(pf);
 		});
 	} else {
+		console.log("Nouwiki is serving on port: "+port);
 		app.listen(port);
 	}
 }

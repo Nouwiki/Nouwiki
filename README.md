@@ -86,9 +86,10 @@ In more concrete terms:
 
 ## UI+Backend Features
 
-- [ ] Search
-- [ ] Per tab Travel History
-- [ ] Asset Management
+- [x] Title Search
+- [ ] Text Search
+- [ ] !Per tab Travel History
+- [ ] !Asset Management
 - [ ] Wiki
 	- [ ] Create
 	- [ ] Remove
@@ -96,8 +97,9 @@ In more concrete terms:
 - [ ] Page
 	- [x] Create
 	- [x] Remove
-	- [ ] Rename
-	- [ ] View & Restore old version of page + see diff
+	- [ ] !Rename
+	- [ ] !View & Restore old version of page + see diff
+	- [ ] Be able to edit Front-Matter as a HTML form
 - [ ] User Account Singup/Login/Manage
 
 ## ToDo
