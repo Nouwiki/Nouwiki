@@ -3,9 +3,9 @@ module.exports = {
   node: {
     fs: "empty"
   },
-  entry: './ui/index.js',
+  entry: './ui/src/index.js',
   output: {
-    filename: './ui/build/js/nouwiki_ui.js'
+    filename: './ui/js/nouwiki_ui.js'
   },
   module: {
     //noParse: [/autoit.js/],
@@ -19,6 +19,6 @@ module.exports = {
     ]
   },
   plugins: [
-      new ExtractTextPlugin("./ui/build/css/nouwiki_ui.css")
+      new ExtractTextPlugin("./ui/css/nouwiki_ui.css")
   ]
 };

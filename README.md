@@ -108,4 +108,7 @@ In more concrete terms:
 - Shouldn't the js and css files of a dynamic build that are not part of a template be in another location? (currently they are in the root of the ./templates folder)
 - The `build` command, apart from building the html files, also updates the default template and ui css and js files, shouldn't that be seperate commands?
 - Nouwiki should track what wikis you create so you can easilly do a `nouwiki serve --all` to gain access to them all in the browser.
+  - Also clean up multi wiki serve code in light of this, as well as the fact that the grep_pages function only thinks in a single wiki being served 
 - Adjust the wiki forging process so it works better for Heroku and create a Heroku deployment guide.
+- Keep nouwiki_ui.js and css to an absolute minimum, or that is just what every template will use, move the rest to the template space.
+- Use git only for the markup folder, we need this for heroku
