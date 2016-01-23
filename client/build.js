@@ -22,7 +22,7 @@ function buildWiki(wiki_abs_dir, assets, target) {
 	var markup_files = fs.readdirSync(markup_dir);
 	for (var x = 0; x < markup_files.length; x++) {
 		var markup_file = path.join(markup_dir, markup_files[x]);
-		buildMarkupFile(markup_file, config, wiki_abs_dir, t);
+		buildMarkupFile(site, markup_file, config, wiki_abs_dir, t);
 		//git.addAndCommitPage(wiki_abs_dir, path.basename(markup_files[x], ".md"), "page build");
 	}
 	var pages = [];
@@ -47,7 +47,7 @@ function buildWiki(wiki_abs_dir, assets, target) {
 	}
 }
 
-function buildMarkupFile(markup_file, config, wiki_abs_dir, target) {
+function buildMarkupFile(site, markup_file, config, wiki_abs_dir, target) {
 	var markup = fs.readFileSync(markup_file, 'utf8');
 	var template_markup;
 	if (target == "static") {
