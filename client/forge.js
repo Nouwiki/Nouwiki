@@ -73,11 +73,11 @@ function copyDefaultTemplate(wiki_abs_dir) {
 function copyUiFiles(wiki_abs_dir) {
 	var temp = path.join(wiki_abs_dir, "/templates");
 
-	var nouwiki_ui_css_src = path.join(appDir, "/ui/build/css/nouwiki_ui.css");
+	var nouwiki_ui_css_src = path.join(appDir, "/ui/css/nouwiki_ui.css");
 	var nouwiki_ui_css_dest = path.join(temp, "/nouwiki_ui.css");
 	fs.copySync(nouwiki_ui_css_src, nouwiki_ui_css_dest);
 
-	var nouwiki_ui_js_src = path.join(appDir, "/ui/build/js/nouwiki_ui.js");
+	var nouwiki_ui_js_src = path.join(appDir, "/ui/js/nouwiki_ui.js");
 	var nouwiki_ui_js_dest = path.join(temp, "/nouwiki_ui.js");
 	fs.copySync(nouwiki_ui_js_src, nouwiki_ui_js_dest);
 }
