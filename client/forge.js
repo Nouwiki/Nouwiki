@@ -4,6 +4,7 @@ var fs = require('fs-extra');
 var git = require('./git');
 
 var appDir = path.dirname(require.main.filename);
+var defaultTemplateDir = path.join(appDir, "../", "/nouwiki-default-template", "/template");
 
 function createWiki(p) {
 	var wiki_abs_dir = path.resolve(p);
@@ -39,6 +40,7 @@ function createEmptyDirs(wiki_abs_dir) {
 	var js = path.join(assets, "/js");
 	var text = path.join(assets, "/text");
 	var video = path.join(assets, "/video");
+	var html = path.join(assets, "/html");
 	fs.mkdirSync(assets);
 	fs.mkdirSync(audio);
 	fs.mkdirSync(style);
@@ -47,6 +49,7 @@ function createEmptyDirs(wiki_abs_dir) {
 	fs.mkdirSync(js);
 	fs.mkdirSync(text);
 	fs.mkdirSync(video);
+	fs.mkdirSync(html);
 
 	var markup = path.join(wiki_abs_dir, "/markup");
 	fs.mkdirSync(markup);
@@ -62,7 +65,7 @@ function createConfigFile(wiki_abs_dir, wiki_name) {
 }
 
 function copyDefaultTemplate(wiki_abs_dir) {
-	var temp_src = path.join(appDir, "/templates/default");
+	var temp_src = defaultTemplateDir;
 	var temp_dest = path.join(wiki_abs_dir, "/templates/default");
 	fs.copySync(temp_src, temp_dest);
 }

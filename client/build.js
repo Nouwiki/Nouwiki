@@ -17,7 +17,6 @@ function buildWiki(wiki_abs_dir, assets, target) {
 	var t = target || config.target;
 
 	var site = path.join(wiki_abs_dir, "/"); // /site
-	removeAndCreateSiteDir(site);
 
 	var markup_dir = path.join(wiki_abs_dir, "/markup");
 	var markup_files = fs.readdirSync(markup_dir);
@@ -38,8 +37,9 @@ function buildWiki(wiki_abs_dir, assets, target) {
 	console.log(files)
 	git.addAndCommitFiles(wiki_abs_dir, files, "pages build");
 
-	updateDefaultTemplate(site);
-	updateUiFiles(site);
+	// This needs to be a seperate command: nouwiki update ./wiki_dir
+	//updateDefaultTemplate(site);
+	//updateUiFiles(site);
 	readyTemplate(site);
 
 	if (assets) {
@@ -64,11 +64,6 @@ function buildMarkupFile(markup_file, config, wiki_abs_dir, target) {
 	var file_name = path.basename(markup_file, '.md') + ".html";
 	var build_path = path.join(wiki_abs_dir, file_name);
 	fs.writeFileSync(build_path, html);
-}
-
-function removeAndCreateSiteDir(site) {
-	var template_assets = path.join(site, "/template_assets");
-	fs.removeSync(template_assets);
 }
 
 function generateAssetPages(root) {

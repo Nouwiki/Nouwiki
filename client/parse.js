@@ -40,9 +40,11 @@ function parse(title, markup, config, template_markup) {
 		title: title,
 		local_js: data.content.js,
 		local_css: data.content.css,
+    local_import: data.content.import,
 		wiki: config.wiki,
     global_js: config.js,
-		global_css: config.css
+		global_css: config.css,
+    global_import: config.import
 	}
 
 	var output;
