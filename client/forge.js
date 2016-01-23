@@ -12,7 +12,7 @@ function createWiki(p) {
 	createNewWikiDirStructure(wiki_abs_dir);
 	var markup_path = path.join(wiki_abs_dir, "/markup");
 	var index_path = path.join(markup_path, "/index.md");
-	var index_markup = "+++\ncss = []\njs = []\n+++\n\n# "+wiki_name+"\n\nWelcome to your new wiki!";
+	var index_markup = "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+wiki_name+"\n\nWelcome to your new wiki!";
 	fs.writeFileSync(index_path, index_markup);
 	//buildWiki(wiki_abs_dir);
 	createConfigFile(wiki_abs_dir, wiki_name);
@@ -60,7 +60,7 @@ function createEmptyDirs(wiki_abs_dir) {
 
 function createConfigFile(wiki_abs_dir, wiki_name) {
 	var config_dest = path.join(wiki_abs_dir, "/config.toml");
-	var config_string = 'wiki = "'+wiki_name+'"\njs = []\ncss = []\ntarget = "dynamic"\ntemplate="default"';
+	var config_string = 'wiki = "'+wiki_name+'"\nimport = []\ncss = []\njs = []\ntarget = "dynamic"\ntemplate="default"';
 	fs.writeFileSync(config_dest, config_string);
 }
 
