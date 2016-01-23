@@ -50,7 +50,7 @@ function *modify() {
 		}
 
 		fs.writeFileSync(file_path, data);
-		build.buildMarkupFile(file_path, config, path_abs);
+		build.buildMarkupFile(path_abs, file_path, config, path_abs);
 
 		git.addAndCommitFiles(path_abs, [file_path, html_path], "page update");
 		this.body = "Done";
