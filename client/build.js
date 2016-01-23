@@ -18,6 +18,11 @@ function buildWiki(wiki_abs_dir, assets, target) {
 
 	var site = path.join(wiki_abs_dir, "/"); // /site
 
+	// This needs to be a seperate command: nouwiki update ./wiki_dir
+	//updateDefaultTemplate(site);
+	//updateUiFiles(site);
+	readyTemplate(site);
+
 	var markup_dir = path.join(wiki_abs_dir, "/markup");
 	var markup_files = fs.readdirSync(markup_dir);
 	for (var x = 0; x < markup_files.length; x++) {
@@ -36,11 +41,6 @@ function buildWiki(wiki_abs_dir, assets, target) {
 	}
 	console.log(files)
 	git.addAndCommitFiles(wiki_abs_dir, files, "pages build");
-
-	// This needs to be a seperate command: nouwiki update ./wiki_dir
-	//updateDefaultTemplate(site);
-	//updateUiFiles(site);
-	readyTemplate(site);
 
 	if (assets) {
 		generateAssetPages(wiki_abs_dir);
