@@ -51,13 +51,13 @@ function buildMarkupFile(markup_file, config, wiki_abs_dir, target) {
 	var markup = fs.readFileSync(markup_file, 'utf8');
 	var template_markup;
 	if (target == "static") {
-		var template_path = path.join(appDir, "/templates/default/static/", "page.dot.jst");
+		var template_path = path.join(site, "/templates/current/static/", "page.dot.jst");
 		template_markup = fs.readFileSync(template_path, 'utf8');
 	} else if (target == "dynamic") {
-		var template_path = path.join(appDir, "/templates/default/dynamic/", "page.dot.jst");
+		var template_path = path.join(site, "/templates/current/dynamic/", "page.dot.jst");
 		template_markup = fs.readFileSync(template_path, 'utf8');
 	} else { // Default to dynamic if no target is specified
-		var template_path = path.join(appDir, "/templates/default/dynamic/", "page.dot.jst");
+		var template_path = path.join(site, "/templates/current/dynamic/", "page.dot.jst");
 		template_markup = fs.readFileSync(template_path, 'utf8');
 	}
 	var html = parse.parse(path.basename(markup_file, '.md'), markup, config, template_markup);
