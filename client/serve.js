@@ -87,7 +87,7 @@ function *create() {
 
 		file_path = path.join(path_abs, "markup", page+".md");
 		fs.writeFileSync(file_path, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nEmpty page.\n");
-		build.buildMarkupFile(file_path, config, path_abs);
+		build.buildMarkupFile(path_abs, file_path, config, path_abs);
 
 		git.addAndCommitFiles(path_abs, [file_path, html_path], "page created");
     this.body = "Done";
