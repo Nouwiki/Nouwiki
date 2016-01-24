@@ -48,6 +48,7 @@ In more concrete terms:
 	- [ ] localstorage
 	- [ ] static web hosting
 	- [x] github
+	- [ ] heroku, etc
 	- [x] local nouwiki server
 	- [ ] dedicated nouwiki server
 - [x] View anywhere
@@ -75,7 +76,7 @@ In more concrete terms:
 - [ ] Extendability (extend the markup parsers, nouwiki plugins, add your own js or css globally or locally on a page, etc).
 - [ ] Scales (from a personal notebook to the size of wikipedia).
 - [ ] Federated (cross node wikilinks, fork, push, pull).
-- [ ] Universal Asset Manager (audio, font, img, js, style, text, video, etc)
+- [ ] Universal Asset Manager (audio, font, html, img, js, style, text, video, etc)
 - [ ] Front-Matter
 	- [ ] YAML
 	- [x] TOML

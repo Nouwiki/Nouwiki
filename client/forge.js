@@ -34,22 +34,22 @@ function createNewWikiDirStructure(wiki_abs_dir) {
 function createEmptyDirs(wiki_abs_dir) {
 	var assets = path.join(wiki_abs_dir, "/assets");
 	var audio = path.join(assets, "/audio");
-	var style = path.join(assets, "/style");
 	var font = path.join(assets, "/font");
+	var html = path.join(assets, "/html");
 	var img = path.join(assets, "/img");
 	var js = path.join(assets, "/js");
+	var style = path.join(assets, "/style");
 	var text = path.join(assets, "/text");
 	var video = path.join(assets, "/video");
-	var html = path.join(assets, "/html");
 	fs.mkdirSync(assets);
 	fs.mkdirSync(audio);
-	fs.mkdirSync(style);
 	fs.mkdirSync(font);
+	fs.mkdirSync(html);
 	fs.mkdirSync(img);
 	fs.mkdirSync(js);
+	fs.mkdirSync(style);
 	fs.mkdirSync(text);
 	fs.mkdirSync(video);
-	fs.mkdirSync(html);
 
 	var markup = path.join(wiki_abs_dir, "/markup");
 	fs.mkdirSync(markup);

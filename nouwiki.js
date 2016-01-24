@@ -38,22 +38,22 @@ program
     }
   });
 
-  program
-    .option('-p, --port [port]', 'HTTP Port')
-    .command('serve [paths...]')
-    .action(function (paths) {
-      var wiki_abs_dir;
-      if (paths.length != 0) {
-        for (var x = 0; x < paths.length; x++) {
-          wiki_abs_dir = path.resolve(paths[x]);
-          paths[x] = wiki_abs_dir;
-        }
-      } else {
-        wiki_abs_dir = path.resolve("./");
-        paths.push(wiki_abs_dir);
+program
+  .option('-p, --port [port]', 'HTTP Port')
+  .command('serve [paths...]')
+  .action(function (paths) {
+    var wiki_abs_dir;
+    if (paths.length != 0) {
+      for (var x = 0; x < paths.length; x++) {
+        wiki_abs_dir = path.resolve(paths[x]);
+        paths[x] = wiki_abs_dir;
       }
+    } else {
+      wiki_abs_dir = path.resolve("./");
+      paths.push(wiki_abs_dir);
+    }
 
-      serve.serve(paths, program.port);
-    });
+    serve.serve(paths, program.port);
+  });
 
 program.parse(process.argv);

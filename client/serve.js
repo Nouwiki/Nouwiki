@@ -210,7 +210,7 @@ function *pageNotFound(next){
 			this.body = fs.readFileSync(file);
 		} else {
 			var template;
-			var template_path = path.join(appDir, "/templates/default/dynamic/", "create.dot.jst");
+			var template_path = path.join(path_abs, "/templates/default/dynamic/", "create.dot.jst");
 			template = fs.readFileSync(template_path, 'utf8');
 
 			this.status = 200;
