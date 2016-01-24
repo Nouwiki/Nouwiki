@@ -4,7 +4,7 @@ var fs = require('fs-extra');
 var git = require('./git');
 
 var appDir = path.dirname(require.main.filename);
-var defaultTemplateDir = path.join(appDir, "../", "/nouwiki-default-template");
+var defaultTemplateDir = path.join(appDir, "/node_modules", "/nouwiki-default-template");
 
 function createWiki(p) {
 	var wiki_abs_dir = path.resolve(p);

@@ -7,6 +7,7 @@ var toml = require('toml');
 var git = require('./git');
 
 var appDir = path.dirname(require.main.filename);
+var defaultTemplateDir = path.join(appDir, "/node_modules", "/nouwiki-default-template");
 
 var config;
 
@@ -76,7 +77,7 @@ function generateAssetPages(root) {
 	}
 }
 
-function updateDefaultTemplate(site) {
+/*function updateDefaultTemplate(site) {
 	var temp_src = path.join(appDir, "/templates/default");
 	var temp_dest = path.join(site, "/templates/default");
 
@@ -90,7 +91,7 @@ function updateDefaultTemplate(site) {
 	}
 
 	fs.copySync(temp_src, temp_dest);
-}
+}*/
 
 function readyTemplate(site) {
 	var temp = path.join(site, "/templates/"+config.template);
@@ -108,7 +109,7 @@ function readyTemplate(site) {
 	fs.copySync(temp, current);
 }
 
-function updateUiFiles(site) {
+/*function updateUiFiles(site) {
 	var temp = path.join(site, "/templates");
 
 	var nouwiki_ui_css_src = path.join(appDir, "/ui/css/nouwiki_ui.css");
@@ -118,7 +119,7 @@ function updateUiFiles(site) {
 	var nouwiki_ui_js_src = path.join(appDir, "/ui/js/nouwiki_ui.js");
 	var nouwiki_ui_js_dest = path.join(temp, "/nouwiki_ui.js");
 	fs.copySync(nouwiki_ui_js_src, nouwiki_ui_js_dest);
-}
+}*/
 
 function addMarkup(markup, a, tab, level) {
 	for (var p in a) {
