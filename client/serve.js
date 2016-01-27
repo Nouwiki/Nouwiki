@@ -165,9 +165,12 @@ function *remove() {
 function *search_pages() {
 	if ('POST' != this.method) return yield next;
 
-	var wiki = this.request.header.referer.split("/");
-	var wiki_url = wiki[wiki.length-2];
-	var i = getWikiIndex(wiki_url);
+	var i = 0;
+	if (wikis.length > 1) {
+		var wiki = this.request.header.referer.split("/");
+		var wiki_url = wiki[wiki.length-2];
+		i = getWikiIndex(wiki_url);
+	}
 
 	var result = [];
 	try {
@@ -199,7 +202,7 @@ function *search_pages() {
 		this.type = 'json';
 		this.body = {"matches": result};
 	} catch(e) {
-		console.log("something went wrong")
+		console.log(e)
 		this.status = 500;
 	}
 };

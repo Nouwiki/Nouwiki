@@ -76,7 +76,7 @@ In more concrete terms:
 - [ ] Extendability (extend the markup parsers, nouwiki plugins, add your own js or css globally or locally on a page, etc).
 - [ ] Scales (from a personal notebook to the size of wikipedia).
 - [ ] Federated (cross node wikilinks, fork, push, pull).
-- [ ] Universal Asset Manager (audio, font, html, img, js, style, text, video, etc)
+- [ ] Universal Asset Manager (audio, font, html, img, pdf, js, style, text, video, etc)
 - [ ] Front-Matter
 	- [ ] YAML
 	- [x] TOML

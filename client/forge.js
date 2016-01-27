@@ -41,6 +41,7 @@ function createEmptyDirs(wiki_abs_dir) {
 	var html = path.join(assets, "/html");
 	var img = path.join(assets, "/img");
 	var js = path.join(assets, "/js");
+	var js = path.join(assets, "/pdf");
 	var style = path.join(assets, "/style");
 	var text = path.join(assets, "/text");
 	var video = path.join(assets, "/video");
@@ -50,6 +51,7 @@ function createEmptyDirs(wiki_abs_dir) {
 	fs.mkdirSync(html);
 	fs.mkdirSync(img);
 	fs.mkdirSync(js);
+	fs.mkdirSync(pdf);
 	fs.mkdirSync(style);
 	fs.mkdirSync(text);
 	fs.mkdirSync(video);
