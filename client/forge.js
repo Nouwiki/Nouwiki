@@ -9,17 +9,20 @@ var defaultTemplateDir = path.join(appDir, "/node_modules", "/nouwiki-default-te
 function createWiki(p) {
 	var wiki_abs_dir = path.resolve(p);
 	var wiki_name = path.basename(wiki_abs_dir);
+
 	createNewWikiDirStructure(wiki_abs_dir);
+
 	var markup_path = path.join(wiki_abs_dir, "/markup");
 	var index_path = path.join(markup_path, "/index.md");
 	var index_markup = "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+wiki_name+"\n\nWelcome to your new wiki!";
 	fs.writeFileSync(index_path, index_markup);
-	//buildWiki(wiki_abs_dir);
+
 	createConfigFile(wiki_abs_dir, wiki_name);
 	copyDefaultTemplate(wiki_abs_dir);
 	copyUiFiles(wiki_abs_dir);
-	git.initRepo(wiki_abs_dir);
-	//git.addAndCommitAll(wiki_abs_dir, "initial commit");
+
+	console.log(wiki_abs_dir)
+	git.initRepo(wiki_abs_dir+"/");
 }
 
 function createNewWikiDirStructure(wiki_abs_dir) {
@@ -60,14 +63,13 @@ function createEmptyDirs(wiki_abs_dir) {
 
 function createConfigFile(wiki_abs_dir, wiki_name) {
 	var config_dest = path.join(wiki_abs_dir, "/config.toml");
-	var config_string = 'wiki = "'+wiki_name+'"\nimport = []\ncss = []\njs = []\ntarget = "dynamic"\ntemplate="default"';
+	var config_string = 'wiki = "'+wiki_name+'"\nimport = []\ncss = []\njs = []\ntarget = "dynamic"\ntemplate = "default"';
 	fs.writeFileSync(config_dest, config_string);
 }
 
 function copyDefaultTemplate(wiki_abs_dir) {
-	var temp_src = defaultTemplateDir;
 	var temp_dest = path.join(wiki_abs_dir, "/templates/default");
-	fs.copySync(temp_src, temp_dest);
+	fs.copySync(defaultTemplateDir, temp_dest);
 }
 
 function copyUiFiles(wiki_abs_dir) {

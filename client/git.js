@@ -14,33 +14,39 @@ function initRepo(root) {
   var repository;
   var index;
 
+  console.log("R", root)
   var isBare = 0;
   nodegit.Repository.init(root, isBare)
   .then(function(repo) {
+    console.log("1");
     repository = repo;
   })
   .then(function(){
+    console.log("2");
     return repository.openIndex();
   })
   .then(function(i) {
+    console.log("3");
     index = i;
     return index.read(1);
   })
   .then(function() {
+    console.log("4");
     return index.addAll("*");
   })
   .then(function() {
+    console.log("5");
     return index.write();
   })
   .then(function() {
+    console.log("6");
     return index.writeTree();
   })
   .then(function(oid) {
+    console.log("7");
     return repository.createCommit("HEAD", author, committer, "nouwiki wiki init", oid, []);
   })
-  .done(function(commitId) {
-    console.log("New Commit: ", commitId);
-  });
+  .done(function() { console.log("promise ends here") });
 }
 
 function addAndCommitFiles(root, file_paths, message) {
@@ -86,7 +92,6 @@ function addAndCommitFiles(root, file_paths, message) {
     return repository.createCommit("HEAD", author, committer, message, oid, [parent]);
   })
   .done(function(commitId) {
-    console.log("New Commit: ", commitId);
   });
 }
 
@@ -133,7 +138,6 @@ function removeAndCommitFiles(root, file_paths, message) {
     return repository.createCommit("HEAD", author, committer, message, oid, [parent]);
   })
   .done(function(commitId) {
-    console.log("New Commit: ", commitId);
   });
 }
 
