@@ -116,3 +116,4 @@ In more concrete terms:
 - Be able to define a constant header or footer on all pages in wiki
 - leverage npm and/or bower so you can install webcomponents easily that users can use
 - a plugin folder? where you can install for example markup parser plugins
+- Rename ui to front-end and client to backend?

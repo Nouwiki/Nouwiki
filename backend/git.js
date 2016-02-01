@@ -1,9 +1,10 @@
 var path = require('path');
 var fs = require('fs-extra');
-var promisify = require("promisify-node");
+var Promise = require('bluebird');
 var nodegit = require("nodegit");
 
-fs.ensureDir = promisify(fs.ensureDir);
+var ensureDir = Promise.promisify(fs.ensureDir);
+var remove = Promise.promisify(fs.remove);
 
 var author = nodegit.Signature.create("Anonymous",
   "anonymous@anonymous.com", 123456789, 60);
@@ -11,11 +12,12 @@ var committer = nodegit.Signature.create("Anonymous",
   "anonymous@anonymous.com", 123456789, 60);
 
 function initRepo(root) {
+  //root = path.join(root, ".git");
   var repository;
   var index;
 
   var isBare = 0;
-  nodegit.Repository.init(root, isBare)
+  return nodegit.Repository.init(root, isBare)
   .then(function(repo) {
     repository = repo;
   })
@@ -38,20 +40,24 @@ function initRepo(root) {
   .then(function(oid) {
     return repository.createCommit("HEAD", author, committer, "nouwiki wiki init", oid, []);
   })
-  .done(function() {});
+  .catch(function(err) {
+    console.error('err:', err);
+    process.exit(1);
+  });
 }
 
 function addAndCommitFiles(root, file_paths, message) {
-  var dotgit = path.join(root, ".git");
-
+  //root = path.join(root, ".git");
   var repository;
+  var repoPath;
   var index;
   var oid;
 
-  nodegit.Repository.open(dotgit)
+  return nodegit.Repository.open(root)
   .then(function(repo) {
     repository = repo;
-    return fs.ensureDir(repository.workdir());
+    repoPath = repository.workdir();
+    return ensureDir(repoPath);
   })
   .then(function() {
     return repository.openIndex();
@@ -61,11 +67,7 @@ function addAndCommitFiles(root, file_paths, message) {
     return index.read(1);
   })
   .then(function() {
-    var i;
-    for (var fp in file_paths) {
-      i = index.addByPath(file_paths[fp]);
-    }
-    return i;
+    return index.addAll(file_paths);
   })
   .then(function() {
     return index.write();
@@ -83,21 +85,24 @@ function addAndCommitFiles(root, file_paths, message) {
   .then(function(parent) {
     return repository.createCommit("HEAD", author, committer, message, oid, [parent]);
   })
-  .done(function(commitId) {
+  .catch(function(err) {
+    console.error('err:', err);
+    process.exit(1);
   });
 }
 
 function removeAndCommitFiles(root, file_paths, message) {
-  var dotgit = path.join(root, ".git");
-
+  //root = path.join(root, ".git");
   var repository;
+  var repoPath;
   var index;
   var oid;
 
-  nodegit.Repository.open(dotgit)
+  return nodegit.Repository.open(root)
   .then(function(repo) {
     repository = repo;
-    return fs.ensureDir(repository.workdir());
+    repoPath = repository.workdir();
+    return ensureDir(repoPath);
   })
   .then(function() {
     return repository.openIndex();
@@ -107,11 +112,15 @@ function removeAndCommitFiles(root, file_paths, message) {
     return index.read(1);
   })
   .then(function() {
-    var i;
-    for (var fp in file_paths) {
-      i = index.removeByPath(file_paths[fp]);
-    }
-    return i;
+    var tasks = [];
+    file_paths.forEach(function(fpath) {
+      var fullPath = fpath;
+      tasks.push(remove(fullPath));
+    });
+    return Promise.all(tasks);
+  })
+  .then(function() {
+    return index.removeAll(file_paths);
   })
   .then(function() {
     return index.write();
@@ -129,7 +138,9 @@ function removeAndCommitFiles(root, file_paths, message) {
   .then(function(parent) {
     return repository.createCommit("HEAD", author, committer, message, oid, [parent]);
   })
-  .done(function(commitId) {
+  .catch(function(err) {
+    console.error('err:', err);
+    process.exit(1);
   });
 }
 
