@@ -23,7 +23,7 @@ function createWiki(p) {
 	copyUiFiles(wiki_abs_dir);
 
 	console.log(wiki_abs_dir)
-	git.initRepo(pub+"/");
+	git.initRepo(pub+"/markup/");
 }
 
 function createNewWikiDirStructure(wiki_abs_dir) {

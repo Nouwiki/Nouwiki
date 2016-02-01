@@ -119,7 +119,7 @@ function *modify() {
 		fs.writeFileSync(markup_file, data);
 		build.buildMarkupFile(wiki_abs_dir, markup_file, config, config.target);
 
-		git.addAndCommitFiles(pub, [markup_file, html_file], "page update");
+		git.addAndCommitFiles(pub+"/markup/", [md/*, html_file*/], "page update");
 		this.body = "Done";
 	} catch(e) {
 		console.log("there")
@@ -155,11 +155,11 @@ function *create() {
 			html_file = path.join(pub, page+".html");
 		}
 
-		markup_file = path.join(pub, "markup", page+".md");
+		//markup_file = path.join(pub, "markup", page+".md");
 		fs.writeFileSync(markup_file, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nEmpty page.\n");
 		build.buildMarkupFile(wiki_abs_dir, markup_file, config, config.target);
 
-		git.addAndCommitFiles(pub, [markup_file, html_file], "page created");
+		git.addAndCommitFiles(pub+"/markup/", [md/*, html_file*/], "page created");
     this.body = "Done";
 	} catch(e) {
 		this.throw(405, "Unable to create page.");
@@ -231,7 +231,7 @@ function *remove() {
 		//fs.removeSync(html_file);
 		//fs.unlinkSync(markup_file);
 		//fs.unlinkSync(html_file);
-		git.removeAndCommitFiles(pub, [markup_file, html_file], "page removed")
+		git.removeAndCommitFiles(pub+"/markup/", [md/*, html_file*/], "page removed")
     this.body = "Done";
 	} catch(e) {
 		this.throw(405, "Unable to remove page.");

@@ -22,14 +22,16 @@ function buildWiki(wiki_abs_dir, target) {
 	var markup_dir = path.join(pub, "/markup");
 	var markup_files = fs.readdirSync(markup_dir);
 	for (var x = 0; x < markup_files.length; x++) {
-		var markup_file = path.join(markup_dir, markup_files[x]);
-		buildMarkupFile(wiki_abs_dir, markup_file, config, target);
+		if (markup_files[x] != ".git") {
+			var markup_file = path.join(markup_dir, markup_files[x]);
+			buildMarkupFile(wiki_abs_dir, markup_file, config, target);	
+		}
 	}
 
 	copyTemplateAssets(wiki_abs_dir);
 
 	// Add and commit pages
-	var pages = [];
+	/*var pages = [];
 	for (var x in markup_files) {
 		pages.push(path.basename(markup_files[x], ".md"))
 	}
@@ -38,10 +40,11 @@ function buildWiki(wiki_abs_dir, target) {
 		files.push(path.join("markup", pages[page]+".md"));
 		files.push(path.join(pages[page]+".html"));
 	}
-	git.addAndCommitFiles(pub, files, "pages build");
+	git.addAndCommitFiles(pub, files, "pages build");*/
 }
 
 function buildMarkupFile(wiki_abs_dir, markup_file, config, target) {
+	console.log(markup_file)
 	var markup = fs.readFileSync(markup_file, 'utf8');
 
 	var pub = path.join(wiki_abs_dir, "/public");
