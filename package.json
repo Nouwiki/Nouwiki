@@ -49,7 +49,7 @@
     "less": "^2.5.3",
     "less-loader": "^2.2.2",
     "markdown-it": "^5.1.0",
-    "markdown-it-wikilink": "git+https://github.com/01AutoMonkey/markdown-it-wikilink.git",
+    "nouwiki-markdown-it-wikilink": "git+https://github.com/Nouwiki/nouwiki-markdown-it-wikilink.git",
     "node-sass": "^3.4.2",
     "nodegit": "^0.10.0",
     "nouwiki-default-template": "git+https://github.com/Nouwiki/Nouwiki-Default-Template.git",

@@ -6,9 +6,10 @@ var md = require('markdown-it')({
   html: true,
   linkify: true,
   typographer: true
-}).use(require('markdown-it-wikilink'))
+});
 
 function parse(title, markup, config, template_markup) {
+  md.use(require('nouwiki-markdown-it-wikilink'));
   console.log(title);
   var output = {};
 
