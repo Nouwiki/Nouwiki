@@ -1,3 +1,3 @@
 window.parse = {
-  "parse": require("../../../backend/parse.js").parse
+  "parse": require("../../../parse.js").parse
 }

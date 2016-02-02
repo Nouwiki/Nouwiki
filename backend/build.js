@@ -1,9 +1,9 @@
 var path = require('path');
 var fs = require('fs-extra');
-var parse = require('./parse');
 var dirTree = require('directory-tree');
 var toml = require('toml');
 
+var parse = require('../parse');
 var git = require('./git');
 
 var appDir = path.dirname(require.main.filename);
@@ -24,7 +24,7 @@ function buildWiki(wiki_abs_dir, target) {
 	for (var x = 0; x < markup_files.length; x++) {
 		if (markup_files[x] != ".git") {
 			var markup_file = path.join(markup_dir, markup_files[x]);
-			buildMarkupFile(wiki_abs_dir, markup_file, config, target);	
+			buildMarkupFile(wiki_abs_dir, markup_file, config, target);
 		}
 	}
 

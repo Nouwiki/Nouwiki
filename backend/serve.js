@@ -14,7 +14,7 @@ var cobody = require('co-body');
 var send = require('koa-send');
 var app = koa();
 
-var parse = require('./parse');
+var parse = require('../parse');
 var git = require('./git');
 
 var appDir = path.dirname(require.main.filename);
@@ -325,6 +325,7 @@ function *pageNotFound(next){
 				f = false;
 			}
 		}
+
 
 		if (f) {
 			this.status = 200;

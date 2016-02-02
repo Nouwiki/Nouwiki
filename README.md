@@ -114,6 +114,4 @@ In more concrete terms:
 - Keep nouwiki_ui.js and css to an absolute minimum, or that is just what every template will use, move the rest to the template space.
 - Use git only for the markup and asset folder, we need this for heroku and it's more "right".
 - Be able to define a constant header or footer on all pages in wiki
-- leverage npm and/or bower so you can install webcomponents easily that users can use
 - a plugin folder? where you can install for example markup parser plugins
-- Rename ui to front-end and client to backend?
