@@ -29,18 +29,6 @@ function buildWiki(wiki_abs_dir, target) {
 	}
 
 	copyTemplateAssets(wiki_abs_dir);
-
-	// Add and commit pages
-	/*var pages = [];
-	for (var x in markup_files) {
-		pages.push(path.basename(markup_files[x], ".md"))
-	}
-	var files = ["/css/template.ui.css", "/js/template.ui.js"];
-	for (var page in pages) {
-		files.push(path.join("markup", pages[page]+".md"));
-		files.push(path.join(pages[page]+".html"));
-	}
-	git.addAndCommitFiles(pub, files, "pages build");*/
 }
 
 function buildMarkupFile(wiki_abs_dir, markup_file, config, target) {
@@ -60,10 +48,16 @@ function buildMarkupFile(wiki_abs_dir, markup_file, config, target) {
 		template_markup = fs.readFileSync(template_path, 'utf8');
 	}
 	var title = path.basename(markup_file, '.md');
-	var html = parse.parse(title, markup, config, template_markup);
-	var file_name = path.basename(markup_file, '.md') + ".html";
-	var build_path = path.join(pub, file_name);
-	fs.writeFileSync(build_path, html);
+	var data = parse.parse(title, markup, config, template_markup);
+	var page = path.basename(markup_file, '.md');
+
+	var text_file = path.join(pub, "/text", page+".txt");
+	var fragment_file = path.join(pub, "/fragment", page+".html");
+	var html_file = path.join(pub, page+".html");
+
+	fs.writeFileSync(text_file, data.text);
+	fs.writeFileSync(fragment_file, data.fragment);
+	fs.writeFileSync(html_file, data.html);
 }
 
 function copyTemplateAssets(wiki_abs_dir) {

@@ -15,7 +15,7 @@ function createWiki(p) {
 	var pub = path.join(wiki_abs_dir, "/public");
 	var markup_path = path.join(pub, "/markup");
 	var index_path = path.join(markup_path, "/index.md");
-	var index_markup = "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+wiki_name+"\n\nWelcome to your new wiki!";
+	var index_markup = "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+wiki_name+"\n\nWelcome to your new wiki!\n";
 	fs.writeFileSync(index_path, index_markup);
 
 	createConfigFile(wiki_abs_dir, wiki_name);
@@ -43,7 +43,7 @@ function createPublicDir(wiki_abs_dir) {
 	var pub = path.join(wiki_abs_dir, "/public");
 	var markup = path.join(pub, "/markup");
 	var fragment = path.join(pub, "/fragment");
-	var text = path.join(pub, "/texts");
+	var text = path.join(pub, "/text");
 	var css = path.join(pub, "/css");
 	var js = path.join(pub, "/js");
 
@@ -81,7 +81,7 @@ function createAssetsDir(wiki_abs_dir) {
 
 function createConfigFile(wiki_abs_dir, wiki_name) {
 	var config_dest = path.join(wiki_abs_dir, "/config.toml");
-	var config_string = 'wiki = "'+wiki_name+'"\nimport = []\ncss = []\njs = []\ntarget = "dynamic"\ntemplate = "nouwiki-default-template"\nfragment = true\ntext = true';
+	var config_string = 'wiki = "'+wiki_name+'"\nimport = []\ncss = []\njs = []\ntarget = "dynamic"\ntemplate = "nouwiki-default-template"\nfragment = true\ntext = true\n';
 	fs.writeFileSync(config_dest, config_string);
 }
 

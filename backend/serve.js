@@ -338,7 +338,7 @@ function *pageNotFound(next){
 
 			this.status = 200;
 			this.type = 'html';
-			this.body = parse.parse(page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", config, template);
+			this.body = parse.parse(page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", config, template).html;
 		}
 	} else {
 		console.log("not a page URL")

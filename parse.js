@@ -9,24 +9,29 @@ var md = require('markdown-it')({
 }).use(require('markdown-it-wikilink'))
 
 function parse(title, markup, config, template_markup) {
+  console.log(title);
+  var output = {};
+
   var content = matter(markup, { lang: 'toml', delims: ['+++', '+++']});
   markup = content.content;
-  html = md.render(markup);
+  fragment = md.render(markup);
 
-	var output;
+  var html = "";
 	if (template_markup != undefined) {
     var template_data = {
-      html: html,
+      fragment: fragment,
       title: title,
       local: content.data,
       global: config
     }
 		var temp = doT.template(template_markup);
-		output = temp(template_data);
-	} else {
-		output = html;
+		html = temp(template_data);
 	}
-  console.log(title);
+
+  output.text = fragment.replace(/<(?:.|\n)*?>/gm, '');
+  output.fragment = fragment;
+  output.html = html;
+
 	return output;
 }
 
