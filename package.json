@@ -19,7 +19,7 @@
     "markup"
   ],
   "author": "Brynjar Harðarson",
-  "license": "GPLv2",
+  "license": "GPL-2.0",
   "bugs": {
     "url": "https://github.com/01AutoMonkey/nouwiki/issues"
   },
@@ -46,14 +46,14 @@
     "less": "^2.6.0",
     "less-loader": "^2.2.2",
     "markdown-it": "^5.1.0",
+    "markdown-it-nouwiki-wikilink": "git+https://github.com/Nouwiki/markdown-it-nouwiki-wikilink.git",
     "node-sass": "^3.4.2",
     "nodegit": "^0.11.0",
+    "nouwiki-default-template": "git+https://github.com/Nouwiki/nouwiki-default-template.git",
     "portfinder": "^1.0.1",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
     "toml": "^2.3.0",
-    "webpack": "^1.12.13",
-    "nouwiki-default-template ": "git+https://github.com/Nouwiki/nouwiki-default-template.git",
-    "markdown-it-nouwiki-wikilink ": "git+https://github.com/Nouwiki/markdown-it-nouwiki-wikilink.git"
+    "webpack": "^1.12.13"
   }
 }
