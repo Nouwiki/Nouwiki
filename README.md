@@ -43,10 +43,10 @@ In more concrete terms:
 	- [ ] nouwiki editor
 	- [x] in-browser nouwiki editor
 - [ ] Serve anywhere
-	- [ ] local filesystem (`file:///`)
-	- [ ] simple server (`http-server`, `python -m SimpleHTTPServer`, etc)
+	- [x] local filesystem (`file:///`)
+	- [x] simple server (`http-server`, `python -m SimpleHTTPServer`, etc)
 	- [ ] localstorage
-	- [ ] static web hosting
+	- [x] static web hosting
 	- [x] github
 	- [ ] heroku, etc
 	- [x] local nouwiki server
@@ -65,15 +65,16 @@ In more concrete terms:
 	- [ ] asciidoc
 	- [ ] mediawiki
 - [ ] Multiple build targets
-	- [ ] fragments
-	- [ ] static
+	- [x] fragments
+	- [x] static
 	- [ ] md.html
 	- [ ] standalone
 	- [ ] full-standalone
 	- [x] dynamic
 - [ ] Great text editor support (atom+sublime+vim+emacs plugins. custom nouwiki editor).
-- [ ] Theme/Template support.
+- [x] Theme/Template support.
 - [ ] Extendability (extend the markup parsers, nouwiki plugins, add your own js or css globally or locally on a page, etc).
+  - [x] Markup Parser
 - [ ] Scales (from a personal notebook to the size of wikipedia).
 - [ ] Federated (cross node wikilinks, fork, push, pull).
 - [ ] Universal Asset Manager (audio, font, html, img, pdf, js, style, text, video, etc)
@@ -89,8 +90,8 @@ In more concrete terms:
 
 - [x] Title Search
 - [ ] Text Search
-- [ ] !Per tab Travel History
-- [ ] !Asset Management
+- [ ] Per tab Travel History
+- [ ] Asset Management
 - [ ] Wiki
 	- [ ] Create
 	- [ ] Remove
@@ -98,8 +99,8 @@ In more concrete terms:
 - [ ] Page
 	- [x] Create
 	- [x] Remove
-	- [ ] !Rename
-	- [ ] !View & Restore old version of page + see diff
+	- [ ] Rename
+	- [ ] View & Restore old version of page + see diff
 	- [ ] Be able to edit Front-Matter as a HTML form
 - [ ] User Account Singup/Login/Manage
 
@@ -111,7 +112,5 @@ In more concrete terms:
 - Nouwiki should track what wikis you create so you can easilly do a `nouwiki serve --all` to gain access to them all in the browser.
   - Also clean up multi wiki serve code in light of this, as well as the fact that the grep_pages function only thinks in a single wiki being served
 - Adjust the wiki forging process so it works better for Heroku and create a Heroku deployment guide.
-- Keep nouwiki_ui.js and css to an absolute minimum, or that is just what every template will use, move the rest to the template space.
 - Use git only for the markup and asset folder, we need this for heroku and it's more "right".
 - Be able to define a constant header or footer on all pages in wiki
-- a plugin folder? where you can install for example markup parser plugins
