@@ -46,35 +46,38 @@ function buildMarkupFile(wiki_abs_dir, markup_file, config, targets) {
 	var wiki_parser_plugins_path = path.join(wiki_abs_dir, "/plugins", "/parser/");
 
 	var pub = wiki_abs_dir;
-	var target;
+	var target = [];
 	var template_path;
 	if (targets.dynamic) {
-		target = "dynamic";
+		target.push("dynamic");
 	}
 	if (targets.static) {
-		target = "static";
+		target.push("static");
 	}
 	if (targets.filesystem) {
-		target = "filesystem";
+		target.push("filesystem");
 	}
-	if (title == "index") {
-		try {
-			template_path = path.join(wiki_abs_dir, "/templates/"+config.template+"/template/"+target+"/", "index.dot.jst");
-			fs.accessSync(template_path, fs.F_OK);
-		} catch (e) {
-			template_path = path.join(wiki_abs_dir, "/templates/"+config.template+"/template/"+target+"/", "page.dot.jst");
+	for (var t in target) {
+		if (title == "index") {
+			try {
+				template_path = path.join(wiki_abs_dir, "/templates/"+config.template+"/template/"+target[t]+"/", "index.dot.jst");
+				fs.accessSync(template_path, fs.F_OK);
+			} catch (e) {
+				template_path = path.join(wiki_abs_dir, "/templates/"+config.template+"/template/"+target[t]+"/", "page.dot.jst");
+			}
+		} else {
+			template_path = path.join(wiki_abs_dir, "/templates/"+config.template+"/template/"+target[t]+"/", "page.dot.jst");
 		}
-	} else {
-		template_path = path.join(wiki_abs_dir, "/templates/"+config.template+"/template/"+target+"/", "page.dot.jst");
+		var template_markup = fs.readFileSync(template_path, 'utf8');
+		parseAndWriteFile(pub, wiki_parser_plugins_path, config, target[t], title, markup, template_markup, false, targets.default)
 	}
-	var template_markup = fs.readFileSync(template_path, 'utf8');
-	parseAndWriteFile(pub, wiki_parser_plugins_path, config, target, title, markup, template_markup, false, targets.default)
 }
 
 function parseAndWriteFile(pub, wiki_parser_plugins_path, config, target, title, markup, template_markup, def, def_val) {
 	var plugins = getPlugins(title, wiki_parser_plugins_path, config.plugins.parser, target);
 	var data = parse.parse(title, markup, config, template_markup, plugins, true);
 	var html_file, wiki_def;
+	console.log(title, def_val, target)
 	if (title == "index" && def_val == target) {
 		html_file = path.join(pub, title+".html");
 		fs.writeFileSync(html_file, data.html);
