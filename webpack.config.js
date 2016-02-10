@@ -3,9 +3,16 @@ module.exports = {
   node: {
     fs: "empty"
   },
-  entry: './frontend/src/index.js',
+  entry: {
+    "ui": [
+      './browser/src/index.js'
+    ],
+    "init": [
+      './browser/src/init.js'
+    ],
+  },
   output: {
-    filename: './frontend/js/nouwiki.ui.js'
+    filename: './browser/js/nouwiki.[name].js'
   },
   module: {
     //noParse: [/autoit.js/],
@@ -14,11 +21,11 @@ module.exports = {
       { test: /\.scss$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader?sourceMap") },
       { test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader') }, // use ! to chain loaders
       { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader') },
-      { test: /\.(png|jpg)$/, loapackder: 'url-loader?limit=8192' }, // inline base64 URLs for <=8k images, direct URLs for the rest
+      { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192' }, // inline base64 URLs for <=8k images, direct URLs for the rest
       { test: /\.json$/, loader: "json" }
     ]
   },
   plugins: [
-      new ExtractTextPlugin("./frontend/css/nouwiki.ui.css")
+    new ExtractTextPlugin("./browser/css/nouwiki.[name].css")
   ]
 };

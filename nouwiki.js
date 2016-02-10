@@ -3,9 +3,10 @@
 var path = require('path');
 var program = require('commander');
 
-var forge = require('./backend/forge');
-var build = require('./backend/build');
-var serve = require('./backend/serve');
+var forge = require('./client/forge');
+var build = require('./client/build');
+var serve = require('./client/serve');
+var update = require('./client/update');
 
 program
   .version('0.0.1')
@@ -33,6 +34,21 @@ program
     } else {
       wiki_abs_dir = path.resolve("./");
       build.buildWiki(wiki_abs_dir, program.target);
+    }
+  });
+
+program
+  .command('update [paths...]')
+  .action(function (paths) {
+    var wiki_abs_dir;
+    if (paths.length != 0) {
+      for (var x = 0; x < paths.length; x++) {
+        wiki_abs_dir = path.resolve(paths[x]);
+        update.update(wiki_abs_dir);
+      }
+    } else {
+      wiki_abs_dir = path.resolve("./");
+      update.update(wiki_abs_dir);
     }
   });
 

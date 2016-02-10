@@ -1,11 +1,8 @@
 var path = require('path');
 var doT = require('dot');
 var fs = require('fs-extra');
-var dirTree = require('directory-tree');
 var toml = require('toml');
-var build = require('./build');
 var portfinder = require('portfinder');
-
 var koa = require('koa');
 var serveStatic = require('koa-static');
 var mount = require('koa-mount');
@@ -14,8 +11,9 @@ var cobody = require('co-body');
 var send = require('koa-send');
 var app = koa();
 
-var parse = require('../parse');
+var build = require('./build');
 var git = require('./git');
+var parse = require('../parse');
 
 var appDir = path.dirname(require.main.filename);
 
@@ -26,7 +24,7 @@ var configs = [];
 function serve(w, port) {
 	wikis = w;
 	for (var wiki in wikis) {
-		pubs.push(path.join(wikis[wiki], "/public"))
+		pubs.push(wikis[wiki]);
 	}
 	for (var wiki in wikis) {
 		configs.push(getWikiConfig(wikis[wiki]))
@@ -35,19 +33,18 @@ function serve(w, port) {
 	// API
 	router.put('/api/modify', modify);
 	router.post('/api/create', create);
-	router.post('/api/get_page', get_page);
 	router.post('/api/remove', remove);
 	router.post('/api/search_pages', search_pages);
 
 	// Serve wiki folder
 	if (wikis.length > 1) {
-		for (var wiki in wikis) {
+		/*for (var wiki in wikis) {
 			var wiki_path = wikis[wiki];
 			var pub_path = pubs[wiki];
-			var config = path.join(wiki_path, "/config.toml");
+			var config = path.join(wiki_path, "/nouwiki.toml");
 			var templates = path.join(wiki_path, "/templates");
 			var wiki = path.basename(wiki_path);
-			app.use(mount("/"+wiki+"/config.toml", serveStatic(config)));
+			app.use(mount("/"+wiki+"/nouwiki.toml", serveStatic(config)));
 			app.use(mount("/"+wiki+"/templates/", serveStatic(templates)));
 			app.use(mount("/"+wiki+"/", serveStatic(pub_path)));
 			// If you enter the wiki without a trailing slash, add the slash and redirect
@@ -55,16 +52,14 @@ function serve(w, port) {
 				this.redirect(this.request.url+'/');
 			  this.status = 301;
 		  });
-		}
+		}*/
 	} else {
-		var wiki_path = wikis[0];
 		var pub_path = pubs[0];
-		var config = path.join(wiki_path, "/config.toml");
 		app.use(serveStatic(pub_path));
-		app.use(mount("/config.toml", function *(){
+		/*app.use(mount("/nouwiki.toml", function *(){
 			return this.body = fs.readFileSync(config);
 			yield send(this, this.path);
-		}));
+		}));*/
 	}
 
 
@@ -88,41 +83,28 @@ function serve(w, port) {
 function *modify() {
 	if ('PUT' != this.method) return yield next;
 
-	var markup_file, html_file, wiki_abs_dir, config, pub;
+	var markup_file;
+	var wiki_abs_dir, config, pub;
+	var page;
 
-	console.log("here")
 	try {
-		console.log("mere")
 		var data = yield cobody.text(this, {
 			limit: '1000kb'
 		});
 
-		var page = getPage(this.request.header.referer);
-		var md = page+".md";
-		if (wikis.length > 1) {
-			var wiki = this.request.header.referer.split("/")
-			wiki_url = wiki[wiki.length-2];
-			var i = getWikiIndex(wiki_url);
-			wiki_abs_dir = wikis[i];
-			pub = path.join(wiki_abs_dir, "/public");
-			config = configs[i];
-			markup_file = path.join(pub, "markup", md);
-			html_file = path.join(pub, page+".html");
-		} else {
-			wiki_abs_dir = wikis[0];
-			pub = path.join(wiki_abs_dir, "/public");
-			config = configs[0];
-			markup_file = path.join(pub, "markup", md);
-			html_file = path.join(pub, page+".html");
-		}
+		page = getPage(this.request.header.referer) || "index";
+		wiki_abs_dir = wikis[0];
+		pub = wiki_abs_dir;
+		config = configs[0];
+		markup_file = path.join(pub, "markup", page+".md");
 
 		fs.writeFileSync(markup_file, data);
-		build.buildMarkupFile(wiki_abs_dir, markup_file, config, config.target);
+		build.buildMarkupFile(wiki_abs_dir, markup_file, config, config.targets);
 
-		git.addAndCommitFiles(pub+"/markup/", [md/*, html_file*/], "page update");
+		git.addAndCommitFiles(pub+"/markup/", [page+".md"], "page update");
 		this.body = "Done";
 	} catch(e) {
-		console.log("there")
+		console.log(e)
 		this.throw(405, "Unable to update.");
 	}
 };
@@ -130,36 +112,25 @@ function *modify() {
 function *create() {
 	if ('POST' != this.method) return yield next;
 
-	var markup_file, html_file, wiki_abs_dir, config, pub;
+	var markup_file;
+	var wiki_abs_dir, config, pub;
+	var page;
 
 	try {
-		var page = yield cobody.text(this, {
+		page = yield cobody.text(this, {
 			limit: '500kb'
 		});
 		page = decodeURI(page);
-		var md = page+".md";
-		if (wikis.length > 1) {
-			var wiki = this.request.header.referer.split("/");
-			var wiki_url = wiki[wiki.length-2];
-			var i = getWikiIndex(wiki_url);
-			wiki_abs_dir = wikis[i];
-			pub = path.join(wiki_abs_dir, "/public");
-			config = configs[i];
-			markup_file = path.join(pub, "markup", md);
-			html_file = path.join(pub, page+".html");
-		} else {
-			wiki_abs_dir = wikis[0];
-			pub = path.join(wiki_abs_dir, "/public");
-			config = configs[0];
-			markup_file = path.join(pub, "markup", md);
-			html_file = path.join(pub, page+".html");
-		}
+		wiki_abs_dir = wikis[0];
+		pub = wiki_abs_dir;//path.join(wiki_abs_dir, "/public");
+		config = configs[0];
+		markup_file = path.join(pub, "markup", page+".md");
 
 		//markup_file = path.join(pub, "markup", page+".md");
 		fs.writeFileSync(markup_file, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nEmpty page.\n");
-		build.buildMarkupFile(wiki_abs_dir, markup_file, config, config.target);
+		build.buildMarkupFile(wiki_abs_dir, markup_file, config, config.targets);
 
-		git.addAndCommitFiles(pub+"/markup/", [md/*, html_file*/], "page created");
+		git.addAndCommitFiles(pub+"/markup/", [page+".md"], "page created");
     this.body = "Done";
 	} catch(e) {
 		this.throw(405, "Unable to create page.");
@@ -167,7 +138,7 @@ function *create() {
 };
 
 
-function *get_page() {
+/*function *get_page() {
 	if ('POST' != this.method) return yield next;
 
 	var markup_file, wiki_abs_dir, config, pub;
@@ -182,12 +153,12 @@ function *get_page() {
 			var wiki_url = wiki[wiki.length-2];
 			var i = getWikiIndex(wiki_url);
 			wiki_abs_dir = wikis[i];
-			pub = path.join(wiki_abs_dir, "/public");
+			pub = wiki_abs_dir;//path.join(wiki_abs_dir, "/public");
 			config = configs[i];
 			markup_file = path.join(pub, md);
 		} else {
 			wiki_abs_dir = wikis[0];
-			pub = path.join(wiki_abs_dir, "/public");
+			pub = wiki_abs_dir;//path.join(wiki_abs_dir, "/public");
 			config = configs[0];
 			markup_file = path.join(pub, "markup", md);
 		}
@@ -197,41 +168,30 @@ function *get_page() {
 	} catch(e) {
 		this.throw(405, "Unable to get page.");
 	}
-};
+};*/
 
 function *remove() {
 	if ('POST' != this.method) return yield next;
 
-	var markup_file, html_file, wiki_abs_dir, config, pub;
+	var markup_file;
+	var wiki_abs_dir, config, pub;
+	var page;
 
 	try {
-		var page = yield cobody.text(this, {
+		page = yield cobody.text(this, {
 			limit: '500kb'
 		});
 		page = decodeURI(page);
-		var md = page+".md";
-		if (wikis.length > 1) {
-			var wiki = this.request.header.referer.split("/");
-			var wiki_url = wiki[wiki.length-2];
-			var i = getWikiIndex(wiki_url);
-			wiki_abs_dir = wikis[i];
-			pub = path.join(wiki_abs_dir, "/public");
-			config = configs[i];
-			markup_file = path.join(/*pub, */"markup", md);
-			html_file = path.join(/*pub, */page+".html");
-		} else {
-			wiki_abs_dir = wikis[0];
-			pub = path.join(wiki_abs_dir, "/public");
-			config = configs[0];
-			markup_file = path.join(/*pub, */"markup", md);
-			html_file = path.join(/*pub, */page+".html");
-		}
+		wiki_abs_dir = wikis[0];
+		pub = wiki_abs_dir;
+		config = configs[0];
+		markup_file = path.join("markup", page+".md");
+		html_file_wiki = path.join("wiki/", page+".html");
+		html_file_dynamic = path.join("builds/", "dynamic/", page+".html");
+		html_file_static = path.join("builds/", "static/", page+".html");
+		html_file_file = path.join("builds/", "file/", page+".html");
 
-		//fs.removeSync(markup_file);
-		//fs.removeSync(html_file);
-		//fs.unlinkSync(markup_file);
-		//fs.unlinkSync(html_file);
-		git.removeAndCommitFiles(pub+"/markup/", [md/*, html_file*/], "page removed")
+		git.removeAndCommitFiles(pub+"/markup/", [page+".md", html_file_wiki, html_file_dynamic, html_file_static, html_file_file], "page removed")
     this.body = "Done";
 	} catch(e) {
 		this.throw(405, "Unable to remove page.");
@@ -242,11 +202,6 @@ function *search_pages() {
 	if ('POST' != this.method) return yield next;
 
 	var i = 0;
-	if (wikis.length > 1) {
-		var wiki = this.request.header.referer.split("/");
-		var wiki_url = wiki[wiki.length-2];
-		i = getWikiIndex(wiki_url);
-	}
 
 	var result = [];
 	try {
@@ -287,31 +242,27 @@ function *pageNotFound(next){
 	yield next;
 	if (404 != this.status) return;
 
-	console.log("path:", this.path)
 	var wiki_abs_dir, config, pub;
-	var page = getPage(this.path);
+	var page = getPage(this.path) || "index";
 	var root = this.path;
 	if (this.path[this.path.length-1] != "/") {
 	  root = this.path.replace("/"+page, "/");
 	}
 	var n = root.split("/").length;
-	if (wikis.length == 1 && n == 2 || wikis.length > 1 && n == 3) { // If the URL really is a page URL: if we're serving 1 wiki the '/' split should be 2, else 3.
+
+	wiki_abs_dir = wikis[0];
+	pub = wiki_abs_dir;
+	config = configs[0];
+
+	var middle;
+	if (page != "index") {
+		middle = root.split("/");
+		middle = middle.slice(1, middle.length-1);
+		middle = "/"+middle.join("/")+"/";
+
 		var new_file1, new_file2;
-		if (wikis.length > 1) {
-			var wiki_url = this.path.split("/")[1];
-			var i = getWikiIndex(wiki_url);
-			wiki_abs_dir = wikis[i];
-			pub = path.join(wiki_abs_dir, "/public");
-			config = configs[i];
-			new_file1 = path.join(pub, decodeURI(page));
-			new_file2 = path.join(pub, decodeURI(page)+".html");
-		} else {
-			wiki_abs_dir = wikis[0];
-			pub = path.join(wiki_abs_dir, "/public");
-			config = configs[0];
-			new_file1 = path.join(pub, decodeURI(page));
-			new_file2 = path.join(pub, decodeURI(page)+".html");
-		}
+		new_file1 = path.join(pub, middle, decodeURI(page));
+		new_file2 = path.join(pub, middle, decodeURI(page)+".html");
 
 		var f, file;
 		try {
@@ -326,14 +277,13 @@ function *pageNotFound(next){
 			}
 		}
 
-
 		if (f) {
 			this.status = 200;
 			this.type = 'html';
 			this.body = fs.readFileSync(file);
 		} else {
 			var template;
-			var template_path = path.join(wiki_abs_dir, "/templates/nouwiki-default-template/backend/dynamic/template/", "create.dot.jst");
+			var template_path = path.join(wiki_abs_dir, "/templates/nouwiki-default-template/template/dynamic/", "create.dot.jst");
 			template = fs.readFileSync(template_path, 'utf8');
 
 			this.status = 200;
@@ -341,15 +291,19 @@ function *pageNotFound(next){
 			this.body = parse.parse(page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", config, template).html;
 		}
 	} else {
-		console.log("not a page URL")
-		this.status = 404;
+		var template;
+		var template_path = path.join(wiki_abs_dir, "/templates/nouwiki-default-template/template/dynamic/", "create.dot.jst");
+		template = fs.readFileSync(template_path, 'utf8');
+
+		this.status = 200;
+		this.type = 'html';
+		this.body = parse.parse(page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", config, template).html;
 	}
 }
 
 function getPage(url) {
 	var page = decodeURI(url).split("/");
 	page = page[page.length-1].split("?")[0];
-	page = page || "index";
 	return page;
 }
 
@@ -365,7 +319,7 @@ function getWikiIndex(wiki_url) {
 }
 
 function getWikiConfig(wiki_path) {
-	var config_src = path.join(wiki_path, "/config.toml");
+	var config_src = path.join(wiki_path, "/nouwiki.toml");
 	var config_src_string = fs.readFileSync(config_src, 'utf8');
 	return toml.parse(config_src_string);
 }
