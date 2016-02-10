@@ -54,6 +54,6 @@
     "toml": "^2.3.0",
     "webpack": "^1.12.13",
     "nouwiki-default-template ": "git+https://github.com/Nouwiki/nouwiki-default-template.git",
-    "nouwiki-markdown-it-wikilink ": "git+https://github.com/Nouwiki/markdown-it-nouwikiwikilink.git"
+    "markdown-it-nouwiki-wikilink ": "git+https://github.com/Nouwiki/markdown-it-nouwiki-wikilink.git"
   }
 }
