@@ -10,20 +10,11 @@ Note that this is a very early prototype, but if you want to play with it:
 
 1. `npm i -g git+https://github.com/Nouwiki/Nouwiki.git`
 2. `nouwiki forge ./wiki_directory`
-3. `nouwiki build ./wiki_directory`
 4. `nouwiki serve ./wiki_directory -p 8080`
 
 ## Host Wiki on GitHub
 
-1. Create empty GitHub repo (don't initialize it with anything).
-2. `nouwiki forge ./my_github_wiki`
-3. `nouwiki build ./my_github_wiki`
-4. `cd ./my_github_wiki`
-5. `git remote add origin https://github.com/User/Repo.git`
-6. `git push -u origin master`
-7. Create [a gh-pages branch](https://pages.github.com) (also don't initialize it with anything).
-8. *make changes to wiki and commit (automatically committed if you edit through browser)*
-9. `git push -u origin master && git push -f origin master:gh-pages` (see more ways to sync master and gh-pages [here](http://oli.jp/2011/github-pages-workflow/))
+`Instructions pending`
 
 ## Features & Goals
 
@@ -45,39 +36,40 @@ In more concrete terms:
 - [ ] Serve anywhere
 	- [x] local filesystem (`file:///`)
 	- [x] simple server (`http-server`, `python -m SimpleHTTPServer`, etc)
-	- [ ] localstorage
-	- [x] static web hosting
+  - [x] dropbox
 	- [x] github
-	- [ ] heroku, etc
+	- [x] static web hosting
+	- [x] heroku, etc
 	- [x] local nouwiki server
-	- [ ] dedicated nouwiki server
+	- [x] dedicated nouwiki server
 - [x] View anywhere
 	- [x] text-browser
 	- [x] no-js
 	- [x] modern browser
 	- [x] mobile
-- [ ] Use any language
+- [ ] Multiple Modes
+  - [x] static (works with anything, including `file://`, needs to be built using `nouwiki build...`)
+  - [x] dynamic_read (single index.html which can read and render content files, no need for building anything, no write support though)
+  - [ ] git (use git as a backend)
+  - [x] nouwiki (the most fully featured backend)
+- [ ] Use any markup language
 	- [x] markdown
 	- [ ] asciidoc
 	- [ ] mediawiki
+  - etc
 - [ ] Wikilink support in all markup languages.
 	- [x] markdown
 	- [ ] asciidoc
 	- [ ] mediawiki
-- [ ] Multiple build targets
-	- [x] fragments
-	- [x] static
-	- [ ] md.html
-	- [ ] standalone
-	- [ ] full-standalone
-	- [x] dynamic
+  - etc
 - [ ] Great text editor support (atom+sublime+vim+emacs plugins. custom nouwiki editor).
 - [x] Theme/Template support.
 - [ ] Extendability (extend the markup parsers, nouwiki plugins, add your own js or css globally or locally on a page, etc).
   - [x] Markup Parser
+  - [x] Local (per page) and Global JS, CSS, etc.
 - [ ] Scales (from a personal notebook to the size of wikipedia).
 - [ ] Federated (cross node wikilinks, fork, push, pull).
-- [ ] Universal Asset Manager (audio, font, html, img, pdf, js, style, text, video, etc)
+- [ ] Universal Asset Manager (audio, font, html, img, pdf, js, json, style, text, video, etc)
 - [ ] Front-Matter
 	- [ ] YAML
 	- [x] TOML
@@ -103,14 +95,3 @@ In more concrete terms:
 	- [ ] View & Restore old version of page + see diff
 	- [ ] Be able to edit Front-Matter as a HTML form
 - [ ] User Account Singup/Login/Manage
-
-## ToDo
-
-- Rename page button.
-- Shouldn't the js and css files of a dynamic build that are not part of a template be in another location? (currently they are in the root of the ./templates folder)
-- The `build` command, apart from building the html files, also updates the default template and ui css and js files, shouldn't that be seperate commands?
-- Nouwiki should track what wikis you create so you can easilly do a `nouwiki serve --all` to gain access to them all in the browser.
-  - Also clean up multi wiki serve code in light of this, as well as the fact that the grep_pages function only thinks in a single wiki being served
-- Adjust the wiki forging process so it works better for Heroku and create a Heroku deployment guide.
-- Use git only for the markup and asset folder, we need this for heroku and it's more "right".
-- Be able to define a constant header or footer on all pages in wiki

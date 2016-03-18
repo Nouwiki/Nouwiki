@@ -1,54 +1,46 @@
 var matter = require('gray-matter');
 var doT = require('dot');
 
-// Initialize markdown-it
-var md = require('markdown-it')({
-  html: true,
-  linkify: false,
-  typographer: false
-});
+doT.templateSettings.strip = false;
 
-/*
-- browser needs to load in plugins once
-- backend needs to load new plugins on each call
-*/
+var md;
 
-function parse(title, markup, config, template_markup, plugins, reset) {
-  if (reset) {
-    md = require('markdown-it')({
-      html: true,
-      linkify: false,
-      typographer: false
-    });
-  }
+function init(parser_options) {
+  md = require('markdown-it')(parser_options);
+}
+
+function loadPlugins(plugins) {
   var plugins = plugins || [];
   for (var plugin in plugins) {
     md.use(plugins[plugin][0], plugins[plugin][1]);
   }
+}
+
+function parse(title, markup, config, template_markup) {
   var output = {};
 
   var content = matter(markup, { lang: 'toml', delims: ['+++', '+++']});
   markup = content.content;
   fragment = md.render(markup);
 
-  var html = "";
-	if (template_markup != undefined) {
+  output.text = fragment.replace(/<(?:.|\n)*?>/gm, '');
+  output.fragment = fragment;
+
+  if (template_markup != undefined) {
     var template_data = {
       fragment: fragment,
       title: title,
+      wiki: config.wiki,
       local: content.data,
-      global: config.include
+      global: config.global
     }
-		var temp = doT.template(template_markup);
-		html = temp(template_data);
-	}
+    var temp = doT.template(template_markup);
+    output.page = temp(template_data);
+  }
 
-  //output.text = fragment.replace(/<(?:.|\n)*?>/gm, '');
-  output.fragment = fragment;
-  output.html = html;
-
-  console.log(title);
 	return output;
 }
 
+exports.init = init;
+exports.loadPlugins = loadPlugins;
 exports.parse = parse;

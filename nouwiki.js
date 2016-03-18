@@ -11,6 +11,7 @@ var update = require('./client/update');
 program
   .version('0.0.1')
 
+// Create new wiki(s)
 program
   .command('forge [paths...]')
   .action(function (paths) {
@@ -19,24 +20,25 @@ program
   	}
   });
 
-var targets = ["all", "fragment", "static", "dynamic"];
-
+// Build a static target of wiki (current targets are `static` and `filesystem`)
 program
-  .option('-t, --target [target]', 'Overwrite config.toml target settings (static, dynamic)')
+  .option('-t, --targets [targets...]', 'Overwrite config.toml target settings (dymamic, static, filesystem)')
+  .option('-T, --template [template]', 'Specify a template to use (overwrites config.toml).')
   .command('build [paths...]')
   .action(function (paths) {
     var wiki_abs_dir;
     if (paths.length != 0) {
       for (var x = 0; x < paths.length; x++) {
         wiki_abs_dir = path.resolve(paths[x]);
-        build.buildWiki(wiki_abs_dir, program.target);
+        build.buildWiki(wiki_abs_dir, program.targets, program.template);
       }
     } else {
       wiki_abs_dir = path.resolve("./");
-      build.buildWiki(wiki_abs_dir, program.target);
+      build.buildWiki(wiki_abs_dir, program.targets, program.template);
     }
   });
 
+// Update all files in wiki that are not wiki-specific
 program
   .command('update [paths...]')
   .action(function (paths) {
@@ -52,8 +54,11 @@ program
     }
   });
 
+// Serve wiki
 program
   .option('-p, --port [port]', 'HTTP Port')
+  .option('-t, --target [target]', 'In case you want to serve static or filesystem instead of dynamic, using the nouwiki server.')
+  .option('-T, --template [template]', 'Specify a template to use (overwrites config.toml).')
   .command('serve [paths...]')
   .action(function (paths) {
     var wiki_abs_dir;
@@ -68,7 +73,7 @@ program
       wikis.push(wiki_abs_dir);
     }
 
-    serve.serve(wikis, program.port);
+    serve.serve(wikis, program.port, program.target, program.template);
   });
 
 program.parse(process.argv);

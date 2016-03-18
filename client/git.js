@@ -12,7 +12,6 @@ var committer = nodegit.Signature.create("Anonymous",
   "anonymous@anonymous.com", 123456789, 60);
 
 function initRepo(root) {
-  //root = path.join(root, ".git");
   var repository;
   var index;
 
@@ -47,7 +46,6 @@ function initRepo(root) {
 }
 
 function addAndCommitFiles(root, file_paths, message) {
-  //root = path.join(root, ".git");
   var repository;
   var repoPath;
   var index;
@@ -92,7 +90,6 @@ function addAndCommitFiles(root, file_paths, message) {
 }
 
 function removeAndCommitFiles(root, file_paths, message) {
-  //root = path.join(root, ".git");
   var repository;
   var repoPath;
   var index;
