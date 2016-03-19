@@ -29,28 +29,28 @@ In more concrete terms:
 
 - [ ] Multiple collaboration models (solve Wikipedia's bureaucracy).
 - [ ] Edit anywhere
- 	- [x] text editor
-	- [x] markup editor
-	- [ ] nouwiki editor
-	- [x] in-browser nouwiki editor
+  - [x] text editor
+  - [x] markup editor
+  - [ ] nouwiki editor
+  - [x] in-browser nouwiki editor
 - [ ] Serve anywhere
-	- [x] local filesystem (`file:///`)
-	- [x] simple server (`http-server`, `python -m SimpleHTTPServer`, etc)
+  - [x] local filesystem (`file:///`)
+  - [x] simple server (`http-server`, `python -m SimpleHTTPServer`, etc)
   - [x] dropbox
-	- [x] github
-	- [x] static web hosting
-	- [x] heroku, etc
-	- [x] local nouwiki server
-	- [x] dedicated nouwiki server
+  - [x] github
+  - [x] static web hosting
+  - [x] heroku, etc
+  - [x] local nouwiki server
+  - [x] dedicated nouwiki server
 - [x] View anywhere
 	- [x] text-browser
 	- [x] no-js
 	- [x] modern browser
 	- [x] mobile
 - [ ] Multiple Modes
-  - [x] static (works with anything, including `file://`, needs to be built using `nouwiki build...`)
+  - [x] static (works with anything, including `file://`, needs to be built using `nouwiki build ./wiki_dir`)
   - [x] dynamic_read (single index.html which can read and render content files, no need for building anything, no write support though)
-  - [ ] git (use git as a backend)
+  - [ ] git (use git as a backend, ideal for github hosting)
   - [x] nouwiki (the most fully featured backend)
 - [ ] Use any markup language
 	- [x] markdown
@@ -65,8 +65,8 @@ In more concrete terms:
 - [ ] Great text editor support (atom+sublime+vim+emacs plugins. custom nouwiki editor).
 - [x] Theme/Template support.
 - [ ] Extendability (extend the markup parsers, nouwiki plugins, add your own js or css globally or locally on a page, etc).
-  - [x] Markup Parser
-  - [x] Local (per page) and Global JS, CSS, etc.
+  - [x] Markup Parser Plugins
+  - [x] Per page and Global JS, CSS, etc.
 - [ ] Scales (from a personal notebook to the size of wikipedia).
 - [ ] Federated (cross node wikilinks, fork, push, pull).
 - [ ] Universal Asset Manager (audio, font, html, img, pdf, js, json, style, text, video, etc)
