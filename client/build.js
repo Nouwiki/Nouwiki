@@ -78,7 +78,7 @@ function buildMarkupFile(wiki_abs_dir, markup_file, config, template, index_defa
 
 function parseAndWriteFile(pub, wiki_parser_plugins_path, config, title, markup, template_markup, def, index_default, target) {
 	var plugins = helpers.getPlugins(title, wiki_parser_plugins_path, config.plugins.parser, target);
-	parse.init();
+	parse.init(config.parser_options);
 	parse.loadPlugins(plugins);
 	var data = parse.parse(title, markup, config, template_markup);
 	var html_file;

@@ -114,7 +114,7 @@ function getPlugins(ready) {
       }
       window.nouwiki.plugins.push([arguments[a], options])
     }
-    window.nouwiki.parse.init();
+    window.nouwiki.parse.init(window.nouwiki.config.parser_options);
     window.nouwiki.parse.loadPlugins(window.nouwiki.plugins);
     if (ready) {
       window.nouwiki.ready();

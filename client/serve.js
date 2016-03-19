@@ -82,7 +82,7 @@ function *serveIndex() {
 
 		var wiki_parser_plugins_path = path.join(wiki, "/nouwiki", "/plugins", "/parser/");
 		var plugins = helpers.getPlugins(page, wiki_parser_plugins_path, config.plugins.parser, "nouwiki");
-		parse.init();
+		parse.init(config.parser_options);
 		parse.loadPlugins(plugins);
 
 		this.status = 200;
@@ -91,7 +91,7 @@ function *serveIndex() {
 	} catch(e) {
 		console.log(e)
 		var page = "index";
-		parse.init();
+		parse.init(config.parser_options);
 
 		this.status = 200;
 		this.type = 'html';
@@ -108,7 +108,7 @@ function *servePage() {
 
 			var wiki_parser_plugins_path = path.join(wiki, "/nouwiki", "/plugins", "/parser/");
 			var plugins = helpers.getPlugins(page, wiki_parser_plugins_path, config.plugins.parser, "nouwiki");
-			parse.init();
+			parse.init(config.parser_options);
 			parse.loadPlugins(plugins);
 
 			this.status = 200;
@@ -117,7 +117,7 @@ function *servePage() {
 			this.body = p;
 		} catch(e) {
 			var page = getPage(this.path);
-			parse.init();
+			parse.init(config.parser_options);
 
 			this.status = 200;
 			this.type = 'html';
@@ -246,7 +246,7 @@ function *pageNotFound(next) {
 
 		this.status = 200;
 		this.type = 'html';
-		parse.init();
+		parse.init(config.parser_options);
 		this.body = parse.parse(page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", config, template).page;
 	}
 }
