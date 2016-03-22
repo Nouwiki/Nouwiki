@@ -6,10 +6,6 @@ var nodegit = require("nodegit");
 var ensureDir = Promise.promisify(fs.ensureDir);
 var remove = Promise.promisify(fs.remove);
 
-var author = nodegit.Signature.create("Anonymous",
-  "anonymous@anonymous.com", 123456789, 60);
-var committer = nodegit.Signature.create("Anonymous",
-  "anonymous@anonymous.com", 123456789, 60);
 
 function initRepo(root) {
   var repository;
@@ -37,6 +33,11 @@ function initRepo(root) {
     return index.writeTree();
   })
   .then(function(oid) {
+    var t = Math.floor(new Date() / 1000);
+    var author = nodegit.Signature.create("Anonymous",
+      "anonymous@anonymous.com", t, 0);
+    var committer = nodegit.Signature.create("Anonymous",
+      "anonymous@anonymous.com", t, 0);
     return repository.createCommit("HEAD", author, committer, "nouwiki wiki init", oid, []);
   })
   .catch(function(err) {
@@ -81,6 +82,11 @@ function addAndCommitFiles(root, file_paths, message) {
     return repository.getCommit(head);
   })
   .then(function(parent) {
+    var t = Math.floor(new Date() / 1000);
+    var author = nodegit.Signature.create("Anonymous",
+      "anonymous@anonymous.com", t, 0);
+    var committer = nodegit.Signature.create("Anonymous",
+      "anonymous@anonymous.com", t, 0);
     return repository.createCommit("HEAD", author, committer, message, oid, [parent]);
   })
   .catch(function(err) {
@@ -133,6 +139,11 @@ function removeAndCommitFiles(root, file_paths, message) {
     return repository.getCommit(head);
   })
   .then(function(parent) {
+    var t = Math.floor(new Date() / 1000);
+    var author = nodegit.Signature.create("Anonymous",
+      "anonymous@anonymous.com", t, 0);
+    var committer = nodegit.Signature.create("Anonymous",
+      "anonymous@anonymous.com", t, 0);
     return repository.createCommit("HEAD", author, committer, message, oid, [parent]);
   })
   .catch(function(err) {
