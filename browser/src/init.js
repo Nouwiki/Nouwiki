@@ -44,7 +44,7 @@ if (QueryString.proxy != undefined) {
 var oReq = new XMLHttpRequest();
 oReq.onload = function (e) {
   window.nouwiki.config = toml.parse(e.target.response);
-  if (window.target == "dynamic_read") {
+  if (window.target == "dynamic") {
     getPageData();
     getPlugins(false);
   } else {
@@ -64,8 +64,8 @@ window.nouwiki.title = title || "index";
 var n = 3;
 function getPageData() {
   window.nouwiki.title = QueryString.title || "index";
-  var markup = content_root+"content/markup/"+window.nouwiki.title+".md";
-  var template = root+"nouwiki/templates/"+window.nouwiki.config.template+"/template/dynamic_read/dynamic.dot.jst";
+  var markup = content_root+"wiki/markup/"+window.nouwiki.title+".md";
+  var template = root+"nouwiki/templates/"+window.nouwiki.config.template+"/template/dynamic/dynamic.dot.jst";
 
   var oReq = new XMLHttpRequest();
   oReq.onload = function (e) {
@@ -92,7 +92,8 @@ function getPageData() {
 
 function getPlugins(ready) {
   var plugins = window.nouwiki.config.plugins.parser;
-  var def = window.nouwiki.config.index_default;
+  //var def = window.nouwiki.config.index_default;
+  var def = window.target;
   var files = [];
   for (var plugin in plugins) {
     files.push(root+"nouwiki/plugins/parser/"+plugins[plugin].name);
@@ -102,14 +103,14 @@ function getPlugins(ready) {
     for (var a in arguments) {
       options = plugins[a].options[def];
       // This should be a plugin
-      if (window.target == "dynamic_read") {
+      if (def == "dynamic") {
         for (var s in QueryString) {
-          if (s != "title") {
+          if (s != "title" && s != "") {
             options.tail += "&"+s+"="+QueryString[s];
           }
         }
       }
-      if (title == "index" && plugins[a].options[def+"_index"] != undefined) {
+      if (window.nouwiki.title == "index" && plugins[a].options[def+"_index"] != undefined) {
         options = plugins[a].options[def+"_index"];
       }
       window.nouwiki.plugins.push([arguments[a], options])

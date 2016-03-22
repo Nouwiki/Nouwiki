@@ -18,7 +18,7 @@ function buildWiki(wiki_abs_dir, targets, template, index_default) {
 
 	var pub = wiki_abs_dir;
 
-	var markup_dir = path.join(pub, "/content", "/markup");
+	var markup_dir = path.join(pub, "/wiki", "/markup");
 	var markup_files = fs.readdirSync(markup_dir);
 	for (var x = 0; x < markup_files.length; x++) {
 		if (markup_files[x] != ".git") {
@@ -56,7 +56,7 @@ function buildMarkupFile(wiki_abs_dir, markup_file, config, template, index_defa
 		console.log("build", e);
 	}
 
-	target = "dynamic_read";
+	target = "dynamic";
 	if (title == "index") {
 		try {
 			template_path = path.join(wiki_abs_dir, "/nouwiki/templates/"+template+"/template/"+target+"/page/", "index.dot.jst");
@@ -85,10 +85,10 @@ function parseAndWriteFile(pub, wiki_parser_plugins_path, config, title, markup,
 	if (title == "index" && index_default == target) {
 		html_file = path.join(pub, title+".html");
 		fs.writeFileSync(html_file, data.page);
-		html_file = path.join(pub, title+"_"+target+".html");
+		html_file = path.join(pub, target+".html");
 		fs.writeFileSync(html_file, data.page);
 	} else if (title == "index") {
-		html_file = path.join(pub, title+"_"+target+".html");
+		html_file = path.join(pub, target+".html");
 		fs.writeFileSync(html_file, data.page);
 	} else if (title != "index") {
 		html_file = path.join(pub, "/wiki", title+".html");

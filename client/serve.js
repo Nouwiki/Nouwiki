@@ -116,12 +116,32 @@ function *servePage() {
 			var p = parse.parse(page, markup, config, template_data_page).page;
 			this.body = p;
 		} catch(e) {
-			var page = getPage(this.path);
-			parse.init(config.parser_options);
+			var page = getPage(this.path) || "index";
+			var p = path.join(wiki, this.path);
+			try {
+				var stat = fs.statSync(p);
+				if (!stat.isDirectory()) {
+					this.status = 200;
+					this.type = 'html';
+					this.body = fs.readFileSync(p);
+				}
+			} catch(e) {
+				try {
+					var stat = fs.statSync(p+".html");
+					if (!stat.isDirectory()) {
+						this.status = 200;
+						this.type = 'html';
+						this.body = fs.readFileSync(p);
+					}
+				} catch(e) {
+					var page = getPage(this.path);
+					parse.init(config.parser_options);
 
-			this.status = 200;
-			this.type = 'html';
-			this.body = parse.parse(page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", config, template_data_create).page;
+					this.status = 200;
+					this.type = 'html';
+					this.body = parse.parse(page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", config, template_data_create).page;
+				}
+			}
 		}
 	}
 }
@@ -135,11 +155,11 @@ function *modify() {
 		});
 
 		var page = getPage(this.request.header.referer) || "index";
-		var markup_file = path.join(wiki, "content", "markup", page+".md");
+		var markup_file = path.join(wiki, "wiki", "markup", page+".md");
 
 		fs.writeFileSync(markup_file, data);
 
-		git.addAndCommitFiles(wiki+"/content/", ["markup/"+page+".md"], "page update");
+		git.addAndCommitFiles(wiki+"/wiki/", ["markup/"+page+".md"], "page update");
 		this.body = "Done";
 	} catch(e) {
 		console.log(e)
@@ -155,11 +175,11 @@ function *create() {
 			limit: '500kb'
 		});
 		page = decodeURI(page);
-		var markup_file = path.join(wiki, "content", "markup", page+".md");
+		var markup_file = path.join(wiki, "wiki", "markup", page+".md");
 
 		fs.writeFileSync(markup_file, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nEmpty page.\n");
 
-		git.addAndCommitFiles(wiki+"/content/", ["markup/"+page+".md"], "page created");
+		git.addAndCommitFiles(wiki+"/wiki/", ["markup/"+page+".md"], "page created");
     this.body = "Done";
 	} catch(e) {
 		console.log(e);
@@ -176,7 +196,7 @@ function *remove() {
 		});
 		page = decodeURI(page);
 
-		git.removeAndCommitFiles(wiki+"/content/", ["markup/"+page+".md"], "page removed")
+		git.removeAndCommitFiles(wiki+"/wiki/", ["markup/"+page+".md"], "page removed")
     this.body = "Done";
 	} catch(e) {
 		console.log(e);
@@ -193,7 +213,7 @@ function *search_pages() {
 			limit: '500kb'
 		});
 		text = text.toLowerCase();
-		var markup = path.join(pubs[i], "content", "markup");
+		var markup = path.join(wiki, "wiki", "markup");
 		var pages = fs.readdirSync(markup);
 		for (var p in pages) { // Remove extension
 			pages[p] = pages[p].replace(/\.[^/.]+$/, "");
@@ -258,7 +278,7 @@ function getPage(url) {
 }
 
 function getMarkup(page) {
-	var markup_src = path.join(wiki, "content", "markup", page+".md");
+	var markup_src = path.join(wiki, "wiki", "markup", page+".md");
 	var markup = fs.readFileSync(markup_src, 'utf8');
 	return markup;
 }

@@ -38,7 +38,7 @@ git_clone_url = "https://github.com/"+git_user+"/"+git_repo+".git";
 //wiki = wiki[wiki.length-3];
 
 var markup_page = page;
-var markup_loc = root+"content/markup/" + markup_page + ".md";
+var markup_loc = root+"wiki/markup/" + markup_page + ".md";
 
 window.nouwiki.origin = {
   markup_loc: markup_loc,

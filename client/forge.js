@@ -16,7 +16,7 @@ function createWiki(wiki) {
 	createNewWikiDirStructure(wiki_abs_dir);
 
 	var pub = wiki_abs_dir;
-	var markup_path = path.join(pub, "/content", "/markup");
+	var markup_path = path.join(pub, "/wiki", "/markup");
 	var index_path = path.join(markup_path, "/index.md");
 	var index_markup = "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+wiki_name+"\n\nWelcome to your new wiki!\n";
 	fs.writeFileSync(index_path, index_markup);
@@ -26,7 +26,7 @@ function createWiki(wiki) {
 	copyDefaultPlugins(wiki_abs_dir);
 	copyUiFiles(wiki_abs_dir);
 
-	git.initRepo(pub+"/content/");
+	git.initRepo(pub+"/wiki/");
 }
 
 function createNewWikiDirStructure(wiki_abs_dir) {
@@ -40,10 +40,6 @@ function createNewWikiDirStructure(wiki_abs_dir) {
 }
 
 function createPublicDir(wiki_abs_dir) {
-	var content = path.join(wiki_abs_dir, "/content");
-	var markup = path.join(content, "/markup");
-	//var text = path.join(content, "/text");
-	//var fragment = path.join(content, "/fragment");
 
 	var nouwiki = path.join(wiki_abs_dir, "/nouwiki");
 	var templates = path.join(nouwiki, "/templates");
@@ -55,10 +51,12 @@ function createPublicDir(wiki_abs_dir) {
 
 	var wiki_dir = path.join(wiki_abs_dir, "/wiki");
 	//var w_frag = path.join(wiki_dir, "/fragment");
+	var markup = path.join(wiki_dir, "/markup");
+	//var text = path.join(wiki_dir, "/text");
+	//var fragment = path.join(wiki_dir, "/fragment");
 
 	//fs.mkdirSync(pub);
-	fs.mkdirSync(content);
-	fs.mkdirSync(markup);
+	//fs.mkdirSync(content);
 	//fs.mkdirSync(text);
 	//fs.mkdirSync(fragment);
 
@@ -72,13 +70,14 @@ function createPublicDir(wiki_abs_dir) {
 
 	fs.mkdirSync(wiki_dir);
 	//fs.mkdirSync(w_frag);
+	fs.mkdirSync(markup);
 
 	createUniversalDir(wiki_abs_dir);
 }
 
 function createUniversalDir(wiki_abs_dir) {
 	var pub = wiki_abs_dir;
-	var universal_assets = path.join(pub, "/content/universal_assets");
+	var universal_assets = path.join(pub, "/wiki/universal_assets");
 	var audio = path.join(universal_assets, "/audio");
 	var font = path.join(universal_assets, "/font");
 	var html = path.join(universal_assets, "/html");
@@ -109,7 +108,7 @@ function createConfigFile(wiki_abs_dir, wiki_name) {
 	var config_string = `wiki = "`+wiki_name+`"
 template = "nouwiki-default-template"
 
-index_default = "dynamic_read" # dynamic_git, dynamic_read, static
+index_default = "dynamic" # dynamic, static
 
 [global]
 import = []
@@ -133,7 +132,7 @@ enabled = true
 		head = ""
 		tail = ".html"
 
-		[plugins.parser.options.dynamic_read]
+		[plugins.parser.options.dynamic]
 		head = "?title="
 		tail = ""
 
@@ -149,7 +148,7 @@ enabled = true
 		head = "../.."
 		tail = ""
 
-		[plugins.parser.options.dynamic_read]
+		[plugins.parser.options.dynamic]
 		head = "."
 		tail = ""
 `
