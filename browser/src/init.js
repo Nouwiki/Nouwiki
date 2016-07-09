@@ -1,5 +1,6 @@
 var toml = require('toml');
 
+// Helpers
 var QueryString = function () {
   var query_string = {};
   var query = window.location.search.substring(1);
@@ -18,27 +19,205 @@ var QueryString = function () {
   return query_string;
 }();
 
-window.nouwiki = {};
-window.nouwiki.config = "";
-window.nouwiki.plugins = [];
-window.nouwiki.ready = function() {
-  window.nouwiki.ready = true;
+function newRequest(file, f, attach) {
+  var oReq = new XMLHttpRequest();
+  oReq.onload = f;
+  if (attach != undefined) {
+    oReq.attach = attach;
+  }
+  oReq.open('GET', root+file + '?' + new Date().getTime(), true);
+  oReq.send();
 }
-window.nouwiki.parse = require("../../parse.js");
+
+
+
+// Init
+nouwiki_global.nouwiki = nouwiki_global.nouwiki || {};
+nouwiki_global.nouwiki.origin = require("./js/origin.js").origin;
+nouwiki_global.nouwiki.nouwiki = {};
+nouwiki_global.nouwiki.plugins = [];
+nouwiki_global.nouwiki.ready = function() {
+  nouwiki_global.nouwiki.ready = true;
+}
+//nouwiki_global.nouwiki.parse = require("../../parse.js");
 //var parse = require("../../../parse.js");
 //window.nouwiki.parse = {};
 //window.nouwiki.parse.init = parse.init;
 //window.nouwiki.parse.loadPlugins = parse.loadPlugins;
 //window.nouwiki.parse.parse = parse.parse;
-require("./js/origin.js");
 
-var root = QueryString.root || window.nouwiki.origin.root;
+var root = QueryString.root || nouwiki_global.nouwiki.origin.root;
 var content_root = QueryString.content || root;
 // CORS proxy
 if (QueryString.proxy != undefined) {
   root = QueryString.proxy+root;
   content_root = QueryString.proxy+content_root;
 }
+
+var loc = decodeURI(window.location.href);
+
+var title = loc.split("/");
+title = title[title.length-1].split("?")[0];
+nouwiki_global.nouwiki.title = title || "index";
+
+
+
+// Get nouwiki.toml, global.toml, and parser.toml
+var top_n = 0;
+
+var file = "nouwiki.toml";
+var f = function (e) {
+  nouwiki_global.nouwiki.nouwiki = toml.parse(e.target.response);
+  top_n += 1;
+  console.log(top_n)
+  if (top_n == 3) {
+    topReady();
+  }
+};
+newRequest(file, f)
+var file = "global.toml";
+var f = function (e) {
+  nouwiki_global.nouwiki.global = toml.parse(e.target.response);
+  top_n += 1;
+  console.log(top_n)
+  if (top_n == 3) {
+    topReady();
+  }
+};
+newRequest(file, f)
+var file = "parser.toml";
+var f = function (e) {
+  nouwiki_global.nouwiki.parser = toml.parse(e.target.response);
+  getPluginOptions();
+};
+newRequest(file, f)
+
+var plugin_n = 0;
+function getPluginOptions() {
+  console.log(nouwiki_global.nouwiki.parser.plugins)
+  if (nouwiki_global.nouwiki.parser.plugins.length > 0) {
+    nouwiki_global.nouwiki.parser.options = {};
+    for (var plugin in nouwiki_global.nouwiki.parser.plugins) {
+      var file = "plugins/"+nouwiki_global.nouwiki.parser.plugins[plugin].split(".")[0]+".toml";
+      var f = function (e) {
+        nouwiki_global.nouwiki.parser.options[this.attach] = toml.parse(e.target.response).options;
+        plugin_n += 1;
+        if (plugin_n == nouwiki_global.nouwiki.parser.plugins.length) {
+          top_n += 1
+          console.log(top_n)
+          if (top_n == 3) {
+            topReady();
+          }
+        }
+      };
+      var attach = nouwiki_global.nouwiki.parser.plugins[plugin];
+      newRequest(file, f, attach)
+    }
+  } else {
+    top_n += 1
+    console.log(top_n)
+    if (top_n == 3) {
+      topReady();
+    }
+  }
+}
+
+
+
+var bottom_n = 0;
+var bottom_num = 1;
+function topReady() {
+  console.log("READY")
+  if (nouwiki_global.target == "dynamic") {
+    bottom_num += 2;
+    getPageData();
+  }
+  loadPlugins();
+}
+
+function getPageData() {
+  nouwiki_global.nouwiki.title = QueryString.title || "index";
+  var markup = content_root+"markup/"+nouwiki_global.nouwiki.title+".md";
+  var t = nouwiki_global.nouwiki.nouwiki.template+"/template/dynamic/dynamic.dot.jst";
+  if (t.indexOf("/") == 0) {
+    t = t.substr(1);
+  }
+  var template = root+t;
+
+  var oReq = new XMLHttpRequest();
+  oReq.onload = function (e) {
+    nouwiki_global.nouwiki.markup = e.target.response;
+    bottom_n += 1;
+    if (bottom_n == bottom_num) {
+      nouwiki_global.nouwiki.ready();
+    }
+  };
+  oReq.open('GET', markup + '?' + new Date().getTime(), true);
+  oReq.send();
+
+  var oReq = new XMLHttpRequest();
+  oReq.onload = function (e) {
+    nouwiki_global.nouwiki.template = e.target.response;
+    bottom_n += 1;
+    if (bottom_n == bottom_num) {
+      nouwiki_global.nouwiki.ready();
+    }
+  };
+  oReq.open('GET', template + '?' + new Date().getTime(), true);
+  oReq.send();
+}
+
+function loadPlugins(ready) {
+  var plugins = nouwiki_global.nouwiki.parser.plugins;
+  console.log(plugins)
+  if (plugins.length > 0) {
+    var def = nouwiki_global.target;
+    var files = [];
+    for (var plugin in plugins) {
+      files.push(root+"plugins/"+plugins[plugin]);
+    }
+    requirejs(files, function() {
+      var options;
+      for (var a in arguments) {
+        console.log(nouwiki_global.nouwiki.parser.options,plugins[a],def)
+        options = nouwiki_global.nouwiki.parser.options[plugins[a]][def];
+        // This should be a plugin
+        /*if (def == "dynamic") {
+          for (var s in QueryString) {
+            if (s != "title" && s != "") {
+              options.tail += "&"+s+"="+QueryString[s];
+            }
+          }
+        }*/
+        if (nouwiki_global.nouwiki.parser.options[plugins[a]][def+"_"+title] != undefined) {
+          options = nouwiki_global.nouwiki.parser.options[plugins[a]][def+"_"+title];
+        }
+        console.log(options)
+        nouwiki_global.nouwiki.plugins.push([arguments[a], options]);
+      }
+      nouwiki_global.parser.init(nouwiki_global.nouwiki.parser.parser_options);
+      nouwiki_global.parser.loadPlugins(nouwiki_global.nouwiki.plugins);
+
+      bottom_n += 1;
+      if (bottom_n == bottom_num) {
+        nouwiki_global.nouwiki.ready();
+      }
+    });
+  } else {
+    nouwiki_global.parser.init();
+
+    bottom_n += 1;
+    if (bottom_n == bottom_num) {
+      nouwiki_global.nouwiki.ready();
+    }
+  }
+}
+
+
+
+
+/*
+// ---
 
 // Get Config & Load markdown-it Plugins
 var oReq = new XMLHttpRequest();
@@ -55,17 +234,11 @@ oReq.open('GET', root+"nouwiki.toml" + '?' + new Date().getTime(), true);
 //oReq.responseType = 'json';
 oReq.send();
 
-var loc = decodeURI(window.location.href);
-
-var title = loc.split("/");
-title = title[title.length-1].split("?")[0];
-window.nouwiki.title = title || "index";
-
 var n = 3;
 function getPageData() {
   window.nouwiki.title = QueryString.title || "index";
-  var markup = content_root+"wiki/markup/"+window.nouwiki.title+".md";
-  var template = root+"nouwiki/templates/"+window.nouwiki.config.template+"/template/dynamic/dynamic.dot.jst";
+  var markup = content_root+"markup/"+window.nouwiki.title+".md";
+  var template = root+window.nouwiki.config.template+"/template/dynamic/dynamic.dot.jst";
 
   var oReq = new XMLHttpRequest();
   oReq.onload = function (e) {
@@ -91,12 +264,22 @@ function getPageData() {
 }
 
 function getPlugins(ready) {
-  var plugins = window.nouwiki.config.plugins.parser;
+  var oReq = new XMLHttpRequest();
+  oReq.onload = function (e) {
+    window.nouwiki.parser = e.target.response;
+    loadPlugins(ready);
+  };
+  oReq.open('GET', root+"parser.toml" + '?' + new Date().getTime(), true);
+  oReq.send();
+}
+
+function loadPlugins(ready) {
+  var plugins = window.nouwiki.parser.plugins;
   //var def = window.nouwiki.config.index_default;
   var def = window.target;
   var files = [];
   for (var plugin in plugins) {
-    files.push(root+"nouwiki/plugins/parser/"+plugins[plugin].name);
+    files.push(root+"plugins/"+plugins[plugin]);
   }
   requirejs(files, function() {
     var options;
@@ -127,3 +310,4 @@ function getPlugins(ready) {
     }
   });
 }
+*/

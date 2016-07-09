@@ -17,7 +17,7 @@ function initRepo(root) {
     repository = repo;
   })
   .then(function(){
-    return repository.openIndex();
+    return repository.refreshIndex();
   })
   .then(function(i) {
     index = i;
@@ -59,7 +59,7 @@ function addAndCommitFiles(root, file_paths, message) {
     return ensureDir(repoPath);
   })
   .then(function() {
-    return repository.openIndex();
+    return repository.refreshIndex();
   })
   .then(function(indexResult) {
     index = indexResult;
@@ -108,7 +108,7 @@ function removeAndCommitFiles(root, file_paths, message) {
     return ensureDir(repoPath);
   })
   .then(function() {
-    return repository.openIndex();
+    return repository.refreshIndex();
   })
   .then(function(indexResult) {
     index = indexResult;

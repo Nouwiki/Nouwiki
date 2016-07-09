@@ -57,7 +57,8 @@ program
 // Serve wiki
 program
   .option('-p, --port [port]', 'HTTP Port')
-  .option('-t, --target [target]', 'In case you want to serve static or filesystem instead of dynamic, using the nouwiki server.')
+  .option('-g, --git', 'Git only backend')
+  //.option('-t, --target [target]', 'In case you want to serve static or filesystem instead of dynamic, using the nouwiki server.')
   .option('-T, --template [template]', 'Specify a template to use (overwrites config.toml).')
   .command('serve [paths...]')
   .action(function (paths) {
@@ -73,7 +74,7 @@ program
       wikis.push(wiki_abs_dir);
     }
 
-    serve.serve(wikis, program.port, program.target, program.template);
+    serve.serve(wikis, program.port, program.template);
   });
 
 program.parse(process.argv);

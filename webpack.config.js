@@ -7,6 +7,9 @@ module.exports = {
     "init": [
       './browser/src/init.js'
     ],
+    "parser": [
+      './parser.js'
+    ]
   },
   output: {
     filename: './browser/js/nouwiki.[name].js'

@@ -11,21 +11,45 @@ if (!String.prototype.endsWith) {
   };
 }
 
+nouwiki_global.nouwiki = nouwiki_global.nouwiki || {};
+
 var origin = window.location.origin;
 var loc = decodeURI(window.location.href);
 
-var page = loc.split("/");
-page = page[page.length-1].split("?")[0];
-page = page || "index";
+var page = loc.split("/wiki/");
+if (page.length == 1) {
+  page = "index";
+} else {
+  page = page[page.length-1];
+}
 
+var sub = getSub(loc, page);
+
+var sub_root;
 var root = loc;
-if (loc[loc.length-1] != "/") {
-  if (loc.endsWith("/wiki/"+page)) {
-    root = loc.replace("/wiki/"+page, "/");
+if (root[root.length-1] != "/") {
+  if (root.endsWith("/wiki/"+page)) {
+    root = root.replace("/wiki/"+page, "/");
   } else {
-    root = loc.replace("/"+page, "/");
+    root = root.replace("/"+page, "/");
   }
   root = root.split("?")[0];
+}
+sub_root = root;
+if (sub != false) {
+  if (root.indexOf("/"+sub+"/") != -1) {
+    root = root.replace("/"+sub+"/", "/");
+  } else {
+    root = root.replace("/"+sub, "/");
+  }
+} else {
+  sub_root = false;
+}
+if (root[root.length-1] != "/") {
+  root = root+"/";
+}
+if (sub_root != false && sub_root[sub_root.length-1] != "/") {
+  sub_root = sub_root+"/";
 }
 
 var git = root.split("/");
@@ -38,10 +62,35 @@ git_clone_url = "https://github.com/"+git_user+"/"+git_repo+".git";
 //wiki = wiki[wiki.length-3];
 
 var markup_page = page;
-var markup_loc = root+"wiki/markup/" + markup_page + ".md";
+var markup_loc;
+if (sub_root == false) {
+  markup_loc = root+"markup/" + markup_page + ".md";
+} else {
+  markup_loc = sub_root+"markup/" + markup_page + ".md";
+}
 
-window.nouwiki.origin = {
+function getSub(p, page) {
+	var root = p;
+	if (root[root.length-1] != "/") {
+		if (root.endsWith("/wiki/"+page)) {
+			root = root.replace("/wiki/"+page, "/");
+		}
+		root = root.split("?")[0];
+	}
+	if (root[root.length-1] != "/") {
+		root = root + "/";
+	}
+	var split = root.split("/");
+	if (split.length == 5) {
+		return split[split.length-2];
+	} else {
+		return false;
+	}
+}
+
+exports.origin = {
   markup_loc: markup_loc,
   page: page,
-  root: root
+  root: root,
+  sub_root: sub_root
 }

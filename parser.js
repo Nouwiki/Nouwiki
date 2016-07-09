@@ -16,23 +16,23 @@ function loadPlugins(plugins) {
   }
 }
 
-function parse(title, markup, config, template_markup) {
+function parse(page_title, wiki_title, markup, template_markup, global) {
   var output = {};
 
-  var content = matter(markup, { lang: 'toml', delims: ['+++', '+++']});
-  markup = content.content;
-  fragment = md.render(markup);
+  var local = matter(markup, { lang: 'toml', delims: ['+++', '+++']});
+  markup_nofront = local.content;
+  fragment = md.render(markup_nofront);
 
-  output.text = fragment.replace(/<(?:.|\n)*?>/gm, '');
+  //output.text = fragment.replace(/<(?:.|\n)*?>/gm, '');
   output.fragment = fragment;
 
   if (template_markup != undefined) {
     var template_data = {
-      fragment: fragment,
-      title: title,
-      wiki: config.wiki,
-      local: content.data,
-      global: config.global
+      wiki: wiki_title,
+      title: page_title,
+      global: global, // global.toml "front matter"
+      local: local.data, // local page front matter
+      fragment: fragment
     }
     var temp = doT.template(template_markup);
     output.page = temp(template_data);
@@ -44,3 +44,8 @@ function parse(title, markup, config, template_markup) {
 exports.init = init;
 exports.loadPlugins = loadPlugins;
 exports.parse = parse;
+try {
+  nouwiki_global.parser = exports;
+} catch(e) {
+  //console.log(e);
+}
