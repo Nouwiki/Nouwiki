@@ -4,15 +4,11 @@ module.exports = {
     fs: "empty"
   },
   entry: {
-    "init": [
-      './browser/src/init.js'
-    ],
-    "parser": [
-      './parser.js'
-    ]
+    "./browser/js/nouwiki.init.min": './browser/src/init.js',
+    "./parser-0.0.1.min": './parser.js'
   },
   output: {
-    filename: './browser/js/nouwiki.[name].js'
+    filename: '[name].js'
   },
   module: {
     loaders: [

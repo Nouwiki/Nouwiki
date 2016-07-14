@@ -1,0 +1,694 @@
+/* Nouwiki's default markup-body css is almost completely based on github markdown css */
+
+.markup-body {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333;
+  /*font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
+  font-family: medium-content-sans-serif-font, "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  /*font-size: 16px;*/
+  font-size: 1.25em;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markup-body a {
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+}
+
+.markup-body a:active,
+.markup-body a:hover {
+  outline-width: 0;
+}
+
+.markup-body strong {
+  font-weight: inherit;
+}
+
+.markup-body strong {
+  font-weight: bolder;
+}
+
+.markup-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markup-body img {
+  border-style: none;
+}
+
+.markup-body svg:not(:root) {
+  overflow: hidden;
+}
+
+.markup-body code,
+.markup-body kbd,
+.markup-body pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markup-body hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+
+.markup-body input {
+  font: inherit;
+  margin: 0;
+}
+
+.markup-body input {
+  overflow: visible;
+}
+
+.markup-body button:-moz-focusring,
+.markup-body [type="button"]:-moz-focusring,
+.markup-body [type="reset"]:-moz-focusring,
+.markup-body [type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+.markup-body [type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markup-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.markup-body td,
+.markup-body th {
+  padding: 0;
+}
+
+.markup-body * {
+  box-sizing: border-box;
+}
+
+.markup-body input {
+  font: 13px/1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.markup-body a {
+  color: #4078c0;
+  text-decoration: none;
+}
+
+.markup-body a:hover,
+.markup-body a:active {
+  text-decoration: underline;
+}
+
+.markup-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markup-body hr::before {
+  display: table;
+  content: "";
+}
+
+.markup-body hr::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markup-body h1,
+.markup-body h2,
+.markup-body h3,
+.markup-body h4,
+.markup-body h5,
+.markup-body h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.markup-body h1 {
+  font-size: 30px;
+}
+
+.markup-body h2 {
+  font-size: 21px;
+}
+
+.markup-body h3 {
+  font-size: 16px;
+}
+
+.markup-body h4 {
+  font-size: 14px;
+}
+
+.markup-body h5 {
+  font-size: 12px;
+}
+
+.markup-body h6 {
+  font-size: 11px;
+}
+
+.markup-body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.markup-body blockquote {
+  margin: 0;
+}
+
+.markup-body ul,
+.markup-body ol {
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markup-body ol ol,
+.markup-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markup-body ul ul ol,
+.markup-body ul ol ol,
+.markup-body ol ul ol,
+.markup-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markup-body dd {
+  margin-left: 0;
+}
+
+.markup-body code {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markup-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.markup-body .pl-0 {
+  padding-left: 0 !important;
+}
+
+.markup-body .pl-1 {
+  padding-left: 3px !important;
+}
+
+.markup-body .pl-2 {
+  padding-left: 6px !important;
+}
+
+.markup-body .pl-3 {
+  padding-left: 12px !important;
+}
+
+.markup-body .pl-4 {
+  padding-left: 24px !important;
+}
+
+.markup-body .pl-5 {
+  padding-left: 36px !important;
+}
+
+.markup-body .pl-6 {
+  padding-left: 48px !important;
+}
+
+.markup-body .form-select::-ms-expand {
+  opacity: 0;
+}
+
+.markup-body:before {
+  display: table;
+  content: "";
+}
+
+.markup-body:after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markup-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markup-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markup-body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.markup-body .anchor {
+  display: inline-block;
+  padding-right: 2px;
+  margin-left: -18px;
+}
+
+.markup-body .anchor:focus {
+  outline: none;
+}
+
+.markup-body h1,
+.markup-body h2,
+.markup-body h3,
+.markup-body h4,
+.markup-body h5,
+.markup-body h6 {
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markup-body h1 .octicon-link,
+.markup-body h2 .octicon-link,
+.markup-body h3 .octicon-link,
+.markup-body h4 .octicon-link,
+.markup-body h5 .octicon-link,
+.markup-body h6 .octicon-link {
+  color: #000;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+.markup-body h1:hover .anchor,
+.markup-body h2:hover .anchor,
+.markup-body h3:hover .anchor,
+.markup-body h4:hover .anchor,
+.markup-body h5:hover .anchor,
+.markup-body h6:hover .anchor {
+  text-decoration: none;
+}
+
+.markup-body h1:hover .anchor .octicon-link,
+.markup-body h2:hover .anchor .octicon-link,
+.markup-body h3:hover .anchor .octicon-link,
+.markup-body h4:hover .anchor .octicon-link,
+.markup-body h5:hover .anchor .octicon-link,
+.markup-body h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+.markup-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markup-body h1 .anchor {
+  line-height: 1;
+}
+
+.markup-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markup-body h2 .anchor {
+  line-height: 1;
+}
+
+.markup-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markup-body h3 .anchor {
+  line-height: 1.2;
+}
+
+.markup-body h4 {
+  font-size: 1.25em;
+}
+
+.markup-body h4 .anchor {
+  line-height: 1.2;
+}
+
+.markup-body h5 {
+  font-size: 1em;
+}
+
+.markup-body h5 .anchor {
+  line-height: 1.1;
+}
+
+.markup-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markup-body h6 .anchor {
+  line-height: 1.1;
+}
+
+.markup-body p,
+.markup-body blockquote,
+.markup-body ul,
+.markup-body ol,
+.markup-body dl,
+.markup-body table,
+.markup-body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markup-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markup-body ul,
+.markup-body ol {
+  padding-left: 2em;
+}
+
+.markup-body ul ul,
+.markup-body ul ol,
+.markup-body ol ol,
+.markup-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markup-body li>p {
+  margin-top: 16px;
+}
+
+.markup-body dl {
+  padding: 0;
+}
+
+.markup-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markup-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markup-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markup-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markup-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markup-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markup-body table th {
+  font-weight: bold;
+}
+
+.markup-body table th,
+.markup-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markup-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markup-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markup-body img {
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #fff;
+}
+
+.markup-body code {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markup-body code:before,
+.markup-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markup-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markup-body .highlight {
+  margin-bottom: 16px;
+}
+
+.markup-body .highlight pre,
+.markup-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markup-body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markup-body pre {
+  word-wrap: normal;
+}
+
+.markup-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markup-body pre code:before,
+.markup-body pre code:after {
+  content: normal;
+}
+
+.markup-body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+
+.markup-body .pl-c {
+  color: #969896;
+}
+
+.markup-body .pl-c1,
+.markup-body .pl-s .pl-v {
+  color: #0086b3;
+}
+
+.markup-body .pl-e,
+.markup-body .pl-en {
+  color: #795da3;
+}
+
+.markup-body .pl-s .pl-s1,
+.markup-body .pl-smi {
+  color: #333;
+}
+
+.markup-body .pl-ent {
+  color: #63a35c;
+}
+
+.markup-body .pl-k {
+  color: #a71d5d;
+}
+
+.markup-body .pl-pds,
+.markup-body .pl-s,
+.markup-body .pl-s .pl-pse .pl-s1,
+.markup-body .pl-sr,
+.markup-body .pl-sr .pl-cce,
+.markup-body .pl-sr .pl-sra,
+.markup-body .pl-sr .pl-sre {
+  color: #183691;
+}
+
+.markup-body .pl-v {
+  color: #ed6a43;
+}
+
+.markup-body .pl-id {
+  color: #b52a1d;
+}
+
+.markup-body .pl-ii {
+  background-color: #b52a1d;
+  color: #f8f8f8;
+}
+
+.markup-body .pl-sr .pl-cce {
+  color: #63a35c;
+  font-weight: bold;
+}
+
+.markup-body .pl-ml {
+  color: #693a17;
+}
+
+.markup-body .pl-mh,
+.markup-body .pl-mh .pl-en,
+.markup-body .pl-ms {
+  color: #1d3e81;
+  font-weight: bold;
+}
+
+.markup-body .pl-mq {
+  color: #008080;
+}
+
+.markup-body .pl-mi {
+  color: #333;
+  font-style: italic;
+}
+
+.markup-body .pl-mb {
+  color: #333;
+  font-weight: bold;
+}
+
+.markup-body .pl-md {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.markup-body .pl-mi1 {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.markup-body .pl-mdr {
+  color: #795da3;
+  font-weight: bold;
+}
+
+.markup-body .pl-mo {
+  color: #1d3e81;
+}
+
+.markup-body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+
+.markup-body .full-commit .btn-outline:not(:disabled):hover {
+  color: #4078c0;
+  border: 1px solid #4078c0;
+}
+
+.markup-body :checked+.radio-label {
+  position: relative;
+  z-index: 1;
+  border-color: #4078c0;
+}
+
+.markup-body .octicon {
+  display: inline-block;
+  vertical-align: text-top;
+  fill: currentColor;
+}
+
+.markup-body .task-list-item {
+  list-style-type: none;
+}
+
+.markup-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markup-body .task-list-item input {
+  margin: 0 0.2em 0.25em -1.6em;
+  vertical-align: middle;
+}
+
+.markup-body hr {
+  border-bottom-color: #eee;
+}

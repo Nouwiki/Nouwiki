@@ -51,14 +51,15 @@ function serve(w, port, templ) {
 	router.put('/api/modify', modify);
 	router.post('/api/create', create);
 	router.post('/api/remove', remove);
+	router.post('/api/rename', rename);
 	router.post('/api/search_pages', search_pages);
 
 	// Root
 	var template_path;
-	template_path = path.join(wiki, template+"/template/nouwiki/", "page.dot.jst");
-	template_data_page = fs.readFileSync(template_path, 'utf8');
-	template_path = path.join(wiki, template+"/template/nouwiki/", "create.dot.jst");
-	template_data_create = fs.readFileSync(template_path, 'utf8');
+	template_path = path.join(wiki, template+"/template/nouwiki/", "page.json");
+	template_data_page = fs.readFileSync(template_path, 'utf8').split("`")[1];
+	template_path = path.join(wiki, template+"/template/nouwiki/", "create.json");
+	template_data_create = fs.readFileSync(template_path, 'utf8').split("`")[1];
 	router.get('/', serveIndex);
 	router.get('/wiki/:page', servePage);
 
@@ -98,7 +99,7 @@ function *serveIndex() {
 		this.status = 200;
 		this.type = 'html';
     console.log("HERE")
-		this.body = parse.parse(page, config.nouwiki.wiki_name, markup, template_data_page, config.global).page;
+		this.body = parse.parse(config.nouwiki, page, markup, template_data_page, config.global).page;
   } catch(e) {
 		console.log("#%#%#$%#$%#", e);
 		var page = "index";
@@ -106,7 +107,7 @@ function *serveIndex() {
 
 		this.status = 200;
 		this.type = 'html';
-		this.body = parse.parse(page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", config, template_data_create, config.global).page;
+		this.body = parse.parse(config.nouwiki, page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", template_data_create, config.global).page;
 	}
 }
 
@@ -125,7 +126,7 @@ function *servePage() {
 
 			this.status = 200;
 			this.type = 'html';
-			var p = parse.parse(page, config.nouwiki.wiki_name, markup, template_data_page, config.global).page;
+			var p = parse.parse(config.nouwiki, page, markup, template_data_page, config.global).page;
 			this.body = p;
 		} catch(e) {
 			var page = this.params.page || "index";
@@ -154,7 +155,7 @@ function *servePage() {
 
 					this.status = 200;
 					this.type = 'html';
-					this.body = parse.parse(page, config.nouwiki.wiki_name, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", template_data_create, config.global).page;
+					this.body = parse.parse(config.nouwiki, page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", template_data_create, config.global).page;
 				}
 			}
 		}
@@ -212,12 +213,64 @@ function *remove() {
 			limit: '500kb'
 		});
 		page = decodeURI(page);
-		var wiki_path = wiki;
-		git.removeAndCommitFiles(wiki_path, ["markup/"+page+".md"], "page removed")
+    if (page != "index") {
+      var wiki_path = wiki;
+
+      var files = [];
+      files.push("markup/"+page+".md");
+      files.push("wiki/"+page+".html");
+      files.push("text/"+page+".txt");
+      files.push("fragment/"+page+".html");
+      for (var x in files) {
+        fs.removeSync(path.join(wiki_path, files[x]))
+      }
+
+      git.removeAndCommitFiles(wiki_path, files, "page removed", this)
+    }
     this.body = "Done";
 	} catch(e) {
 		console.log(e);
 		this.throw(405, "Unable to remove page.");
+	}
+}
+
+function *rename() {
+	if ('POST' != this.method) return yield next;
+
+	try {
+		var page = yield cobody.json(this, {
+			limit: '500kb'
+		});
+    page.old = decodeURI(page.old);
+    page.new = decodeURI(page.new);
+    if (page.old != "index") {
+      var wiki_path = wiki;
+
+      var old_files = [];
+      old_files.push("markup/"+page.old+".md");
+      old_files.push("wiki/"+page.old+".html");
+      old_files.push("text/"+page.old+".txt");
+      old_files.push("fragment/"+page.old+".html");
+
+      var new_files = [];
+      new_files.push("markup/"+page.new+".md");
+      new_files.push("wiki/"+page.new+".html");
+      new_files.push("text/"+page.new+".txt");
+      new_files.push("fragment/"+page.new+".html");
+
+      for (var x in old_files) {
+        fs.copySync(path.join(wiki_path, old_files[x]), path.join(wiki_path, new_files[x]));
+        fs.removeSync(path.join(wiki_path, old_files[x]));
+      }
+
+      git.removeAndCommitFiles(wiki_path, old_files, "page removed").then(function() {
+        git.addAndCommitFiles(wiki_path, new_files, "page added")
+      })
+    }
+    this.body = "Done";
+	} catch(e) {
+		console.log(e);
+		this.throw(405, "Unable to rename page.");
 	}
 }
 
@@ -236,19 +289,21 @@ function *search_pages() {
 
 		var markup = path.join(wiki_path, "markup");
 		var pages = fs.readdirSync(markup);
+    var lowerPages = [];
 		for (var p in pages) { // Remove extension
 			pages[p] = pages[p].replace(/\.[^/.]+$/, "");
+      lowerPages.push(pages[p].toLowerCase());
 		}
-		for (var p in pages) { // Matches beginning of string
-			if (pages[p].substring(0, text.length).toLowerCase() == text) {
-				if (pages[p] != "index") {
+		for (var p in lowerPages) { // Matches beginning of string
+			if (lowerPages[p].substring(0, text.length) == text) {
+				if (lowerPages[p] != "index") {
 					result.push(pages[p]);
 				}
 			}
 		}
-		for (var p in pages) { // Matches anywhere in the string
-			if (pages[p].indexOf(text) > -1 && result.indexOf(pages[p]) == -1) {
-				if (pages[p] != "index") {
+		for (var p in lowerPages) { // Matches anywhere in the string
+			if (lowerPages[p].indexOf(text) > -1 && result.indexOf(pages[p]) == -1) {
+				if (lowerPages[p] != "index") {
 					result.push(pages[p]);
 				}
 			}
@@ -284,13 +339,13 @@ function *pageNotFound(next) {
 			return;
 		}
 		var template;
-		var template_path = path.join(wiki_path, template, "nouwiki-default-template/template/nouwiki/", "create.dot.jst");
-		template = fs.readFileSync(template_path, 'utf8');
+		var template_path = path.join(wiki_path, template, "nouwiki-default-template/template/nouwiki/", "create.json");
+		template = fs.readFileSync(template_path, 'utf8').split("`")[1];
 
 		this.status = 200;
 		this.type = 'html';
 		parse.init(config.parser.parser_options);
-		this.body = parse.parse(page, config.nouwiki.wiki_name, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", template, config.global).page;
+		this.body = parse.parse(config.nouwiki, page, "+++\nimport = []\ncss = []\njs = []\n+++\n\n# "+page+"\n\nThis page has not been created yet.\n", template, config.global).page;
 	}
 }
 

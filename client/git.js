@@ -54,34 +54,43 @@ function addAndCommitFiles(root, file_paths, message) {
 
   return nodegit.Repository.open(root)
   .then(function(repo) {
+    console.log("1")
     repository = repo;
     repoPath = repository.workdir();
     return ensureDir(repoPath);
   })
   .then(function() {
+    console.log("2")
     return repository.refreshIndex();
   })
   .then(function(indexResult) {
+    console.log("3")
     index = indexResult;
     return index.read(1);
   })
   .then(function() {
+    console.log("4")
     return index.addAll(file_paths);
   })
   .then(function() {
+    console.log("5")
     return index.write();
   })
   .then(function() {
+    console.log("6")
     return index.writeTree();
   })
   .then(function(oidResult) {
+    console.log("7")
     oid = oidResult;
     return nodegit.Reference.nameToId(repository, "HEAD");
   })
   .then(function(head) {
+    console.log("8")
     return repository.getCommit(head);
   })
   .then(function(parent) {
+    console.log("9!")
     var t = Math.floor(new Date() / 1000);
     var author = nodegit.Signature.create("Anonymous",
       "anonymous@anonymous.com", t, 0);
@@ -101,31 +110,39 @@ function removeAndCommitFiles(root, file_paths, message) {
   var index;
   var oid;
 
+  console.log("1")
   return nodegit.Repository.open(root)
   .then(function(repo) {
+    console.log("2")
     repository = repo;
     repoPath = repository.workdir();
     return ensureDir(repoPath);
   })
   .then(function() {
+    console.log("3")
     return repository.refreshIndex();
   })
   .then(function(indexResult) {
+    console.log("4")
     index = indexResult;
     return index.read(1);
   })
   .then(function() {
+    console.log("5")
     var tasks = [];
     file_paths.forEach(function(fpath) {
-      var fullPath = fpath;
+      var fullPath = path.join(repoPath, fpath);
+      console.log('> fullpath', fullPath);
       tasks.push(remove(fullPath));
     });
     return Promise.all(tasks);
   })
   .then(function() {
+    console.log("6")
     return index.removeAll(file_paths);
   })
   .then(function() {
+    console.log("7")
     return index.write();
   })
   .then(function() {

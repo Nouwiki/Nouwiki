@@ -10,7 +10,7 @@ var appDir = path.dirname(require.main.filename);
 var defaultTemplateDir = path.join(appDir, "/node_modules", "/nouwiki-default-template");
 var defaultPlugins = [];
 defaultPlugins.push([path.join(appDir, "/node_modules", "/markdown-it-nouwiki-wikilink", "/dist", "/markdown-it-nouwiki-wikilink.js"), "markdown-it-nouwiki-wikilink.js"]);
-defaultPlugins.push([path.join(appDir, "/node_modules", "/markdown-it-nouwiki-locallink", "/dist", "/markdown-it-nouwiki-locallink.js"), "markdown-it-nouwiki-locallink.js"]);
+//defaultPlugins.push([path.join(appDir, "/node_modules", "/markdown-it-nouwiki-locallink", "/dist", "/markdown-it-nouwiki-locallink.js"), "markdown-it-nouwiki-locallink.js"]);
 
 var plugin_configs = {
 	"markdown-it-nouwiki-wikilink.js": `[options.fragment_index]
@@ -33,24 +33,6 @@ tail = ""
 
 [options.nouwiki]
 head = "/wiki/"
-tail = ""
-`,
-	"markdown-it-nouwiki-locallink.js": `[options.fragment_index]
-head = "."
-tail = ""
-[options.fragment]
-head = "../.."
-tail = ""
-
-[options.static_index]
-head = "."
-tail = ""
-[options.static]
-head = "../.."
-tail = ""
-
-[options.dynamic]
-head = "."
 tail = ""
 `
 }
@@ -132,9 +114,9 @@ function createPublicDir(wiki_abs_dir) {
 	var files_data = path.join(files, "/data");
 	var files_binary = path.join(files, "/binary");
 
-	var files_assets_html = path.join(files_assets, "/html");
-	var files_assets_js = path.join(files_assets, "/js");
-	var files_assets_css = path.join(files_assets, "/css");
+	var files_assets_html = path.join(files_assets, "/import");
+	var files_assets_js = path.join(files_assets, "/script");
+	var files_assets_css = path.join(files_assets, "/link");
 	var files_assets_fonts = path.join(files_assets, "/fonts");
 
 	var files_media_audio = path.join(files_media, "/audio");
@@ -175,14 +157,15 @@ function createPublicDir(wiki_abs_dir) {
 
 function createConfigFiles(wiki_abs_dir, wiki_name) {
 	var config_dest = path.join(wiki_abs_dir, "/nouwiki.toml");
-	var config_string = `wiki_name = "`+wiki_name+`"
+	var config_string = `wikiName = "`+wiki_name+`"
 
 # Absolute or relative URLs
 #nouwiki_backend = ""
 #git_backend = ""
 template = "/components/templates/nouwiki-default-template"
-markup_body = "/components/markup-body/nouwiki-default-markup-body.css"
-parser = "/components/parsers/parser.min.0.1.js"
+markupBody = "/components/markup-body/nouwiki-default-markup-body.css"
+parser = "/components/parsers/parser-0.0.1.min.js"
+nouwiki = "/components/nouwiki"
 
 default_index = "static" # nouwiki, git, dynamic, static
 
@@ -260,12 +243,17 @@ function copyUiFiles(wiki_abs_dir) {
 	var require_js_dest = path.join(pub, "/components/nouwiki", "/js/require.js");
 	fs.copySync(require_js_src, require_js_dest);
 
-	var init_js_src = path.join(appDir, "/browser/js/nouwiki.init.js");
-	var init_js_dest = path.join(pub, "/components/nouwiki", "/js/nouwiki.init.js");
+	var init_js_src = path.join(appDir, "/browser/js/nouwiki.init.min.js");
+	var init_js_dest = path.join(pub, "/components/nouwiki", "/js/nouwiki.init.min.js");
 	fs.copySync(init_js_src, init_js_dest);
 
-	var init_js_src = path.join(appDir, "/browser/js/nouwiki.parser.js");
-	var init_js_dest = path.join(pub, "/components/nouwiki", "/js/nouwiki.parser.js");
+	var init_js_src = path.join(appDir, "/parser-0.0.1.min.js");
+	var init_js_dest = path.join(pub, "/components/parsers/", "parser-0.0.1.min.js");
+	fs.copySync(init_js_src, init_js_dest);
+
+	var init_js_src = path.join(appDir, "/browser/css", "nouwiki-default-markup-body.css");
+	var dest = path.join(pub, "/components/markup-body/");
+	var init_js_dest = path.join(dest, "nouwiki-default-markup-body.css");
 	fs.copySync(init_js_src, init_js_dest);
 }
 

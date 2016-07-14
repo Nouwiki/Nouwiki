@@ -16,7 +16,8 @@ function loadPlugins(plugins) {
   }
 }
 
-function parse(page_title, wiki_title, markup, template_markup, global) {
+function parse(nouwiki, page_title, markup, template_markup, global) {
+  console.log(nouwiki)
   var output = {};
 
   var local = matter(markup, { lang: 'toml', delims: ['+++', '+++']});
@@ -28,7 +29,7 @@ function parse(page_title, wiki_title, markup, template_markup, global) {
 
   if (template_markup != undefined) {
     var template_data = {
-      wiki: wiki_title,
+      nouwiki: nouwiki,
       title: page_title,
       global: global, // global.toml "front matter"
       local: local.data, // local page front matter
