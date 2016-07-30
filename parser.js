@@ -3,6 +3,8 @@ var doT = require('dot');
 
 doT.templateSettings.strip = false;
 
+var md, front_matter_line_count;
+
 //
 // Inject line numbers for sync scroll. Notes:
 //
@@ -11,15 +13,12 @@ doT.templateSettings.strip = false;
 function injectLineNumbers(tokens, idx, options, env, slf) {
   var line;
   if (tokens[idx].map && tokens[idx].level === 0) {
-    console.log(tokens[idx].tag);
-    line = tokens[idx].map[0];
+    line = tokens[idx].map[0]+front_matter_line_count;
     tokens[idx].attrJoin('class', 'line');
     tokens[idx].attrSet('data-line', String(line));
   }
   return slf.renderToken(tokens, idx, options, env, slf);
 }
-
-var md;
 
 function init(parser_options, preview) {
   md = require('markdown-it')(parser_options);
@@ -36,11 +35,11 @@ function loadPlugins(plugins) {
 }
 
 function parse(nouwiki, page_title, markup, template_markup, global) {
-  console.log(nouwiki)
   var output = {};
 
   var local = matter(markup, { lang: 'toml', delims: ['+++', '+++']});
   markup_nofront = local.content;
+  front_matter_line_count = markup.split(/\r\n|\r|\n/).length - markup_nofront.split(/\r\n|\r|\n/).length
   fragment = md.render(markup_nofront);
 
   //output.text = fragment.replace(/<(?:.|\n)*?>/gm, '');
