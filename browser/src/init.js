@@ -232,7 +232,7 @@ function loadPlugins(ready) {
         console.log(options)
         nouwiki_global.nouwiki.plugins.push([arguments[a], options]);
       }
-      nouwiki_global.parser.init(nouwiki_global.nouwiki.parser.parser_options);
+      nouwiki_global.parser.init(nouwiki_global.nouwiki.parser.parser_options, true); // is for preview
       nouwiki_global.parser.loadPlugins(nouwiki_global.nouwiki.plugins);
 
       bottom_n += 1;
