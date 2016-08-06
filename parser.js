@@ -20,10 +20,21 @@ function injectLineNumbers(tokens, idx, options, env, slf) {
   return slf.renderToken(tokens, idx, options, env, slf);
 }
 
+function editLink(tokens, idx, options, env, self) {
+  var hrefIndex = tokens[idx].attrIndex('href');
+  var href = tokens[idx].attrs[hrefIndex][1];
+
+  if (hrefIndex >= 0 && href.indexOf("/wiki/") == 0) { // if markdown link doesn't contain a url use the text as url (wikilink)
+    tokens[idx].attrs[hrefIndex][1] = tokens[idx].attrs[hrefIndex][1]+"?mode=edit";
+  }
+  return self.renderToken(tokens, idx, options, env, self);
+}
+
 function init(parser_options, preview) {
   md = require('markdown-it')(parser_options);
   if (preview) {
     md.renderer.rules.paragraph_open = md.renderer.rules.heading_open = injectLineNumbers;
+    md.renderer.rules.link_open = editLink;
   }
 }
 

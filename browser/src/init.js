@@ -25,6 +25,7 @@ function newRequest(file, f, attach) {
   if (attach != undefined) {
     oReq.attach = attach;
   }
+  console.log(root+file)
   oReq.open('GET', root+file + '?' + new Date().getTime(), true);
   oReq.send();
 }
@@ -82,6 +83,7 @@ var loc = decodeURI(window.location.href);
 var title = loc.split("/");
 title = title[title.length-1].split("?")[0];
 nouwiki_global.nouwiki.title = title || "index";
+nouwiki_global.mode = QueryString.mode || "view";
 
 // Get nouwiki.toml, global.toml, and parser.toml
 var top_n = 0;
