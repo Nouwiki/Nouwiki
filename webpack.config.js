@@ -4,8 +4,8 @@ module.exports = {
     fs: "empty"
   },
   entry: {
-    "./browser/js/nouwiki.init.min": './browser/src/init.js',
-    "./parser-0.0.1.min": './parser.js'
+    "./frontend/js/nouwiki.init.min": './src/frontend/init.js',
+    "./parser.min": './parser.js'
   },
   output: {
     filename: '[name].js'

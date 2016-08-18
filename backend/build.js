@@ -29,7 +29,7 @@ function buildWiki(wiki_abs_dir, targets, template, default_index) {
 	markup_files = fs.readdirSync(markup_dir);
 	temp = getTemplatePaths()
 
-	buildSpecial();
+	build();
 	git.addAndCommitFiles(pub, ["*"], "add all after build");
 }
 
@@ -48,7 +48,7 @@ function loadConfigs(template) {
 	global = toml.parse(global_src_string);
 }
 
-function buildSpecial() {
+function build() {
 	for (var t in targets) {
 		if (temp.type == "fs") {
 			buildSpecialFS(targets[t]);

@@ -3,10 +3,10 @@
 var path = require('path');
 var program = require('commander');
 
-var forge = require('./client/forge');
-var build = require('./client/build');
-var serve = require('./client/serve');
-var update = require('./client/update');
+var forge = require('./backend/forge');
+var build = require('./backend/build');
+var serve = require('./backend/serve');
+//var update = require('./backend/update');
 
 program
   .version('0.0.1')
@@ -39,7 +39,7 @@ program
   });
 
 // Update all files in wiki that are not wiki-specific
-program
+/*program
   .command('update [paths...]')
   .action(function (paths) {
     var wiki_abs_dir;
@@ -52,7 +52,7 @@ program
       wiki_abs_dir = path.resolve("./");
       update.update(wiki_abs_dir);
     }
-  });
+  });*/
 
 // Serve wiki
 program

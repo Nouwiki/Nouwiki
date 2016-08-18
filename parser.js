@@ -5,11 +5,7 @@ doT.templateSettings.strip = false;
 
 var md, front_matter_line_count;
 
-//
-// Inject line numbers for sync scroll. Notes:
-//
-// - We track only headings and paragraphs on first level. That's enough.
-// - Footnotes content causes jumps. Level limit filter it automatically.
+// Line numbers in preview for sync-scolling in edit mode
 function injectLineNumbers(tokens, idx, options, env, slf) {
   var line;
   if (tokens[idx].map && tokens[idx].level === 0) {
@@ -20,6 +16,7 @@ function injectLineNumbers(tokens, idx, options, env, slf) {
   return slf.renderToken(tokens, idx, options, env, slf);
 }
 
+// When clicking wikilinks in preview in edit mode that page should open up in edit mode
 function editLink(tokens, idx, options, env, self) {
   var hrefIndex = tokens[idx].attrIndex('href');
   var href = tokens[idx].attrs[hrefIndex][1];
@@ -41,6 +38,7 @@ function init(parser_options, preview) {
 function loadPlugins(plugins) {
   var plugins = plugins || [];
   for (var plugin in plugins) {
+    console.log(plugins[plugin][0], plugins[plugin][1])
     md.use(plugins[plugin][0], plugins[plugin][1]);
   }
 }

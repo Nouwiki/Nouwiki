@@ -93,7 +93,6 @@ var f = function (e) {
   nouwiki_global.nouwiki.nouwiki = toml.parse(e.target.response);
   getScript(nouwiki_global.nouwiki.nouwiki.parser, function() {
     top_n += 1;
-    console.log(top_n)
     if (top_n == 3) {
       topReady();
     }
@@ -104,7 +103,6 @@ var file = "global.toml";
 var f = function (e) {
   nouwiki_global.nouwiki.global = toml.parse(e.target.response);
   top_n += 1;
-  console.log(top_n)
   if (top_n == 3) {
     topReady();
   }
@@ -119,17 +117,19 @@ newRequest(file, f)
 
 var plugin_n = 0;
 function getPluginOptions() {
-  console.log(nouwiki_global.nouwiki.parser.plugins)
   if (nouwiki_global.nouwiki.parser.plugins.length > 0) {
     nouwiki_global.nouwiki.parser.options = {};
     for (var plugin in nouwiki_global.nouwiki.parser.plugins) {
       var file = "plugins/"+nouwiki_global.nouwiki.parser.plugins[plugin].split(".")[0]+".toml";
       var f = function (e) {
-        nouwiki_global.nouwiki.parser.options[this.attach] = toml.parse(e.target.response).options;
+        if (e.target.status == 200) {
+          nouwiki_global.nouwiki.parser.options[this.attach] = toml.parse(e.target.response).options;
+        } else {
+          nouwiki_global.nouwiki.parser.options[this.attach] = {};
+        }
         plugin_n += 1;
         if (plugin_n == nouwiki_global.nouwiki.parser.plugins.length) {
           top_n += 1
-          console.log(top_n)
           if (top_n == 3) {
             topReady();
           }
@@ -140,7 +140,6 @@ function getPluginOptions() {
     }
   } else {
     top_n += 1
-    console.log(top_n)
     if (top_n == 3) {
       topReady();
     }
@@ -208,7 +207,6 @@ function getPageData() {
 
 function loadPlugins(ready) {
   var plugins = nouwiki_global.nouwiki.parser.plugins;
-  console.log(plugins)
   if (plugins.length > 0) {
     var def = nouwiki_global.target;
     var files = [];
@@ -218,7 +216,6 @@ function loadPlugins(ready) {
     requirejs(files, function() {
       var options;
       for (var a in arguments) {
-        console.log(nouwiki_global.nouwiki.parser.options,plugins[a],def)
         options = nouwiki_global.nouwiki.parser.options[plugins[a]][def];
         // This should be a plugin
         /*if (def == "dynamic") {
@@ -231,8 +228,7 @@ function loadPlugins(ready) {
         if (nouwiki_global.nouwiki.parser.options[plugins[a]][def+"_"+title] != undefined) {
           options = nouwiki_global.nouwiki.parser.options[plugins[a]][def+"_"+title];
         }
-        console.log(options)
-        nouwiki_global.nouwiki.plugins.push([arguments[a], options]);
+        nouwiki_global.nouwiki.plugins.push([arguments[a], options||{}]);
       }
       nouwiki_global.parser.init(nouwiki_global.nouwiki.parser.parser_options, true); // is for preview
       nouwiki_global.parser.loadPlugins(nouwiki_global.nouwiki.plugins);
