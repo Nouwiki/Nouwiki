@@ -2,7 +2,7 @@
 
 # Header 1
 
-## Header 2
+## Header 2 {.jshide}
 
 *italic*, **bold**, ~~strikethrough~~
 
@@ -10,5 +10,6 @@
 
 > Quote ~ ...
 
-![external image](https://www.google.is/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png)  
+![external image](https://www.google.is/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png){.h200 .white}
+
 ![internal image](../files/media/img/example.jpg)

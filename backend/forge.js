@@ -163,6 +163,10 @@ function createPublicDir(wiki_abs_dir) {
 	var global_js_src = path.join(appDir, "/files/global/global.js");
 	var global_js_dest = path.join(files_assets_js, "global.js");
 	fs.copySync(global_js_src, global_js_dest);
+
+	var white_js_src = path.join(appDir, "/files/global/white.min.js");
+	var white_js_dest = path.join(files_assets_js, "white.min.js");
+	fs.copySync(white_js_src, white_js_dest);
 }
 
 function createConfigFiles(wiki_abs_dir, wiki_name) {
@@ -187,7 +191,7 @@ enabled = true
 	var config_dest = path.join(wiki_abs_dir, "/global.toml");
 	var config_string = `import = []
 css = ["/files/assets/link/global.css"]
-js = ["/files/assets/script/global.js"]
+js = ["/files/assets/script/white.min.js", "/files/assets/script/global.js"]
 `
 	fs.writeFileSync(config_dest, config_string);
 
