@@ -117,7 +117,8 @@ function *servePage() {
 		var wiki_path = wiki;
 		try {
 			//var page = getPage(this.path);
-			var markup = getMarkup(wiki_path, this.params.page);
+      var page = this.params.page;
+			var markup = getMarkup(wiki_path, page);
 
 			var wiki_parser_plugins_path = path.join(wiki_path,"/plugins");
       var plugins = helpers.getPlugins(page, wiki_parser_plugins_path, helpers.getPluginJSON(wiki_parser_plugins_path, config.parser.plugins), "nouwiki");
