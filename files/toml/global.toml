@@ -1,0 +1,3 @@
+import = []
+css = ["files/assets/link/global.css"]
+js = ["files/assets/script/global.js"]

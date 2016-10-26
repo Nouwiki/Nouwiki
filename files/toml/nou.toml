@@ -1,0 +1,22 @@
+content = ["./content.toml"]
+#port = 8080
+force_network = false # When content is on the same machine as the nou process, it communicates with content through the system, this forces it to communicate with it through the local network
+cors = true
+
+# Components (For all content defined, overwrites content-local component defintions unless undefined)
+parser = "./components/parser.js"
+markupBody = "./components/markup-body.css"
+nouwiki = "./components/nouwiki"
+template = "./components/template"
+template_special = ["index"] # which pages don't use a generic page template file
+
+merge_search = true # If you define multiple content instances, this merges their search function.
+
+# Forward / Redirct (Only relevant if content or components are over the network rather then locally on the system)
+[network]
+content = "forward"
+content_api = "redirect"
+parser = "forward"
+markupBody = "redirect"
+nouwiki = "redirect"
+template = "redirect"

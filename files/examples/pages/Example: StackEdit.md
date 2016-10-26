@@ -154,7 +154,7 @@ Term 3
 
 :   Definition D
 
-	> part of definition D
+  > part of definition D
 
 
 ### Fenced code blocks

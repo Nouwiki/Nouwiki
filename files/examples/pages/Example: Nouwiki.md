@@ -1,15 +1,28 @@
 # Example: NouwWiki
 
-# Header 1
+## Route Problem
 
-## Header 2 {.jshide}
+### Relative
 
-*italic*, **bold**, ~~strikethrough~~
-
-[link](http://www.google.com/)
-
-> Quote ~ ...
-
-![external image](https://www.google.is/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png){.h200 .white}
+[Markup CSS File](../components/markup-body.css)
 
 ![internal image](../files/media/img/example.jpg)
+
+### Absolute
+
+[Markup CSS File](/components/markup-body.css)
+
+![internal image](/files/media/img/example.jpg)
+
+
+### 8081
+
+[Markup CSS File](http://localhost:8081/components/markup-body.css)
+
+![internal image](http://localhost:8081/files/media/img/example.jpg)
+
+### 8082
+
+[Markup CSS File](http://localhost:8082/components/markup-body.css)
+
+![internal image](http://localhost:8082/files/media/img/example.jpg)

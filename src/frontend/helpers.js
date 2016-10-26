@@ -22,6 +22,7 @@ function newRequest(head, file, f, attach) {
   if (attach != undefined) {
     oReq.attach = attach;
   }
+  console.log(head+file + '?' + new Date().getTime())
   oReq.open('GET', head+file + '?' + new Date().getTime(), true);
   oReq.send();
 }

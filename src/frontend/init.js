@@ -1,4 +1,8 @@
 var toml = require('toml');
+var markdownit = require('markdown-it');
+var matter = require('gray-matter');
+var doT = require('dot');
+doT.templateSettings.strip = false;
 var helpers = require('./helpers');
 
 
@@ -14,18 +18,24 @@ nouwiki_global = nouwiki_global || {};
 nouwiki_global.origin = require("./js/origin.js").origin;
 //nouwiki_global.nouwiki = {};
 nouwiki_global.plugins = [];
-nouwiki_global.config = {};
+nouwiki_global.conf = nouwiki_global.conf || {};
 nouwiki_global.ready = function() {
   nouwiki_global.ready = true;
 }
 
-var root = helpers.QueryString.root || nouwiki_global.origin.root;
+/*var root = helpers.QueryString.root || nouwiki_global.origin.root;
 var content_root = helpers.QueryString.content || root;
 // CORS proxy
 if (helpers.QueryString.proxy != undefined) {
   root = helpers.QueryString.proxy+root;
   content_root = helpers.QueryString.proxy+content_root;
-}
+}*/
+
+//var root = nouwiki_global.conf.content.frontend.path;
+//var content_root = root;
+
+var nou_root = nouwiki_global.paths.nou;
+var content_root = nouwiki_global.paths.content;
 
 var loc = decodeURI(window.location.href);
 
@@ -38,58 +48,65 @@ nouwiki_global.mode = helpers.QueryString.mode || "view";
 // Get nouwiki.toml, global.toml, and parser.toml(+parser plugins)
 var top_n = 0;
 
-var file = "nouwiki.toml";
+var file = "nou.toml";
 var f = function (e) {
-  nouwiki_global.config.nouwiki = toml.parse(e.target.response);
-  helpers.getScript(nouwiki_global.config.nouwiki.parser, function() {
-    top_n += 1;
-    if (top_n == 3) {
-      topReady();
-    }
-  });
-};
-helpers.newRequest(root, file, f)
-var file = "global.toml";
-var f = function (e) {
-  nouwiki_global.config.global = toml.parse(e.target.response);
+  nouwiki_global.conf.nou = toml.parse(e.target.response);
   top_n += 1;
-  if (top_n == 3) {
+  if (top_n == 4) {
     topReady();
   }
 };
-helpers.newRequest(root, file, f)
+helpers.newRequest(nou_root, file, f)
+var file = "content.toml";
+var f = function (e) {
+  nouwiki_global.conf.content = toml.parse(e.target.response);
+  top_n += 1;
+  if (top_n == 4) {
+    topReady();
+  }
+};
+helpers.newRequest(content_root, file, f)
+var file = "global.toml";
+var f = function (e) {
+  nouwiki_global.conf.global = toml.parse(e.target.response);
+  top_n += 1;
+  if (top_n == 4) {
+    topReady();
+  }
+};
+helpers.newRequest(content_root, file, f)
 var file = "parser.toml";
 var f = function (e) {
-  nouwiki_global.config.parser = toml.parse(e.target.response);
+  nouwiki_global.conf.parser = toml.parse(e.target.response);
   getPluginOptions();
 };
-helpers.newRequest(root, file, f)
+helpers.newRequest(content_root, file, f)
 
 
 var plugin_n = 0;
 function getPluginOptions() {
-  if (nouwiki_global.config.parser.plugins.length > 0) {
-    nouwiki_global.config.parser.options = {};
-    for (var plugin in nouwiki_global.config.parser.plugins) {
-      var file = "plugins/"+nouwiki_global.config.parser.plugins[plugin].split(".")[0]+".toml";
+  if (nouwiki_global.conf.parser.plugins.length > 0) {
+    nouwiki_global.conf.parser.plugin_options = {};
+    for (var plugin in nouwiki_global.conf.parser.plugins) {
+      var file = "plugins/"+nouwiki_global.conf.parser.plugins[plugin].split(".")[0]+".options.toml";
       var f = function (e) {
         if (e.target.status == 200) {
-          nouwiki_global.config.parser.options[this.attach] = toml.parse(e.target.response).options;
+          nouwiki_global.conf.parser.plugin_options[this.attach] = toml.parse(e.target.response).options;
         }
         plugin_n += 1;
-        if (plugin_n == nouwiki_global.config.parser.plugins.length) {
+        if (plugin_n == nouwiki_global.conf.parser.plugins.length) {
           top_n += 1
-          if (top_n == 3) {
+          if (top_n == 4) {
             topReady();
           }
         }
       };
-      var attach = nouwiki_global.config.parser.plugins[plugin];
-      helpers.newRequest(root, file, f, attach);
+      var attach = nouwiki_global.conf.parser.plugins[plugin];
+      helpers.newRequest(content_root, file, f, attach);
     }
   } else {
     top_n += 1
-    if (top_n == 3) {
+    if (top_n == 4) {
       topReady();
     }
   }
@@ -111,14 +128,14 @@ function getPageData() {
   nouwiki_global.title = helpers.QueryString.title || "index";
   var markup = "markup/"+nouwiki_global.title+".md";
   var template;
-  var t = nouwiki_global.config.nouwiki.template+"/template/dynamic/dynamic.json";
+  var t = nouwiki_global.conf.nouwiki.template_FRONTEND+"/template/dynamic/dynamic.json";
   if (t.indexOf("/") == t.indexOf("//") && t.indexOf("://") > -1) { // a url
     template = t;
   } else { // not a url
     if (t.indexOf("/") == 0) {
       t = t.substr(1);
     }
-    template = root+t;
+    template = nou_root+t;
   }
 
   // Get markup
@@ -141,20 +158,20 @@ function getPageData() {
 }
 
 function loadPlugins() {
-  var plugins = nouwiki_global.config.parser.plugins;
+  var plugins = nouwiki_global.conf.parser.plugins;
   if (plugins.length > 0) {
     var def = nouwiki_global.target;
     var files = [];
     for (var plugin in plugins) {
-      files.push(root+"plugins/"+plugins[plugin]);
+      files.push(content_root+"plugins/"+plugins[plugin]);
     }
     requirejs(files, function() {
       var options;
       for (var a in arguments) {
-        if (nouwiki_global.config.parser.options[plugins[a]] != undefined) {
-          options = nouwiki_global.config.parser.options[plugins[a]][def];
-          if (nouwiki_global.config.parser.options[plugins[a]][def+"_"+title] != undefined) {
-            options = nouwiki_global.config.parser.options[plugins[a]][def+"_"+title];
+        if (nouwiki_global.conf.parser.plugin_options[plugins[a]] != undefined) {
+          options = nouwiki_global.conf.parser.plugin_options[plugins[a]][def];
+          if (nouwiki_global.conf.parser.plugin_options[plugins[a]][def+"_"+title] != undefined) {
+            options = nouwiki_global.conf.parser.plugin_options[plugins[a]][def+"_"+title];
           }
         }
         var plugin = [];
@@ -164,7 +181,7 @@ function loadPlugins() {
         }
         nouwiki_global.plugins.push(plugin);
       }
-      nouwiki_global.parser.init(nouwiki_global.config.parser.parser_options, true); // true = is for preview
+      nouwiki_global.parser.init(markdownit, nouwiki_global.conf.parser.options, true, matter, doT);
       nouwiki_global.parser.loadPlugins(nouwiki_global.plugins);
 
       bottom_n += 1;
@@ -173,7 +190,7 @@ function loadPlugins() {
       }
     });
   } else {
-    nouwiki_global.parser.init();
+    nouwiki_global.parser.init(markdownit, nouwiki_global.conf.parser.options, true, matter, doT);
 
     bottom_n += 1;
     if (bottom_n == bottom_num) {

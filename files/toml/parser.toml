@@ -1,0 +1,13 @@
+plugins = [
+		"markdown-it-nouwiki-wikilink.js",
+		"markdown-it-attrs.js"
+	]
+
+[options]
+html = true
+#xhtmlOut = false
+#breaks = false
+#langPrefix = 'language-'
+#linkify = false
+#typographer = false
+#quotes = '“”‘’'

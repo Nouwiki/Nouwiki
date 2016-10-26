@@ -1,4 +1,4 @@
-var path = require('path');
+/*var path = require('path');
 var fs = require('fs-extra');
 var Promise = require('bluebird');
 var nodegit = require("nodegit");
@@ -8,6 +8,7 @@ var remove = Promise.promisify(fs.remove);
 
 
 function initRepo(root) {
+  return;
   var repository;
   var index;
 
@@ -47,6 +48,7 @@ function initRepo(root) {
 }
 
 function addAndCommitFiles(root, file_paths, message) {
+  return;
   var repository;
   var repoPath;
   var index;
@@ -105,6 +107,7 @@ function addAndCommitFiles(root, file_paths, message) {
 }
 
 function removeAndCommitFiles(root, file_paths, message) {
+  return;
   var repository;
   var repoPath;
   var index;
@@ -173,3 +176,4 @@ function removeAndCommitFiles(root, file_paths, message) {
 exports.initRepo = initRepo;
 exports.addAndCommitFiles = addAndCommitFiles;
 exports.removeAndCommitFiles = removeAndCommitFiles;
+*/

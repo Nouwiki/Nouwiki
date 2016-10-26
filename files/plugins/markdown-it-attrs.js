@@ -15,7 +15,7 @@ module.exports = function attributes(md) {
         var codeCurlyEnd = tokens[i].info.length - 1;
         var codeAttrs = utils.getAttrs(tokens[i].info, codeCurlyStart + 1, codeCurlyEnd);
         utils.addAttrs(codeAttrs, tokens[i]);
-        tokens[i].info = tokens[i].info.substring(0, codeCurlyStart);
+        tokens[i].info = removeCurly(tokens[i].info);
         continue;
       }
       // block tokens contain markup
@@ -29,7 +29,38 @@ module.exports = function attributes(md) {
         continue;
       }
 
-      // attributes in inline tokens
+      // attributes in inline tokens:
+      // inline **bold**{.red} text
+      // {
+      //   "type": "strong_close",
+      //   "tag": "strong",
+      //   "attrs": null,
+      //   "map": null,
+      //   "nesting": -1,
+      //   "level": 0,
+      //   "children": null,
+      //   "content": "",
+      //   "markup": "**",
+      //   "info": "",
+      //   "meta": null,
+      //   "block": false,
+      //   "hidden": false
+      // },
+      // {
+      //   "type": "text",
+      //   "tag": "",
+      //   "attrs": null,
+      //   "map": null,
+      //   "nesting": 0,
+      //   "level": 0,
+      //   "children": null,
+      //   "content": "{.red} text",
+      //   "markup": "",
+      //   "info": "",
+      //   "meta": null,
+      //   "block": false,
+      //   "hidden": false
+      // }
       for (var j=0, k=inlineTokens.length; j<k; ++j) {
         // should be inline token of type text
         if (!inlineTokens[j] || inlineTokens[j].type !== 'text') {
@@ -53,54 +84,65 @@ module.exports = function attributes(md) {
         if (!attrToken) {
           continue;
         }
-        var attrs = utils.getAttrs(inlineTokens[j].content, 1, endChar);
-        if (attrs.length !== 0) {
+        var inlineAttrs = utils.getAttrs(inlineTokens[j].content, 1, endChar);
+        if (inlineAttrs.length !== 0) {
           // remove {}
-          inlineTokens[j].content = inlineTokens[j].content.substr(endChar + 1);
+          inlineTokens[j].content = inlineTokens[j].content.slice(endChar + 1);
           // add attributes
-          attrToken.info = "b";
-          utils.addAttrs(attrs, attrToken);
+          attrToken.info = 'b';
+          utils.addAttrs(inlineAttrs, attrToken);
         }
       }
 
       // attributes for blocks
+      var lastInlineToken;
       if (hasCurly(tokens[i].content)) {
-        var content = last(inlineTokens).content;
+        lastInlineToken = last(inlineTokens);
+        var content = lastInlineToken.content;
         var curlyStart = content.lastIndexOf('{');
         var attrs = utils.getAttrs(content, curlyStart + 1, content.length - 1);
-        if (content[curlyStart - 1] === ' ') {
-          // trim space before {}
-          curlyStart -= 1;
-        }
-        // if list and `\n{#c}` -> apply to bullet list open
-        // `- iii \n{#c}` -> `<ul id="c"><li>iii</li></ul>`
+        // if list and `\n{#c}` -> apply to bullet list open:
+        //
+        // - iii
+        // {#c}
+        //
+        // should give
+        //
+        // <ul id="c">
+        //   <li>iii</li>
+        // </ul>
         var nextLastInline = nextLast(inlineTokens);
+        // some blocks are hidden, example li > paragraph_open
         var correspondingBlock = firstTokenNotHidden(tokens, i - 1);
         if (nextLastInline && nextLastInline.type === 'softbreak' &&
             correspondingBlock && correspondingBlock.type === 'list_item_open') {
           utils.addAttrs(attrs, bulletListOpen(tokens, i - 1));
           // remove softbreak and {} inline tokens
           tokens[i].children = inlineTokens.slice(0, -2);
+          tokens[i].content = removeCurly(tokens[i].content);
+          if (hasCurly(tokens[i].content)) {
+            // do once more:
+            //
+            // - item {.a}
+            // {.b} <-- applied this
+            i -= 1;
+          }
         } else {
-          // some blocks are hidden, example li > paragraph_open
           utils.addAttrs(attrs, correspondingBlock);
-          last(inlineTokens).content = content.slice(0, curlyStart);
+          lastInlineToken.content = removeCurly(content);
+          if (lastInlineToken.content === '') {
+            // remove empty inline token
+            inlineTokens.pop();
+          }
+          tokens[i].content = removeCurly(tokens[i].content);
         }
       }
 
     }
   }
   md.core.ruler.before('replacements', 'curly_attributes', curlyAttrs);
-  // render inline code blocks with attrs
-  md.renderer.rules.code_inline = renderCodeInline;
 };
 
-function renderCodeInline(tokens, idx, _, __, slf) {
-  var token = tokens[idx];
-  return '<code'+ slf.renderAttrs(token) +'>'
-       + utils.escapeHtml(tokens[idx].content)
-       + '</code>';
-}
 /**
  * test if string has proper formated curly
  */
@@ -136,7 +178,9 @@ function firstTokenNotHidden(tokens, i) {
  * Find first bullet list open.
  */
 function bulletListOpen(tokens, i) {
-  if (tokens[i] && tokens[i].type !== 'bullet_list_open') {
+  if (tokens[i] &&
+      tokens[i].type !== 'bullet_list_open' &&
+      tokens[i].type !== 'ordered_list_open') {
     return bulletListOpen(tokens, i - 1);
   }
   return tokens[i];
@@ -160,6 +204,15 @@ function matchingOpeningToken(tokens, i) {
     }
   }
 }
+/**
+ * Removes last curly from string.
+ */
+function removeCurly(str) {
+  var curly = /[ \n]?{[^{}}]+}$/;
+  var pos = str.search(curly);
+
+  return pos !== -1 ? str.slice(0, pos) : str;
+}
 
 function last(arr) {
   return arr.slice(-1)[0];
@@ -170,6 +223,7 @@ function nextLast(arr) {
 }
 
 },{"./utils.js":2}],2:[function(require,module,exports){
+'use strict';
 /**
  * parse {.class #id key=val} strings
  * @param {string} str: string to parse
@@ -193,40 +247,40 @@ exports.getAttrs = function(str, start, end) {
 
   // read inside {}
   for (var i=start; i <= end; ++i) {
-    var char = str.charAt(i);
+    var char_ = str.charAt(i);
 
     // switch to reading value if equal sign
-    if (char === keySeparator) {
+    if (char_ === keySeparator) {
       parsingKey = false;
       continue;
     }
 
     // {.class}
-    if (char === classChar && key === '') {
+    if (char_ === classChar && key === '') {
       key = 'class';
       parsingKey = false;
       continue;
     }
 
     // {#id}
-    if (char === idChar && key === '') {
+    if (char_ === idChar && key === '') {
       key = 'id';
       parsingKey = false;
       continue;
     }
 
     // {value="inside quotes"}
-    if (char === '"' && value === '') {
+    if (char_ === '"' && value === '') {
       valueInsideQuotes = true;
       continue;
     }
-    if (char === '"' && valueInsideQuotes) {
+    if (char_ === '"' && valueInsideQuotes) {
       valueInsideQuotes = false;
       continue;
     }
 
     // read next key/value pair
-    if ((char === pairSeparator && !valueInsideQuotes) || i === end) {
+    if ((char_ === pairSeparator && !valueInsideQuotes) || i === end) {
       if (key === '') {
         // beginning or ending space: { .red } vs {.red}
         continue;
@@ -239,19 +293,19 @@ exports.getAttrs = function(str, start, end) {
     }
 
     // continue if character not allowed
-    if (parsingKey && char.search(allowedKeyChars) === -1) {
+    if (parsingKey && char_.search(allowedKeyChars) === -1) {
       continue;
     }
 
     // no other conditions met; append to key/value
     if (parsingKey) {
-      key += char;
+      key += char_;
       continue;
     }
-    value += char;
+    value += char_;
   }
   return attrs;
-}
+};
 
 /**
  * add attributes from [['key', 'val']] list
@@ -262,16 +316,14 @@ exports.getAttrs = function(str, start, end) {
 exports.addAttrs = function(attrs, token) {
   for (var j=0, l=attrs.length; j<l; ++j) {
     var key = attrs[j][0];
-    if (key === 'class' && token.attrIndex('class') !== -1) {
-      // append space seperated text string
-      var classIdx = token.attrIndex('class');
-      token.attrs[classIdx][1] += ' ' + attrs[j][1];
+    if (key === 'class') {
+      token.attrJoin('class', attrs[j][1]);
     } else {
       token.attrPush(attrs[j]);
     }
   }
   return token;
-}
+};
 
 /**
  * from https://github.com/markdown-it/markdown-it/blob/master/lib/common/utils.js
@@ -294,7 +346,7 @@ exports.escapeHtml = function(str) {
     return str.replace(HTML_ESCAPE_REPLACE_RE, replaceUnsafeChar);
   }
   return str;
-}
+};
 
 },{}]},{},[1])(1)
 });

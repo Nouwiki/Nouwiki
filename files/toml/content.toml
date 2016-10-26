@@ -1,0 +1,16 @@
+path = "./"
+#static_port = 8080 # Automatic if not defined
+#api_port = 8081 # Automatic if not defined
+static = true
+static_cors = true
+api = true
+api_cors = true
+
+wiki_title = "WIKI_TITLE"
+
+# Components
+parser = "./components/parser.js"
+markupBody = "./components/markup-body.css"
+nouwiki = "./components/nouwiki"
+template = "./components/template"
+template_special = ["index"] # which pages don't use a generic page template file
